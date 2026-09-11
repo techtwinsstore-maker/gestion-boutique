@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>💼 Gestion Boutique — Cloud</title>
+<style>
+:root{
+  --bg:#0f1420;--panel:#171d2b;--panel2:#1e2536;--border:#2a3346;
+  --text:#e6ebf5;--muted:#8b97ad;
+  --green:#22c55e;--red:#ef4444;--blue:#3b82f6;--amber:#f59e0b;
+  --radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);font-size:14px;padding:16px;line-height:1.45}
+h1,h2,h3{font-weight:600}h1{font-size:19px}
+h3{font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px}
+.app{max-width:1200px;margin:0 auto}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.badge{background:linear-gradient(135deg,#1e3a8a,#3b82f6);padding:8px 16px;border-radius:999px;font-weight:600;font-size:13px;white-space:nowrap;box-shadow:0 4px 14px rgba(59,130,246,.25)}
+.user-box{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;border-bottom:1px solid var(--border)}
+.tabs button{background:none;border:none;color:var(--muted);padding:10px 16px;cursor:pointer;font-size:14px;font-weight:500;border-bottom:2px solid transparent;transition:.15s;border-radius:8px 8px 0 0}
+.tabs button:hover{color:var(--text);background:var(--panel)}
+.tabs button.active{color:var(--blue);border-bottom-color:var(--blue);background:var(--panel)}
+.tab-panel{display:none}.tab-panel.active{display:block;animation:fade .2s}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px}
+.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:820px){.grid2{grid-template-columns:1fr}}
+input,select,textarea{background:var(--panel2);border:1px solid var(--border);color:var(--text);padding:9px 11px;border-radius:9px;font-size:13px;font-family:inherit;width:100%;transition:.15s}
+input:focus,select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,.15)}
+input[type=date]{color-scheme:dark}
+label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.field{display:flex;flex-direction:column}
+button.btn{background:var(--blue);color:#fff;border:none;padding:10px 18px;border-radius:9px;cursor:pointer;font-weight:600;font-size:13px;font-family:inherit;transition:.15s;white-space:nowrap}
+button.btn:hover{filter:brightness(1.12)}
+button.btn.green{background:var(--green)}
+button.btn.red{background:var(--red)}
+button.btn.ghost{background:var(--panel2);border:1px solid var(--border);color:var(--text)}
+button.btn.sm{padding:6px 12px;font-size:12px}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;align-items:end}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:16px}
+.kpi{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:16px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--blue)}
+.kpi.green::before{background:var(--green)}.kpi.red::before{background:var(--red)}.kpi.amber::before{background:var(--amber)}
+.kpi .label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+.kpi .value{font-size:22px;font-weight:700;margin-top:6px;word-break:break-word}
+.kpi .sub{font-size:12px;color:var(--muted);margin-top:3px}
+.bar-row{display:grid;grid-template-columns:130px 1fr 110px;gap:10px;align-items:center;margin-bottom:9px;font-size:13px}
+.bar-label{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-track{background:var(--panel2);height:9px;border-radius:999px;overflow:hidden}
+.bar-fill{height:100%;border-radius:999px;transition:width .3s}
+.bar-value{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.table-wrap{overflow-x:auto;margin:0 -16px;padding:0 16px}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:640px}
+th{text-align:left;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:8px 10px;border-bottom:1px solid var(--border);font-weight:600}
+td{padding:9px 10px;border-bottom:1px solid rgba(42,51,70,.5);vertical-align:middle}
+tr:hover td{background:rgba(59,130,246,.04)}
+.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
+.pos{color:var(--green)}.neg{color:var(--red)}
+.pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:600;white-space:nowrap}
+.pill.rev{background:rgba(34,197,94,.15);color:#4ade80}
+.pill.dep{background:rgba(239,68,68,.15);color:#f87171}
+.pill.cash{background:rgba(245,158,11,.15);color:#fbbf24}
+.pill.gray{background:var(--panel2);color:var(--muted)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;vertical-align:middle}
+.day-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:14px}
+.day-card.open{border-left:3px solid var(--amber)}
+.day-card.closed{border-left:3px solid var(--green)}
+.day-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.day-head .date{font-size:16px;font-weight:700}
+.day-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:14px}
+.day-stat{background:var(--panel2);border-radius:9px;padding:11px 13px}
+.day-stat .l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+.day-stat .v{font-size:17px;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums}
+.day-stat.hl{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3)}
+.muted{color:var(--muted)}
+.empty{text-align:center;color:var(--muted);padding:28px 10px;font-size:13px}
+.row-actions{display:flex;gap:6px}
+.icon-btn{background:none;border:1px solid var(--border);color:var(--muted);border-radius:7px;width:28px;height:28px;cursor:pointer;font-size:14px;line-height:1;transition:.15s}
+.icon-btn:hover{color:var(--red);border-color:var(--red);background:rgba(239,68,68,.1)}
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin-bottom:16px}
+.filters .field{min-width:150px}
+.hint{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.5}
+.auth-wrap{display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}
+.auth-card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:32px;width:100%;max-width:400px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.auth-card h1{margin-bottom:6px;text-align:center;font-size:22px}
+.auth-card p.sub{text-align:center;color:var(--muted);font-size:13px;margin-bottom:24px}
+.auth-card .field{margin-bottom:14px}
+.auth-card button{width:100%;padding:12px;font-size:14px;margin-top:6px}
+.auth-error{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#f87171;padding:10px;border-radius:8px;font-size:13px;margin-bottom:14px;display:none}
+.loading{text-align:center;padding:40px;color:var(--muted)}
+.spinner{display:inline-block;width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite;margin-right:10px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<div id="authScreen" class="auth-wrap" style="display:none">
+  <div class="auth-card">
+    <h1>💼 Gestion Boutique</h1>
+    <p class="sub">Connectez-vous pour accéder aux données partagées</p>
+    <div id="authError" class="auth-error"></div>
+    <form id="loginForm">
+      <div class="field"><label>E-mail</label><input type="email" id="loginEmail" placeholder="vous@exemple.com" required autocomplete="email"></div>
+      <div class="field"><label>Mot de passe</label><input type="password" id="loginPass" placeholder="••••••••" required autocomplete="current-password"></div>
+      <button class="btn" type="submit" id="loginBtn">Se connecter</button>
+    </form>
+    <p class="hint" style="text-align:center;margin-top:20px">Pas encore de compte ?<br>Demandez à l'administrateur de créer votre accès.</p>
+  </div>
+</div>
+
+<div id="loadingScreen" class="auth-wrap" style="display:none">
+  <div class="loading"><span class="spinner"></span>Chargement des données…</div>
+</div>
+
+<div id="appScreen" class="app" style="display:none">
+  <header>
+    <h1>💼 Gestion de ma Boutique</h1>
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <div class="badge" id="cashBadge">Caisse : —</div>
+      <div class="user-box"><span id="userEmail"></span><button class="btn ghost sm" id="logoutBtn">Déconnexion</button></div>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button data-tab="dashboard" class="active">📊 Tableau de bord</button>
+    <button data-tab="transactions">💸 Transactions</button>
+    <button data-tab="sections">🗂️ Sections / Campagnes</button>
+    <button data-tab="categories">🏷️ Catégories</button>
+    <button data-tab="caisse">💰 Caisse journalière</button>
+    <button data-tab="settings">⚙️ Réglages</button>
+  </nav>
+
+  <section id="tab-dashboard" class="tab-panel active">
+    <div class="filters">
+      <div class="field"><label>Section</label><select id="dashSection"></select></div>
+      <div class="field"><label>Du</label><input type="date" id="dashFrom"></div>
+      <div class="field"><label>Au</label><input type="date" id="dashTo"></div>
+      <button class="btn ghost sm" id="dashReset">Réinitialiser</button>
+    </div>
+    <div class="kpis" id="dashKpis"></div>
+    <div class="grid2">
+      <div class="panel"><h3>Répartition par catégorie</h3><div id="dashByCat"></div></div>
+      <div class="panel"><h3>Performance par section</h3><div id="dashBySection"></div></div>
+    </div>
+    <div class="panel"><h3>Dernières transactions</h3><div id="dashRecent"></div></div>
+  </section>
+
+  <section id="tab-transactions" class="tab-panel">
+    <div class="panel">
+      <h3>➕ Ajouter une transaction</h3>
+      <form id="txForm">
+        <div class="form-grid">
+          <div class="field"><label>Date</label><input type="date" id="txDate" required></div>
+          <div class="field"><label>Type</label><select id="txType"><option value="revenu">Revenu (+)</option><option value="depense">Dépense (−)</option></select></div>
+          <div class="field"><label>Section</label><select id="txSection"></select></div>
+          <div class="field"><label>Catégorie</label><select id="txCategory"></select></div>
+          <div class="field"><label>Montant</label><input type="number" id="txAmount" step="0.01" min="0" placeholder="0.00" required></div>
+          <div class="field"><label>Paiement</label>
+            <select id="txPayment">
+              <option value="espece">💵 Espèces</option>
+              <option value="carte">💳 Carte / En ligne</option>
+              <option value="virement">🏦 Virement</option>
+              <option value="autre">📦 Autre</option>
+            </select>
+          </div>
+          <div class="field" style="grid-column:span 2"><label>Description (optionnel)</label><input type="text" id="txDesc" placeholder="Ex: Vente 3 coques"></div>
+          <button class="btn green" type="submit">Ajouter</button>
+        </div>
+      </form>
+      <p class="hint">💡 Les transactions en <b>Espèces</b> alimentent automatiquement la caisse du jour.</p>
+    </div>
+    <div class="panel">
+      <div class="panel-head">
+        <h3 style="margin:0">📋 Historique</h3>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <select id="fltSection" style="width:auto"></select>
+          <select id="fltType" style="width:auto">
+            <option value="">Tous types</option><option value="revenu">Revenus</option><option value="depense">Dépenses</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-wrap"><div id="txList"></div></div>
+    </div>
+  </section>
+
+  <section id="tab-sections" class="tab-panel">
+    <div class="panel">
+      <h3>➕ Nouvelle section</h3>
+      <form id="secForm">
+        <div class="form-grid">
+          <div class="field"><label>Nom</label><input type="text" id="secName" placeholder="Ex: Campagne Facebook Juin" required></div>
+          <div class="field"><label>Type</label>
+            <select id="secType">
+              <option value="campagne">📣 Campagne publicitaire</option>
+              <option value="produit">📦 Produit</option>
+              <option value="global">🏪 Global / Autre</option>
+            </select>
+          </div>
+          <button class="btn green" type="submit">Créer</button>
+        </div>
+      </form>
+    </div>
+    <div class="panel"><h3>🗂️ Mes sections</h3><div id="secList"></div></div>
+  </section>
+
+  <section id="tab-categories" class="tab-panel">
+    <div class="panel">
+      <h3>➕ Nouvelle catégorie</h3>
+      <form id="catForm">
+        <div class="form-grid">
+          <div class="field"><label>Nom</label><input type="text" id="catName" placeholder="Ex: Publicité TikTok" required></div>
+          <div class="field"><label>Type</label>
+            <select id="catType"><option value="revenu">Revenu</option><option value="depense">Dépense</option></select>
+          </div>
+          <button class="btn green" type="submit">Ajouter</button>
+        </div>
+      </form>
+    </div>
+    <div class="grid2">
+      <div class="panel"><h3>Revenus</h3><div id="catRevList"></div></div>
+      <div class="panel"><h3>Dépenses</h3><div id="catDepList"></div></div>
+    </div>
+  </section>
+
+  <section id="tab-caisse" class="tab-panel">
+    <div class="panel">
+      <h3>🔓 Ouvrir une journée</h3>
+      <form id="dayForm">
+        <div class="form-grid">
+          <div class="field"><label>Date</label><input type="date" id="dayDate" required></div>
+          <div class="field"><label>Ouverture prévue</label><input type="number" step="0.01" id="dayOpenExp" placeholder="0.00"></div>
+          <div class="field"><label>Ouverture réelle</label><input type="number" step="0.01" id="dayOpenAct" placeholder="0.00" required></div>
+          <button class="btn green" type="submit">Ouvrir la journée</button>
+        </div>
+      </form>
+      <p class="hint">L'ouverture prévue se remplit automatiquement avec la clôture de la dernière journée fermée.</p>
+    </div>
+    <div class="panel"><h3>📅 Journées de caisse</h3><div id="dayList"></div></div>
+  </section>
+
+  <section id="tab-settings" class="tab-panel">
+    <div class="panel">
+      <h3>💱 Devise</h3>
+      <div class="form-grid">
+        <div class="field"><label>Symbole</label><input type="text" id="setCurrency" placeholder="DA"></div>
+        <button class="btn" id="saveCurrency">Enregistrer</button>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>💾 Sauvegarde</h3>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn ghost" id="exportBtn">⬇️ Exporter (JSON)</button>
+        <label class="btn ghost" style="display:inline-flex;align-items:center;cursor:pointer">
+          ⬆️ Importer<input type="file" id="importFile" accept=".json" style="display:none">
+        </label>
+        <button class="btn red" id="resetBtn">🗑️ Tout effacer</button>
+      </div>
+      <p class="hint">☁️ Les données sont stockées dans Firebase (cloud). Elles sont partagées avec tous les partenaires connectés.</p>
+    </div>
+  </section>
+</div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, onSnapshot, setDoc }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+/* ✅ VOTRE CONFIGURATION FIREBASE */
+const firebaseConfig = {
+  apiKey: "AIzaSyBRWNREaG4CMAEBaT7Q771NaADi4uadvxc",
+  authDomain: "techtwins-861d7.firebaseapp.com",
+  projectId: "techtwins-861d7",
+  storageBucket: "techtwins-861d7.firebasestorage.app",
+  messagingSenderId: "227879496013",
+  appId: "1:227879496013:web:1fe14bb01584f22803ef04"
+};
+
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+const SHOP_ID = 'main';
+const SHOP_REF = doc(db, 'shops', SHOP_ID);
+
+let state = null;
+let unsub = null;
+
+const $ = s => document.querySelector(s);
+const uid = p => p + '_' + Math.random().toString(36).slice(2, 9);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const todayStr = () => new Date().toISOString().slice(0, 10);
+
+function defaults(){
+  return {
+    currency: 'DA',
+    sections: [{ id: 'sec_global', name: 'Boutique (global)', type: 'global', color: '#3b82f6' }],
+    categories: [
+      { id: uid('cat'), name: 'Vente produit',        type: 'revenu'  },
+      { id: uid('cat'), name: 'Frais de livraison',   type: 'revenu'  },
+      { id: uid('cat'), name: 'Autre revenu',         type: 'revenu'  },
+      { id: uid('cat'), name: 'Publicité (Ads)',      type: 'depense' },
+      { id: uid('cat'), name: 'Achat stock',          type: 'depense' },
+      { id: uid('cat'), name: 'Livraison',            type: 'depense' },
+      { id: uid('cat'), name: 'Emballage',            type: 'depense' },
+      { id: uid('cat'), name: 'Abonnements / Outils', type: 'depense' },
+      { id: uid('cat'), name: 'Frais bancaires',      type: 'depense' },
+      { id: uid('cat'), name: 'Retour / Remboursement', type: 'depense' },
+      { id: uid('cat'), name: 'Autre dépense',        type: 'depense' }
+    ],
+    transactions: [],
+    cashDays: []
+  };
+}
+
+async function persist(){
+  try { await setDoc(SHOP_REF, state); }
+  catch(e){ console.error('Erreur sauvegarde', e); alert('Erreur de sauvegarde : ' + e.message); }
+}
+
+function subscribe(){
+  if (unsub) unsub();
+  unsub = onSnapshot(SHOP_REF, snap => {
+    if (snap.exists()){
+      state = snap.data();
+      state.currency     = state.currency     || 'DA';
+      state.sections     = state.sections     || [];
+      state.categories   = state.categories   || [];
+      state.transactions = state.transactions || [];
+      state.cashDays     = state.cashDays     || [];
+    } else {
+      state = defaults();
+      persist();
+    }
+    renderAll();
+  }, err => {
+    console.error('Erreur Firestore', err);
+    alert('Erreur Firestore : ' + err.message);
+  });
+}
+
+function fmt(n){
+  const v = Number(n) || 0;
+  const s = Math.abs(v).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return (v < 0 ? '−' : '') + s + ' ' + (state?.currency || 'DA');
+}
+const secById  = id => state.sections.find(s => s.id === id);
+const catById  = id => state.categories.find(c => c.id === id);
+const secName  = id => secById(id)?.name || '—';
+const secColor = id => secById(id)?.color || '#64748b';
+const catName  = id => catById(id)?.name || '—';
+const sum = arr => arr.reduce((a, b) => a + (Number(b.amount) || 0), 0);
+
+function txFiltered({ sectionId = '', from = '', to = '', type = '' } = {}){
+  return state.transactions.filter(t => {
+    if (sectionId && t.sectionId !== sectionId) return false;
+    if (type && t.type !== type) return false;
+    if (from && t.date < from) return false;
+    if (to   && t.date > to)   return false;
+    return true;
+  });
+}
+
+document.querySelectorAll('.tabs button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    $('#tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+function fillSectionSelects(){
+  const opts = state.sections.map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join('');
+  [['#txSection', false], ['#dashSection', true], ['#fltSection', true]].forEach(([sel, withAll]) => {
+    const el = $(sel); const prev = el.value;
+    el.innerHTML = (withAll ? '<option value="">Toutes les sections</option>' : '') + opts;
+    if ([...el.options].some(o => o.value === prev)) el.value = prev;
+  });
+}
+function fillCategorySelect(){
+  const type = $('#txType').value;
+  const sel = $('#txCategory'); const prev = sel.value;
+  sel.innerHTML = state.categories.filter(c => c.type === type)
+    .map(c => `<option value="${c.id}">${esc(c.name)}</option>`).join('');
+  if ([...sel.options].some(o => o.value === prev)) sel.value = prev;
+}
+$('#txType').addEventListener('change', fillCategorySelect);
+
+function renderBreakdown(container, items){
+  if (!items.length){ container.innerHTML = '<p class="empty">Aucune donnée</p>'; return; }
+  const max = Math.max(...items.map(i => Math.abs(i.value)), 1);
+  container.innerHTML = items.map(i => `
+    <div class="bar-row">
+      <div class="bar-label" title="${esc(i.label)}">${esc(i.label)}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.abs(i.value)/max*100}%;background:${i.color||'#3b82f6'}"></div></div>
+      <div class="bar-value ${i.value < 0 ? 'neg' : ''}">${fmt(i.value)}</div>
+    </div>`).join('');
+}
+function renderDashboard(){
+  const list = txFiltered({ sectionId: $('#dashSection').value, from: $('#dashFrom').value, to: $('#dashTo').value });
+  const rev = sum(list.filter(t => t.type === 'revenu'));
+  const dep = sum(list.filter(t => t.type === 'depense'));
+  const net = rev - dep;
+  const marge = rev > 0 ? (net / rev * 100) : 0;
+  $('#dashKpis').innerHTML = `
+    <div class="kpi green"><div class="label">Revenus</div><div class="value pos">${fmt(rev)}</div><div class="sub">${list.filter(t=>t.type==='revenu').length} opération(s)</div></div>
+    <div class="kpi red"><div class="label">Dépenses</div><div class="value neg">${fmt(dep)}</div><div class="sub">${list.filter(t=>t.type==='depense').length} opération(s)</div></div>
+    <div class="kpi ${net >= 0 ? 'green' : 'red'}"><div class="label">Bénéfice net</div><div class="value ${net >= 0 ? 'pos' : 'neg'}">${fmt(net)}</div><div class="sub">Revenus − Dépenses</div></div>
+    <div class="kpi amber"><div class="label">Marge</div><div class="value">${marge.toFixed(1)} %</div><div class="sub">Sur les revenus</div></div>`;
+
+  const byCat = {};
+  list.forEach(t => {
+    const k = t.categoryId;
+    if (!byCat[k]) byCat[k] = { label: catName(k), value: 0, color: t.type === 'revenu' ? '#22c55e' : '#ef4444' };
+    byCat[k].value += (t.type === 'revenu' ? 1 : -1) * (Number(t.amount) || 0);
+  });
+  renderBreakdown($('#dashByCat'), Object.values(byCat).filter(i => i.value !== 0).sort((a, b) => Math.abs(b.value) - Math.abs(a.value)));
+
+  const listAll = txFiltered({ from: $('#dashFrom').value, to: $('#dashTo').value });
+  const bySec = {};
+  state.sections.forEach(s => bySec[s.id] = { label: s.name, value: 0, color: s.color });
+  listAll.forEach(t => {
+    if (!bySec[t.sectionId]) bySec[t.sectionId] = { label: secName(t.sectionId), value: 0, color: '#64748b' };
+    bySec[t.sectionId].value += (t.type === 'revenu' ? 1 : -1) * (Number(t.amount) || 0);
+  });
+  renderBreakdown($('#dashBySection'), Object.values(bySec).filter(i => i.value !== 0).sort((a, b) => b.value - a.value));
+
+  const recent = [...list].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 8);
+  $('#dashRecent').innerHTML = recent.length ? `
+    <div class="table-wrap"><table>
+      <thead><tr><th>Date</th><th>Type</th><th>Section</th><th>Catégorie</th><th class="num">Montant</th></tr></thead>
+      <tbody>${recent.map(t => `<tr>
+        <td>${t.date}</td>
+        <td><span class="pill ${t.type === 'revenu' ? 'rev' : 'dep'}">${t.type === 'revenu' ? 'Revenu' : 'Dépense'}</span></td>
+        <td><span class="dot" style="background:${secColor(t.sectionId)}"></span>${esc(secName(t.sectionId))}</td>
+        <td>${esc(catName(t.categoryId))}</td>
+        <td class="num ${t.type === 'revenu' ? 'pos' : 'neg'}">${t.type === 'revenu' ? '+' : '−'}${fmt(t.amount)}</td>
+      </tr>`).join('')}</tbody></table></div>` : '<p class="empty">Aucune transaction.</p>';
+}
+
+$('#txForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const amount = parseFloat($('#txAmount').value);
+  if (!(amount > 0)) return;
+  state.transactions.push({
+    id: uid('tx'), date: $('#txDate').value, type: $('#txType').value,
+    sectionId: $('#txSection').value, categoryId: $('#txCategory').value,
+    amount, payment: $('#txPayment').value, desc: $('#txDesc').value.trim()
+  });
+  persist();
+  $('#txAmount').value = ''; $('#txDesc').value = '';
+});
+
+function renderTransactions(){
+  const list = txFiltered({ sectionId: $('#fltSection').value, type: $('#fltType').value })
+    .sort((a, b) => b.date.localeCompare(a.date));
+  if (!list.length){ $('#txList').innerHTML = '<p class="empty">Aucune transaction.</p>'; return; }
+  const payLabel = { espece: '💵 Espèces', carte: '💳 Carte', virement: '🏦 Virement', autre: '📦 Autre' };
+  $('#txList').innerHTML = `<table>
+    <thead><tr><th>Date</th><th>Type</th><th>Section</th><th>Catégorie</th><th>Paiement</th><th>Description</th><th class="num">Montant</th><th></th></tr></thead>
+    <tbody>${list.map(t => `<tr>
+      <td>${t.date}</td>
+      <td><span class="pill ${t.type === 'revenu' ? 'rev' : 'dep'}">${t.type === 'revenu' ? 'Revenu' : 'Dépense'}</span></td>
+      <td><span class="dot" style="background:${secColor(t.sectionId)}"></span>${esc(secName(t.sectionId))}</td>
+      <td>${esc(catName(t.categoryId))}</td>
+      <td><span class="pill ${t.payment === 'espece' ? 'cash' : 'gray'}">${payLabel[t.payment] || t.payment}</span></td>
+      <td class="muted">${esc(t.desc) || '—'}</td>
+      <td class="num ${t.type === 'revenu' ? 'pos' : 'neg'}">${t.type === 'revenu' ? '+' : '−'}${fmt(t.amount)}</td>
+      <td><div class="row-actions"><button class="icon-btn" onclick="delTx('${t.id}')">✕</button></div></td>
+    </tr>`).join('')}</tbody></table>`;
+}
+window.delTx = function(id){
+  if (!confirm('Supprimer cette transaction ?')) return;
+  state.transactions = state.transactions.filter(t => t.id !== id);
+  persist();
+};
+
+$('#secForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const name = $('#secName').value.trim(); if (!name) return;
+  const palette = ['#3b82f6','#8b5cf6','#ec4899','#f59e0b','#10b981','#06b6d4','#ef4444','#84cc16','#f97316','#14b8a6'];
+  state.sections.push({ id: uid('sec'), name, type: $('#secType').value, color: palette[state.sections.length % palette.length] });
+  persist(); $('#secName').value = '';
+});
+function renderSections(){
+  if (!state.sections.length){ $('#secList').innerHTML = '<p class="empty">Aucune section.</p>'; return; }
+  const typeLabel = { campagne: '📣 Campagne', produit: '📦 Produit', global: '🏪 Global' };
+  $('#secList').innerHTML = `<div class="table-wrap"><table>
+    <thead><tr><th>Section</th><th>Type</th><th class="num">Revenus</th><th class="num">Dépenses</th><th class="num">Net</th><th class="num">ROI</th><th></th></tr></thead>
+    <tbody>${state.sections.map(s => {
+      const list = state.transactions.filter(t => t.sectionId === s.id);
+      const rev = sum(list.filter(t => t.type === 'revenu'));
+      const dep = sum(list.filter(t => t.type === 'depense'));
+      const net = rev - dep;
+      const roi = dep > 0 ? (net / dep * 100) : null;
+      return `<tr>
+        <td><span class="dot" style="background:${s.color}"></span><b>${esc(s.name)}</b></td>
+        <td><span class="pill gray">${typeLabel[s.type] || s.type}</span></td>
+        <td class="num pos">${fmt(rev)}</td>
+        <td class="num neg">${fmt(dep)}</td>
+        <td class="num ${net >= 0 ? 'pos' : 'neg'}">${fmt(net)}</td>
+        <td class="num ${roi === null ? 'muted' : (roi >= 0 ? 'pos' : 'neg')}">${roi === null ? '—' : roi.toFixed(0) + ' %'}</td>
+        <td><button class="icon-btn" onclick="delSection('${s.id}')">✕</button></td>
+      </tr>`;
+    }).join('')}</tbody></table></div>`;
+}
+window.delSection = function(id){
+  if (state.transactions.some(t => t.sectionId === id)){ alert('Des transactions sont liées à cette section.'); return; }
+  if (state.sections.length === 1){ alert('Gardez au moins une section.'); return; }
+  if (!confirm('Supprimer cette section ?')) return;
+  state.sections = state.sections.filter(s => s.id !== id); persist();
+};
+
+$('#catForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const name = $('#catName').value.trim(); if (!name) return;
+  state.categories.push({ id: uid('cat'), name, type: $('#catType').value });
+  persist(); $('#catName').value = '';
+});
+function renderCategories(){
+  const build = type => {
+    const list = state.categories.filter(c => c.type === type);
+    if (!list.length) return '<p class="empty">Aucune catégorie.</p>';
+    return list.map(c => {
+      const total = sum(state.transactions.filter(t => t.categoryId === c.id));
+      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(42,51,70,.5)">
+        <span>${esc(c.name)}</span>
+        <span style="display:flex;align-items:center;gap:10px">
+          <span class="muted" style="font-size:12px">${fmt(total)}</span>
+          <button class="icon-btn" onclick="delCat('${c.id}')">✕</button>
+        </span>
+      </div>`;
+    }).join('');
+  };
+  $('#catRevList').innerHTML = build('revenu');
+  $('#catDepList').innerHTML = build('depense');
+}
+window.delCat = function(id){
+  if (state.transactions.some(t => t.categoryId === id)){ alert('Des transactions utilisent cette catégorie.'); return; }
+  if (!confirm('Supprimer cette catégorie ?')) return;
+  state.categories = state.categories.filter(c => c.id !== id); persist();
+};
+
+function cashMoves(date){
+  const list = state.transactions.filter(t => t.date === date && t.payment === 'espece');
+  return { inn: sum(list.filter(t => t.type === 'revenu')), out: sum(list.filter(t => t.type === 'depense')) };
+}
+function dayComputed(day){
+  const { inn, out } = cashMoves(day.date);
+  const closingExpected = (Number(day.openingActual) || 0) + inn - out;
+  const openingGap = (Number(day.openingActual) || 0) - (Number(day.openingExpected) || 0);
+  const closingGap = day.closingActual === null || day.closingActual === undefined
+    ? null : (Number(day.closingActual) - closingExpected);
+  return { inn, out, closingExpected, openingGap, closingGap };
+}
+function lastClosedDay(){
+  return [...state.cashDays].filter(d => d.closingActual !== null && d.closingActual !== undefined)
+    .sort((a, b) => b.date.localeCompare(a.date))[0];
+}
+function currentCash(){
+  const open = [...state.cashDays].filter(d => d.closingActual === null || d.closingActual === undefined)
+    .sort((a, b) => b.date.localeCompare(a.date))[0];
+  if (open) return { value: dayComputed(open).closingExpected, label: 'journée ouverte' };
+  const last = lastClosedDay();
+  if (last) return { value: Number(last.closingActual), label: 'dernière clôture' };
+  return { value: 0, label: 'aucune journée' };
+}
+$('#dayForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const date = $('#dayDate').value;
+  if (state.cashDays.some(d => d.date === date)){ alert('Journée déjà existante.'); return; }
+  state.cashDays.push({
+    id: uid('day'), date,
+    openingExpected: parseFloat($('#dayOpenExp').value) || 0,
+    openingActual:   parseFloat($('#dayOpenAct').value) || 0,
+    closingActual:   null
+  });
+  persist(); $('#dayOpenExp').value = ''; $('#dayOpenAct').value = '';
+});
+function renderCaisse(){
+  if (!$('#dayOpenExp').value){
+    const last = lastClosedDay();
+    $('#dayOpenExp').value = last ? Number(last.closingActual).toFixed(2) : '0.00';
+  }
+  const days = [...state.cashDays].sort((a, b) => b.date.localeCompare(a.date));
+  if (!days.length){ $('#dayList').innerHTML = '<p class="empty">Aucune journée enregistrée.</p>'; return; }
+  $('#dayList').innerHTML = days.map(d => {
+    const c = dayComputed(d);
+    const isOpen = d.closingActual === null || d.closingActual === undefined;
+    return `<div class="day-card ${isOpen ? 'open' : 'closed'}">
+      <div class="day-head">
+        <div><span class="date">📅 ${d.date}</span>
+          <span class="pill ${isOpen ? 'cash' : 'rev'}" style="margin-left:10px">${isOpen ? 'Ouverte' : 'Clôturée'}</span>
+        </div>
+        <button class="icon-btn" onclick="delDay('${d.id}')">✕</button>
+      </div>
+      <div class="day-grid">
+        <div class="day-stat"><div class="l">Ouverture prévue</div><div class="v">${fmt(d.openingExpected)}</div></div>
+        <div class="day-stat"><div class="l">Ouverture réelle</div><div class="v">${fmt(d.openingActual)}</div>
+          <div class="l" style="margin-top:4px;color:${c.openingGap === 0 ? 'var(--muted)' : (c.openingGap > 0 ? 'var(--green)' : 'var(--red)')}">Écart : ${fmt(c.openingGap)}</div>
+        </div>
+        <div class="day-stat"><div class="l">Entrées espèces</div><div class="v pos">+${fmt(c.inn)}</div></div>
+        <div class="day-stat"><div class="l">Sorties espèces</div><div class="v neg">−${fmt(c.out)}</div></div>
+        <div class="day-stat hl"><div class="l">Clôture prévue</div><div class="v">${fmt(c.closingExpected)}</div></div>
+      </div>
+      ${isOpen ? `<div class="form-grid">
+          <div class="field"><label>Clôture réelle</label><input type="number" step="0.01" id="close_${d.id}" placeholder="0.00"></div>
+          <button class="btn green" onclick="closeDay('${d.id}')">🔒 Clôturer</button>
+        </div>` : `<div class="day-grid" style="margin-bottom:0">
+          <div class="day-stat"><div class="l">Clôture réelle</div><div class="v">${fmt(d.closingActual)}</div></div>
+          <div class="day-stat" style="background:${c.closingGap === 0 ? 'rgba(34,197,94,.1)' : 'rgba(239,68,68,.1)'}">
+            <div class="l">Écart</div><div class="v ${c.closingGap === 0 ? 'pos' : 'neg'}">${fmt(c.closingGap)}</div>
+          </div>
+        </div>`}
+    </div>`;
+  }).join('');
+}
+window.closeDay = function(id){
+  const day = state.cashDays.find(d => d.id === id); if (!day) return;
+  const val = parseFloat($('#close_' + id).value);
+  if (isNaN(val)){ alert('Entrez la clôture réelle.'); return; }
+  const c = dayComputed(day);
+  if (Math.abs(val - c.closingExpected) > 0.001){
+    if (!confirm(`Écart détecté !\nPrévu : ${fmt(c.closingExpected)}\nRéel : ${fmt(val)}\nÉcart : ${fmt(val - c.closingExpected)}\n\nConfirmer ?`)) return;
+  }
+  day.closingActual = val; persist();
+};
+window.delDay = function(id){
+  if (!confirm('Supprimer cette journée ?')) return;
+  state.cashDays = state.cashDays.filter(d => d.id !== id); persist();
+};
+
+$('#saveCurrency').addEventListener('click', () => {
+  state.currency = $('#setCurrency').value.trim() || 'DA'; persist();
+});
+$('#exportBtn').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'boutique-sauvegarde-' + todayStr() + '.json';
+  a.click(); URL.revokeObjectURL(a.href);
+});
+$('#importFile').addEventListener('change', e => {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (!confirm('Remplacer les données actuelles ?')) return;
+      state = data; persist();
+      alert('Import réussi ✅');
+    } catch(err){ alert('Fichier invalide.'); }
+  };
+  reader.readAsText(file); e.target.value = '';
+});
+$('#resetBtn').addEventListener('click', () => {
+  if (!confirm('⚠️ Effacer TOUTES les données du cloud ?')) return;
+  if (!confirm('Vraiment sûr ?')) return;
+  state = defaults(); persist();
+});
+
+['#dashSection', '#dashFrom', '#dashTo'].forEach(s => $(s).addEventListener('change', renderDashboard));
+$('#dashReset').addEventListener('click', () => {
+  $('#dashSection').value = ''; $('#dashFrom').value = ''; $('#dashTo').value = ''; renderDashboard();
+});
+['#fltSection', '#fltType'].forEach(s => $(s).addEventListener('change', renderTransactions));
+
+function renderAll(){
+  fillSectionSelects();
+  fillCategorySelect();
+  renderDashboard();
+  renderTransactions();
+  renderSections();
+  renderCategories();
+  renderCaisse();
+  const cc = currentCash();
+  $('#cashBadge').textContent = '💰 Caisse : ' + fmt(cc.value) + ' (' + cc.label + ')';
+}
+
+function showScreen(name){
+  $('#authScreen').style.display    = name === 'auth'    ? 'flex' : 'none';
+  $('#loadingScreen').style.display = name === 'loading' ? 'flex' : 'none';
+  $('#appScreen').style.display     = name === 'app'     ? 'block' : 'none';
+}
+
+$('#loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  $('#authError').style.display = 'none';
+  const btn = $('#loginBtn'); btn.disabled = true; btn.textContent = 'Connexion…';
+  try {
+    await signInWithEmailAndPassword(auth, $('#loginEmail').value.trim(), $('#loginPass').value);
+  } catch(err){
+    const msg = ({
+      'auth/invalid-email': 'Adresse e-mail invalide.',
+      'auth/user-not-found': 'Aucun compte avec cet e-mail.',
+      'auth/wrong-password': 'Mot de passe incorrect.',
+      'auth/invalid-credential': 'E-mail ou mot de passe incorrect.',
+      'auth/too-many-requests': 'Trop de tentatives. Réessayez plus tard.'
+    })[err.code] || 'Erreur : ' + err.message;
+    $('#authError').textContent = msg;
+    $('#authError').style.display = 'block';
+  }
+  btn.disabled = false; btn.textContent = 'Se connecter';
+});
+
+$('#logoutBtn').addEventListener('click', () => {
+  if (confirm('Se déconnecter ?')) signOut(auth);
+});
+
+onAuthStateChanged(auth, user => {
+  if (user){
+    $('#userEmail').textContent = user.email;
+    showScreen('loading');
+    subscribe();
+    $('#txDate').value = todayStr();
+    $('#dayDate').value = todayStr();
+    setTimeout(() => showScreen('app'), 200);
+  } else {
+    if (unsub){ unsub(); unsub = null; }
+    state = null;
+    showScreen('auth');
+  }
+});
+</script>
+</body>
+</html>
