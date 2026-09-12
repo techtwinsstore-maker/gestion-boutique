@@ -27,6 +27,26 @@ img,svg,table{max-width:100%}
 input,select,textarea,button{font-family:inherit}
 h1,h2,h3,h4{font-weight:700;letter-spacing:-.02em}
 
+/* ============ ÉCRAN DE CONNEXION ============ */
+.auth-screen{position:fixed;inset:0;background:radial-gradient(circle at 30% 20%,rgba(74,222,128,.08),transparent 50%),#000;display:flex;align-items:center;justify-content:center;padding:20px;z-index:2000}
+.auth-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px 28px;width:100%;max-width:400px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.auth-card h1{font-size:26px;font-weight:900;letter-spacing:.1em;text-align:center;color:#fff;margin-bottom:6px;text-transform:uppercase}
+.auth-card p.sub{text-align:center;color:var(--muted);font-size:13px;margin-bottom:26px}
+.auth-card .field{margin-bottom:14px}
+.auth-card input{background:#0d0d0d;border:1px solid var(--border2);color:var(--text);padding:13px 15px;border-radius:11px;font-size:15px;width:100%}
+.auth-card input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-soft)}
+.auth-card label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.auth-card button{width:100%;padding:14px;font-size:15px;background:var(--green);color:#0d0d0d;border:none;border-radius:11px;font-weight:700;cursor:pointer;margin-top:8px}
+.auth-card button:hover{background:#3dbf6a}
+.auth-error{background:var(--red-soft);border:1px solid rgba(248,113,113,.3);color:var(--red);padding:11px;border-radius:10px;font-size:13px;margin-bottom:14px;display:none}
+.auth-info{text-align:center;color:var(--muted);font-size:12px;margin-top:20px;line-height:1.6}
+
+/* ============ LOADING ============ */
+.loading-screen{position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:2000;color:var(--muted)}
+.spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite;margin-right:14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ============ APP ============ */
 .app{display:grid;grid-template-columns:64px 1fr 340px;min-height:100vh;gap:0}
 .app.no-stats{grid-template-columns:64px 1fr}
 @media(max-width:1200px){.app{grid-template-columns:64px 1fr}.right-stats{display:none!important}}
@@ -41,6 +61,10 @@ h1,h2,h3,h4{font-weight:700;letter-spacing:-.02em}
 .nav-icon-btn:hover::after{opacity:1;left:60px}
 .nav-label-mobile{display:none}
 .sidebar-bottom{margin-top:auto;display:flex;flex-direction:column;gap:6px}
+.sidebar-user{display:flex;align-items:center;gap:8px;padding:10px 6px;margin-bottom:6px;border-top:1px solid var(--border);width:100%;flex-direction:column}
+.sidebar-user-email{font-size:10px;color:var(--muted);word-break:break-all;text-align:center;line-height:1.3;max-width:56px}
+.sidebar-user-logout{background:transparent;border:1px solid var(--border2);color:var(--muted);border-radius:8px;width:36px;height:36px;cursor:pointer;font-size:16px;transition:.15s}
+.sidebar-user-logout:hover{border-color:var(--red);color:var(--red);background:var(--red-soft)}
 
 .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:998;backdrop-filter:blur(4px)}
 .sidebar-overlay.show{display:block}
@@ -54,6 +78,9 @@ h1,h2,h3,h4{font-weight:700;letter-spacing:-.02em}
 .brand-title{font-size:28px;font-weight:900;letter-spacing:.08em;color:#fff;text-transform:uppercase;white-space:nowrap}
 .cash-pill{background:var(--green-soft);color:var(--green);padding:10px 20px;border-radius:999px;font-size:13px;font-weight:600;white-space:nowrap;display:flex;align-items:center;gap:8px;border:1px solid rgba(74,222,128,.3)}
 .cash-pill .dot-live{width:8px;height:8px;background:var(--green);border-radius:50%;box-shadow:0 0 8px var(--green)}
+.cloud-badge{background:rgba(96,165,250,.15);color:var(--blue);padding:6px 12px;border-radius:999px;font-size:11px;font-weight:600;border:1px solid rgba(96,165,250,.3);display:flex;align-items:center;gap:6px}
+.cloud-dot{width:6px;height:6px;background:var(--blue);border-radius:50%;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;align-items:center}
 .filter-pill{background:var(--card-soft);border:1px solid var(--border2);border-radius:999px;padding:8px 16px;font-size:13px;color:var(--text);cursor:pointer;transition:.15s;display:flex;align-items:center;gap:8px}
@@ -147,6 +174,7 @@ tr:hover td{background:rgba(74,222,128,.03)}
 .pill.cash{background:rgba(245,197,66,.15);color:#f5c542}
 .pill.gray{background:#2a2a2a;color:var(--muted)}
 .pill.admin{background:var(--violet-soft);color:var(--violet)}
+.pill.caisse{background:rgba(245,197,66,.15);color:#f5c542}
 .pill.pub{background:var(--red-soft);color:var(--red)}
 .pill.stock{background:var(--blue-soft);color:var(--blue)}
 .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:middle}
@@ -191,7 +219,6 @@ tr:hover td{background:rgba(74,222,128,.03)}
 .settings-section-title{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700;color:#fff;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border)}
 .settings-section-title .badge{background:var(--green-soft);color:var(--green);font-size:10px;padding:2px 8px;border-radius:999px;font-weight:700}
 
-/* Style pour le champ admin qui apparaît */
 .admin-source-field{background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.3);border-radius:10px;padding:12px;animation:fade .3s ease}
 
 @media(max-width:820px){
@@ -214,6 +241,8 @@ tr:hover td{background:rgba(74,222,128,.03)}
   .sidebar.open{transform:translateX(0)}
   .logo-mark{margin-bottom:16px;align-self:flex-start}
   .sidebar-bottom{margin-top:16px;flex-direction:column;gap:4px;width:100%}
+  .sidebar-user{flex-direction:row;padding:12px 4px;margin-top:auto;border-top:1px solid var(--border)}
+  .sidebar-user-email{max-width:150px;text-align:left;font-size:12px}
   .nav-icon-btn{
     width:100%;height:auto;padding:12px 14px;flex-direction:row;
     justify-content:flex-start;gap:12px;font-size:17px;border-radius:10px;text-align:left;
@@ -228,6 +257,7 @@ tr:hover td{background:rgba(74,222,128,.03)}
   .top-header-left{width:100%;justify-content:space-between;overflow:hidden}
   .brand-title{font-size:18px;letter-spacing:.08em;white-space:nowrap}
   .cash-pill{justify-content:center;font-size:12px;padding:9px 14px}
+  .cloud-badge{justify-content:center;font-size:10px}
   .kpi-grid{grid-template-columns:1fr 1fr;gap:10px}
   .kpi-grid-3{grid-template-columns:1fr 1fr;gap:10px}
   .kpi{padding:14px}
@@ -297,6 +327,39 @@ tr:hover td{background:rgba(74,222,128,.03)}
 </head>
 <body>
 
+<!-- ============ ÉCRAN DE CONNEXION ============ -->
+<div class="auth-screen" id="authScreen">
+  <div class="auth-card">
+    <h1>TECH TWINS</h1>
+    <p class="sub">Gestion de la boutique — Connectez-vous</p>
+    <div class="auth-error" id="authError"></div>
+    <form id="loginForm">
+      <div class="field">
+        <label>E-mail</label>
+        <input type="email" id="loginEmail" placeholder="vous@exemple.com" required autocomplete="email">
+      </div>
+      <div class="field">
+        <label>Mot de passe</label>
+        <input type="password" id="loginPass" placeholder="••••••••" required autocomplete="current-password">
+      </div>
+      <button type="submit" id="loginBtn">Se connecter</button>
+    </form>
+    <p class="auth-info">
+      ☁️ Vos données sont synchronisées dans le cloud.<br>
+      Tous vos appareils et associés verront les mêmes informations en temps réel.
+    </p>
+  </div>
+</div>
+
+<!-- ============ CHARGEMENT ============ -->
+<div class="loading-screen" id="loadingScreen" style="display:none">
+  <div class="spinner"></div>
+  <span>Chargement des données…</span>
+</div>
+
+<!-- ============ APPLICATION ============ -->
+<div id="appRoot" style="display:none">
+
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
 <div class="app" id="appContainer">
@@ -331,6 +394,11 @@ tr:hover td{background:rgba(74,222,128,.03)}
         <span>⚙</span><span class="nav-label-mobile">Réglages</span>
       </button>
     </div>
+
+    <div class="sidebar-user">
+      <div class="sidebar-user-email" id="userEmailDisplay">—</div>
+      <button class="sidebar-user-logout" onclick="logout()" title="Se déconnecter">⎋</button>
+    </div>
   </aside>
 
   <main class="main">
@@ -341,7 +409,10 @@ tr:hover td{background:rgba(74,222,128,.03)}
           <button class="mobile-menu-btn" onclick="openSidebar()">☰</button>
           <div class="brand-title">TECH TWINS</div>
         </div>
-        <div class="cash-pill"><span class="dot-live"></span> caisse : <span id="cashBadge">00,00 DA</span></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <div class="cloud-badge"><span class="cloud-dot"></span> Cloud</div>
+          <div class="cash-pill"><span class="dot-live"></span> caisse : <span id="cashBadge">00,00 DA</span></div>
+        </div>
       </div>
 
       <!-- DASHBOARD -->
@@ -633,7 +704,7 @@ tr:hover td{background:rgba(74,222,128,.03)}
         <div id="dayList"></div>
       </section>
 
-      <!-- RÉGLAGES (avec ADMINS) -->
+      <!-- RÉGLAGES -->
       <section id="tab-settings" class="tab-panel">
         <div class="page-head"><div><h1>Réglages</h1><p>Admins, devise et sauvegarde</p></div></div>
 
@@ -709,6 +780,20 @@ tr:hover td{background:rgba(74,222,128,.03)}
           </div>
         </div>
 
+        <!-- COMPTE -->
+        <div class="settings-section">
+          <div class="settings-section-title">👤 Compte connecté</div>
+          <div class="panel">
+            <div class="settings-note" style="margin-top:0">
+              Vous êtes connecté en tant que <b id="settingsUserEmail">—</b>.<br>
+              Toutes les modifications sont automatiquement synchronisées dans le cloud.
+            </div>
+            <div style="margin-top:12px">
+              <button class="btn red" onclick="logout()">Se déconnecter</button>
+            </div>
+          </div>
+        </div>
+
         <!-- EXPORT -->
         <div class="settings-section">
           <div class="settings-section-title">⬇️ Exporter les données</div>
@@ -718,7 +803,7 @@ tr:hover td{background:rgba(74,222,128,.03)}
               <button class="btn blue" id="exportXlsxBtn">📊 Exporter en XLSX</button>
             </div>
             <div class="settings-note">
-              <b>JSON</b> : sauvegarde complète.<br>
+              <b>JSON</b> : sauvegarde locale complète.<br>
               <b>XLSX</b> : fichier Excel multi-feuilles.
             </div>
           </div>
@@ -734,7 +819,7 @@ tr:hover td{background:rgba(74,222,128,.03)}
               </label>
             </div>
             <div class="settings-note">
-              Accepte <b>.json</b> et <b>.xlsx</b>. Remplace tout.
+              Accepte <b>.json</b> et <b>.xlsx</b>. ⚠️ Remplace <b>TOUTES</b> les données du cloud pour tous les utilisateurs.
             </div>
           </div>
         </div>
@@ -745,6 +830,9 @@ tr:hover td{background:rgba(74,222,128,.03)}
           <div class="panel">
             <div class="export-actions">
               <button class="btn red" onclick="resetTest()">Tout effacer</button>
+            </div>
+            <div class="settings-note">
+              ⚠️ Efface toutes les données pour <b>tous les utilisateurs</b>.
             </div>
           </div>
         </div>
@@ -783,9 +871,43 @@ tr:hover td{background:rgba(74,222,128,.03)}
 
 </div>
 
-<script>
-const LS_KEY = 'boutique_test_v13';
+</div><!-- /appRoot -->
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, onSnapshot, setDoc }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+/* ============================================================
+   CONFIGURATION FIREBASE
+============================================================ */
+const firebaseConfig = {
+  apiKey: "AIzaSyBRWNREaG4CMAEBaT7Q771NaADi4uadvxc",
+  authDomain: "techtwins-861d7.firebaseapp.com",
+  projectId: "techtwins-861d7",
+  storageBucket: "techtwins-861d7.firebasestorage.app",
+  messagingSenderId: "227879496013",
+  appId: "1:227879496013:web:1fe14bb01584f22803ef04"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const SHOP_ID = 'main';
+const SHOP_REF = doc(db, 'shops', SHOP_ID);
+
+/* ============================================================
+   ÉTAT GLOBAL
+============================================================ */
 let state = null;
+let unsubscribeSnapshot = null;
+let isFirstLoad = true;
+let isSaving = false;
+let saveTimer = null;
+
 let selectedClientId = null;
 let selectedSupplier = null;
 let selectedSectionId = null;
@@ -811,18 +933,125 @@ function defaults(){
     admins: [], adminOps: [], receptions: [], supplierPayments: []
   };
 }
-function save(){ try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch(e){} }
-function load(){
-  try { const raw = localStorage.getItem(LS_KEY); state = raw ? JSON.parse(raw) : defaults(); }
-  catch(e){ state = defaults(); }
-  ['sections','categories','transactions','cashDays','clients','clientOps','admins','adminOps','receptions','supplierPayments'].forEach(k => { state[k] = state[k] || []; });
-  state.currency = state.currency || 'DA';
+
+function normalizeState(data){
+  const s = data || defaults();
+  ['sections','categories','transactions','cashDays','clients','clientOps','admins','adminOps','receptions','supplierPayments'].forEach(k => {
+    s[k] = s[k] || [];
+  });
+  s.currency = s.currency || 'DA';
+  if (!s.sections.length) s.sections = [{ id: 'sec_global', name: 'Boutique (global)', type: 'global', color: '#4ade80' }];
+  return s;
 }
-function resetTest(){
-  if (!confirm('Réinitialiser TOUTES les données ?')) return;
-  if (!confirm('Vraiment sûr ?')) return;
-  localStorage.removeItem(LS_KEY); load(); renderAll();
+
+/* ============================================================
+   SYNCHRONISATION FIRESTORE
+============================================================ */
+function subscribeToShop(){
+  if (unsubscribeSnapshot) unsubscribeSnapshot();
+
+  unsubscribeSnapshot = onSnapshot(SHOP_REF, snap => {
+    if (snap.exists()){
+      state = normalizeState(snap.data());
+    } else {
+      // Première utilisation : créer les données par défaut
+      state = defaults();
+      setDoc(SHOP_REF, state);
+      return;
+    }
+    if (isFirstLoad){
+      isFirstLoad = false;
+      showApp();
+    }
+    renderAll();
+  }, err => {
+    console.error('Erreur Firestore:', err);
+    alert('Erreur de synchronisation : ' + err.message);
+  });
 }
+
+function save(){
+  if (!state) return;
+  // Debounce pour éviter de spammer Firestore
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async () => {
+    try {
+      isSaving = true;
+      await setDoc(SHOP_REF, state);
+      isSaving = false;
+    } catch(e){
+      console.error('Erreur sauvegarde:', e);
+      alert('Erreur de sauvegarde : ' + e.message);
+      isSaving = false;
+    }
+  }, 400);
+}
+
+/* ============================================================
+   AUTHENTIFICATION
+============================================================ */
+function showApp(){
+  $('#authScreen').style.display = 'none';
+  $('#loadingScreen').style.display = 'none';
+  $('#appRoot').style.display = 'block';
+}
+function showAuth(){
+  $('#authScreen').style.display = 'flex';
+  $('#loadingScreen').style.display = 'none';
+  $('#appRoot').style.display = 'none';
+}
+function showLoading(){
+  $('#authScreen').style.display = 'none';
+  $('#loadingScreen').style.display = 'flex';
+  $('#appRoot').style.display = 'none';
+}
+
+$('#loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const errEl = $('#authError');
+  errEl.style.display = 'none';
+  const btn = $('#loginBtn');
+  btn.disabled = true;
+  btn.textContent = 'Connexion…';
+  try {
+    await signInWithEmailAndPassword(auth, $('#loginEmail').value.trim(), $('#loginPass').value);
+  } catch(err){
+    const msg = ({
+      'auth/invalid-email': 'Adresse e-mail invalide.',
+      'auth/user-not-found': 'Aucun compte avec cet e-mail.',
+      'auth/wrong-password': 'Mot de passe incorrect.',
+      'auth/invalid-credential': 'E-mail ou mot de passe incorrect.',
+      'auth/too-many-requests': 'Trop de tentatives. Réessayez plus tard.'
+    })[err.code] || 'Erreur : ' + err.message;
+    errEl.textContent = msg;
+    errEl.style.display = 'block';
+  }
+  btn.disabled = false;
+  btn.textContent = 'Se connecter';
+});
+
+window.logout = async function(){
+  if (!confirm('Se déconnecter ?')) return;
+  await signOut(auth);
+};
+
+onAuthStateChanged(auth, user => {
+  if (user){
+    $('#userEmailDisplay').textContent = user.email;
+    $('#settingsUserEmail').textContent = user.email;
+    showLoading();
+    isFirstLoad = true;
+    subscribeToShop();
+  } else {
+    if (unsubscribeSnapshot){ unsubscribeSnapshot(); unsubscribeSnapshot = null; }
+    state = null;
+    showAuth();
+  }
+});
+
+/* ============================================================
+   HELPERS
+============================================================ */
 function fmtNum(n){ return (Number(n) || 0).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 function fmt(n){
   const v = Number(n) || 0;
@@ -877,18 +1106,16 @@ function txFiltered({ sectionId = '', from = '', to = '', type = '' } = {}){
   });
 }
 
-function openSidebar(){
+window.openSidebar = function(){
   document.getElementById('sidebar').classList.add('open');
   document.getElementById('sidebarOverlay').classList.add('show');
   document.body.style.overflow = 'hidden';
-}
-function closeSidebar(){
+};
+window.closeSidebar = function(){
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('sidebarOverlay').classList.remove('show');
   document.body.style.overflow = '';
-}
-window.openSidebar = openSidebar;
-window.closeSidebar = closeSidebar;
+};
 
 function goTab(tab){
   document.querySelectorAll('.nav-icon-btn').forEach(b => b.classList.remove('active'));
@@ -932,7 +1159,6 @@ function fillCategorySelect(){
 }
 $('#txType').addEventListener('change', fillCategorySelect);
 
-/* Remplir les selects d'admins dans les formulaires */
 function fillAdminSelects(){
   const opts = state.admins.map(a => `<option value="${a.id}">${esc(a.name)}</option>`).join('');
   [['#recAdmin'], ['#supPayAdmin']].forEach(([sel]) => {
@@ -943,7 +1169,6 @@ function fillAdminSelects(){
   });
 }
 
-/* Afficher/masquer le champ admin selon la source */
 function toggleAdminSourceField(sourceSelectId, adminFieldId){
   const src = $(sourceSelectId)?.value;
   const field = $(adminFieldId);
@@ -1043,6 +1268,7 @@ function renderTopTransactions(){
     </div>`).join('');
 }
 
+/* TRANSACTIONS */
 $('#txForm').addEventListener('submit', e => {
   e.preventDefault();
   const amount = parseFloat($('#txAmount').value);
@@ -1054,8 +1280,9 @@ $('#txForm').addEventListener('submit', e => {
     sectionId, categoryId: $('#txCategory').value,
     amount, payment: $('#txPayment').value, desc: $('#txDesc').value.trim()
   });
-  save(); $('#txAmount').value = ''; $('#txDesc').value = ''; renderAll();
+  save(); $('#txAmount').value = ''; $('#txDesc').value = '';
 });
+
 function renderTransactions(){
   const list = txFiltered({ sectionId: $('#fltSection').value, type: $('#fltType').value }).sort((a, b) => b.date.localeCompare(a.date));
   if (!list.length){ $('#txList').innerHTML = '<p class="empty">Aucune transaction.</p>'; return; }
@@ -1075,15 +1302,16 @@ function renderTransactions(){
 }
 window.delTx = function(id){
   if (!confirm('Supprimer cette transaction ?')) return;
-  state.transactions = state.transactions.filter(t => t.id !== id); save(); renderAll();
+  state.transactions = state.transactions.filter(t => t.id !== id); save();
 };
 
+/* SECTIONS */
 $('#secForm').addEventListener('submit', e => {
   e.preventDefault();
   const name = $('#secName').value.trim(); if (!name) return;
   const palette = ['#4ade80','#f87171','#60a5fa','#f5c542','#a78bfa','#22d3ee','#fb923c','#84cc16','#ec4899','#14b8a6'];
   state.sections.push({ id: uid('sec'), name, type: $('#secType').value, color: palette[state.sections.length % palette.length] });
-  save(); $('#secName').value = ''; renderAll();
+  save(); $('#secName').value = '';
 });
 function renderSections(){
   if (!state.sections.length){ $('#secList').innerHTML = '<p class="empty">Aucune section.</p>'; return; }
@@ -1116,7 +1344,7 @@ window.delSection = function(id){
   if (state.transactions.some(t => t.sectionId === id)){ alert('Des transactions sont liées.'); return; }
   if (state.sections.length === 1){ alert('Gardez au moins une section.'); return; }
   if (!confirm('Supprimer cette section ?')) return;
-  state.sections = state.sections.filter(s => s.id !== id); save(); renderAll();
+  state.sections = state.sections.filter(s => s.id !== id); save();
 };
 function renderSectionDetails(){
   if (!selectedSectionId){ $('#sectionDetailsPanel').style.display = 'none'; return; }
@@ -1168,6 +1396,7 @@ function renderSectionDetails(){
   }
 }
 
+/* CLIENTS */
 function clientById(id){ return state.clients.find(c => c.id === id); }
 function clientBalance(clientId){
   const ops = state.clientOps.filter(o => o.clientId === clientId);
@@ -1190,7 +1419,7 @@ $('#clientForm').addEventListener('submit', e => {
   const name = $('#clientName').value.trim(); if (!name) return;
   state.clients.push({ id: uid('cli'), name, phone: $('#clientPhone').value.trim(), createdAt: todayStr() });
   save(); $('#clientName').value = ''; $('#clientPhone').value = '';
-  $('#clientFormPanel').style.display = 'none'; renderAll();
+  $('#clientFormPanel').style.display = 'none';
 });
 function renderClients(){
   const q = ($('#clientSearch')?.value || '').trim().toLowerCase();
@@ -1219,7 +1448,6 @@ function renderClients(){
       <tbody>${clients.map(c => {
         const b = clientBalance(c.id);
         const cls = b.balance > 0 ? 'neg' : (b.balance < 0 ? 'pos' : 'muted');
-        const label = b.balance > 0 ? 'À encaisser' : (b.balance < 0 ? 'Crédit' : 'À jour');
         return `<tr>
           <td data-label="Nom"><b>${esc(c.name)}</b></td>
           <td data-label="Tél.">${esc(c.phone) || '—'}</td>
@@ -1242,7 +1470,7 @@ window.delClient = function(id){
   state.clients = state.clients.filter(c => c.id !== id);
   state.clientOps = state.clientOps.filter(o => o.clientId !== id);
   if (selectedClientId === id) selectedClientId = null;
-  save(); renderAll();
+  save();
 };
 function renderClientDetails(){
   if (!selectedClientId){ $('#clientDetailsPanel').style.display = 'none'; return; }
@@ -1277,11 +1505,11 @@ $('#clientOpForm').addEventListener('submit', e => {
   const amount = parseFloat($('#clientOpAmount').value);
   if (!(amount > 0)) return;
   state.clientOps.push({ id: uid('cop'), clientId: selectedClientId, date: $('#clientOpDate').value, type: $('#clientOpType').value, amount, desc: $('#clientOpDesc').value.trim() });
-  save(); $('#clientOpAmount').value = ''; $('#clientOpDesc').value = ''; renderAll();
+  save(); $('#clientOpAmount').value = ''; $('#clientOpDesc').value = '';
 });
 window.delClientOp = function(id){
   if (!confirm('Supprimer ?')) return;
-  state.clientOps = state.clientOps.filter(o => o.id !== id); save(); renderAll();
+  state.clientOps = state.clientOps.filter(o => o.id !== id); save();
 };
 
 /* ADMINS */
@@ -1312,7 +1540,7 @@ $('#adminForm').addEventListener('submit', e => {
   const name = $('#adminName').value.trim(); if (!name) return;
   state.admins.push({ id: uid('adm'), name, phone: $('#adminPhone').value.trim(), createdAt: todayStr() });
   save(); $('#adminName').value = ''; $('#adminPhone').value = '';
-  $('#adminFormPanel').style.display = 'none'; renderAll();
+  $('#adminFormPanel').style.display = 'none';
 });
 function renderAdmins(){
   const badge = $('#adminCountBadge');
@@ -1344,7 +1572,6 @@ function renderAdmins(){
       <tbody>${admins.map(a => {
         const b = adminBalance(a.id);
         const cls = b.balance > 0 ? 'pos' : (b.balance < 0 ? 'neg' : 'muted');
-        const label = b.balance > 0 ? 'La boutique doit' : (b.balance < 0 ? 'Doit à la boutique' : 'À jour');
         return `<tr>
           <td data-label="Nom"><b>${esc(a.name)}</b></td>
           <td data-label="Tél.">${esc(a.phone) || '—'}</td>
@@ -1367,7 +1594,7 @@ window.delAdmin = function(id){
   state.admins = state.admins.filter(a => a.id !== id);
   state.adminOps = state.adminOps.filter(o => o.adminId !== id);
   if (selectedAdminId === id) selectedAdminId = null;
-  save(); renderAll();
+  save();
 };
 function renderAdminDetails(){
   if (!selectedAdminId){ $('#adminDetailsPanel').style.display = 'none'; return; }
@@ -1405,16 +1632,14 @@ $('#adminOpForm').addEventListener('submit', e => {
   const amount = parseFloat($('#adminOpAmount').value);
   if (!(amount > 0)) return;
   state.adminOps.push({ id: uid('aop'), adminId: selectedAdminId, date: $('#adminOpDate').value, type: $('#adminOpType').value, amount, desc: $('#adminOpDesc').value.trim() });
-  save(); $('#adminOpAmount').value = ''; $('#adminOpDesc').value = ''; renderAll();
+  save(); $('#adminOpAmount').value = ''; $('#adminOpDesc').value = '';
 });
 window.delAdminOp = function(id){
   if (!confirm('Supprimer ?')) return;
-  state.adminOps = state.adminOps.filter(o => o.id !== id); save(); renderAll();
+  state.adminOps = state.adminOps.filter(o => o.id !== id); save();
 };
 
-/* ============================================================
-   RÉCEPTIONS — avec admin spécifique
-============================================================ */
+/* RÉCEPTIONS */
 $('#recQuantity').addEventListener('input', calcRecTotal);
 $('#recUnitPrice').addEventListener('input', calcRecTotal);
 function calcRecTotal(){
@@ -1424,7 +1649,6 @@ function calcRecTotal(){
 }
 
 function autoCreateExpenseFromReception(rec){
-  // Si source = caisse → créer une dépense espèces
   if (rec.source === 'caisse' && rec.paid > 0){
     let cat = state.categories.find(c => c.type === 'depense' && c.name === 'Achat stock');
     if (!cat){ cat = { id: uid('cat'), name: 'Achat stock', type: 'depense' }; state.categories.push(cat); }
@@ -1434,15 +1658,10 @@ function autoCreateExpenseFromReception(rec){
       desc: 'Réception ' + rec.product + ' ×' + rec.quantity + ' (' + rec.supplier + ')'
     });
   }
-  // Si source = admins ET un admin est sélectionné → créer une charge pour cet admin
   if (rec.source === 'admins' && rec.adminId && rec.paid > 0){
     state.adminOps.push({
-      id: uid('aop'),
-      adminId: rec.adminId,
-      date: rec.date,
-      type: 'charge',
-      amount: rec.paid,
-      desc: 'Réception ' + rec.product + ' ×' + rec.quantity + ' (' + rec.supplier + ')',
+      id: uid('aop'), adminId: rec.adminId, date: rec.date, type: 'charge',
+      amount: rec.paid, desc: 'Réception ' + rec.product + ' ×' + rec.quantity + ' (' + rec.supplier + ')',
       linkedReceptionId: rec.id
     });
   }
@@ -1460,11 +1679,7 @@ $('#receptionForm').addEventListener('submit', e => {
 
   if (paid > 0 && !source){ alert('Indiquez la source du versement.'); return; }
   if (paid > 0 && source === 'admins' && !adminId){
-    alert('Veuillez sélectionner l\'admin qui a payé.\n\nSi aucun admin n\'est dans la liste, ajoutez-en dans Réglages → Admins.');
-    return;
-  }
-  if (paid > 0 && source === 'admins' && state.admins.length === 0){
-    alert('Aucun admin disponible. Allez dans Réglages → Admins pour en créer.');
+    alert('Sélectionnez l\'admin qui a payé.\n\nSi aucun admin n\'existe, créez-en dans Réglages → Admins.');
     return;
   }
 
@@ -1481,7 +1696,6 @@ $('#receptionForm').addEventListener('submit', e => {
   $('#recProduct').value = ''; $('#recQuantity').value = ''; $('#recUnitPrice').value = '';
   $('#recTotal').value = ''; $('#recPaid').value = '0'; $('#recSource').value = '';
   $('#recAdminField').style.display = 'none';
-  renderAll();
 });
 
 function supplierBalances(){
@@ -1497,7 +1711,6 @@ function supplierBalances(){
   });
   return Object.values(map).map(s => ({ ...s, balance: s.total - s.paid })).sort((a, b) => b.balance - a.balance);
 }
-
 function renderReceptions(){
   const suppliers = supplierBalances();
   if (!suppliers.length){ $('#supplierList').innerHTML = '<p class="empty">Aucun fournisseur.</p>'; }
@@ -1543,18 +1756,14 @@ function renderReceptions(){
   }
   renderSupplierDetails();
 }
-
 window.delReception = function(id){
   if (!confirm('Supprimer cette réception ?')) return;
-  // Supprimer aussi l'opération admin liée (si source = admins)
   state.adminOps = state.adminOps.filter(o => o.linkedReceptionId !== id);
   state.receptions = state.receptions.filter(r => r.id !== id);
-  save(); renderAll();
+  save();
 };
-
 window.selectSupplier = function(name){ selectedSupplier = name; renderSupplierDetails(); $('#supplierDetailsPanel').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
 window.closeSupplierDetails = function(){ selectedSupplier = null; $('#supplierDetailsPanel').style.display = 'none'; };
-
 function renderSupplierDetails(){
   if (!selectedSupplier){ $('#supplierDetailsPanel').style.display = 'none'; return; }
   $('#supplierDetailsPanel').style.display = 'block';
@@ -1599,8 +1808,6 @@ function renderSupplierDetails(){
       }
     }).join('')}</tbody></table>` : '<p class="empty">Aucune opération.</p>';
 }
-
-/* Paiement fournisseur — avec admin spécifique */
 $('#supplierPayForm').addEventListener('submit', e => {
   e.preventDefault();
   if (!selectedSupplier) return;
@@ -1610,20 +1817,18 @@ $('#supplierPayForm').addEventListener('submit', e => {
   const adminId = $('#supPayAdmin').value;
 
   if (source === 'admins' && !adminId){
-    alert('Veuillez sélectionner l\'admin qui a payé.');
+    alert('Sélectionnez l\'admin qui a payé.');
     return;
   }
 
   const pay = {
     id: uid('sp'), supplier: selectedSupplier,
     date: $('#supPayDate').value, amount,
-    source,
-    adminId: source === 'admins' ? adminId : null,
+    source, adminId: source === 'admins' ? adminId : null,
     desc: $('#supPayDesc').value.trim()
   };
   state.supplierPayments.push(pay);
 
-  // Si source = caisse → dépense auto espèces
   if (source === 'caisse' && amount > 0){
     let cat = state.categories.find(c => c.type === 'depense' && c.name === 'Achat stock');
     if (!cat){ cat = { id: uid('cat'), name: 'Achat stock', type: 'depense' }; state.categories.push(cat); }
@@ -1634,15 +1839,10 @@ $('#supplierPayForm').addEventListener('submit', e => {
     });
   }
 
-  // Si source = admins → charge pour cet admin
   if (source === 'admins' && adminId){
     state.adminOps.push({
-      id: uid('aop'),
-      adminId: adminId,
-      date: pay.date,
-      type: 'charge',
-      amount: amount,
-      desc: 'Paiement fournisseur ' + selectedSupplier + (pay.desc ? ' — ' + pay.desc : ''),
+      id: uid('aop'), adminId: adminId, date: pay.date, type: 'charge',
+      amount: amount, desc: 'Paiement fournisseur ' + selectedSupplier + (pay.desc ? ' — ' + pay.desc : ''),
       linkedSupplierPaymentId: pay.id
     });
   }
@@ -1650,14 +1850,12 @@ $('#supplierPayForm').addEventListener('submit', e => {
   save();
   $('#supPayAmount').value = ''; $('#supPayDesc').value = '';
   $('#supPayAdminField').style.display = 'none';
-  renderAll();
 });
 window.delSupplierPayment = function(id){
   if (!confirm('Supprimer ?')) return;
-  // Supprimer aussi l'opération admin liée
   state.adminOps = state.adminOps.filter(o => o.linkedSupplierPaymentId !== id);
   state.supplierPayments = state.supplierPayments.filter(p => p.id !== id);
-  save(); renderAll();
+  save();
 };
 
 /* CATÉGORIES */
@@ -1665,7 +1863,7 @@ $('#catForm').addEventListener('submit', e => {
   e.preventDefault();
   const name = $('#catName').value.trim(); if (!name) return;
   state.categories.push({ id: uid('cat'), name, type: $('#catType').value });
-  save(); $('#catName').value = ''; renderAll();
+  save(); $('#catName').value = '';
 });
 function renderCategories(){
   const build = type => {
@@ -1690,7 +1888,7 @@ function renderCategories(){
 window.delCat = function(id){
   if (state.transactions.some(t => t.categoryId === id)){ alert('Utilisée.'); return; }
   if (!confirm('Supprimer ?')) return;
-  state.categories = state.categories.filter(c => c.id !== id); save(); renderAll();
+  state.categories = state.categories.filter(c => c.id !== id); save();
 };
 
 /* CAISSE */
@@ -1704,9 +1902,6 @@ function dayComputed(day){
   const openingGap = (Number(day.openingActual) || 0) - (Number(day.openingExpected) || 0);
   const closingGap = day.closingActual === null || day.closingActual === undefined ? null : (Number(day.closingActual) - closingExpected);
   return { inn, out, closingExpected, openingGap, closingGap };
-}
-function lastClosedDay(){
-  return [...state.cashDays].filter(d => d.closingActual !== null && d.closingActual !== undefined).sort((a, b) => b.date.localeCompare(a.date))[0];
 }
 function lastClosedDayBefore(date){
   return [...state.cashDays].filter(d => d.closingActual !== null && d.closingActual !== undefined && d.date < date).sort((a, b) => b.date.localeCompare(a.date))[0];
@@ -1723,7 +1918,7 @@ function computeOpeningExpected(date){
 function currentCash(){
   const open = [...state.cashDays].filter(d => d.closingActual === null || d.closingActual === undefined).sort((a, b) => b.date.localeCompare(a.date))[0];
   if (open) return { value: dayComputed(open).closingExpected, label: 'journée ouverte' };
-  const last = lastClosedDay();
+  const last = [...state.cashDays].filter(d => d.closingActual !== null && d.closingActual !== undefined).sort((a, b) => b.date.localeCompare(a.date))[0];
   if (last) return { value: Number(last.closingActual), label: 'dernière clôture' };
   return { value: 0, label: 'aucune journée' };
 }
@@ -1733,7 +1928,7 @@ $('#dayForm').addEventListener('submit', e => {
   if (!date){ alert('Choisissez une date.'); return; }
   if (state.cashDays.some(d => d.date === date)){ alert('Journée déjà existante.'); return; }
   state.cashDays.push({ id: uid('day'), date, openingExpected: computeOpeningExpected(date), openingActual: parseFloat($('#dayOpenAct').value) || 0, closingActual: null });
-  save(); $('#dayOpenAct').value = ''; renderAll();
+  save(); $('#dayOpenAct').value = '';
 });
 $('#dayDate').addEventListener('change', () => {
   const date = $('#dayDate').value;
@@ -1767,16 +1962,17 @@ window.closeDay = function(id){
   const day = state.cashDays.find(d => d.id === id); if (!day) return;
   const val = parseFloat($('#close_' + id).value);
   if (isNaN(val)){ alert('Entrez la clôture.'); return; }
-  day.closingActual = val; save(); renderAll();
+  day.closingActual = val; save();
 };
 window.delDay = function(id){
   if (!confirm('Supprimer ?')) return;
-  state.cashDays = state.cashDays.filter(d => d.id !== id); save(); renderAll();
+  state.cashDays = state.cashDays.filter(d => d.id !== id); save();
 };
 
 $('#saveCurrency').addEventListener('click', () => {
-  state.currency = $('#setCurrency').value.trim() || 'DA'; save(); renderAll();
+  state.currency = $('#setCurrency').value.trim() || 'DA'; save();
 });
+
 $('#exportJsonBtn').addEventListener('click', () => {
   const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
   const a = document.createElement('a');
@@ -1814,12 +2010,10 @@ $('#importFile').addEventListener('change', e => {
     reader.onload = ev => {
       try {
         const data = JSON.parse(ev.target.result);
-        if (!confirm('Remplacer toutes les données ?')) return;
-        state = data;
-        ['sections','categories','transactions','cashDays','clients','clientOps','admins','adminOps','receptions','supplierPayments'].forEach(k => { state[k] = state[k] || []; });
-        state.currency = state.currency || 'DA';
-        save(); renderAll();
-        alert('✅ Import JSON réussi !');
+        if (!confirm('⚠️ Remplacer TOUTES les données du cloud ?\n\nCela affectera TOUS les utilisateurs connectés.')) return;
+        state = normalizeState(data);
+        save();
+        alert('✅ Import JSON réussi !\nLes données seront synchronisées sur tous les appareils.');
       } catch(err){ alert('Fichier JSON invalide.'); }
     };
     reader.readAsText(file); e.target.value = '';
@@ -1832,7 +2026,7 @@ $('#importFile').addEventListener('change', e => {
         const data = new Uint8Array(ev.target.result);
         const wb = XLSX.read(data, { type: 'array' });
         const getSheet = (name) => { const ws = wb.Sheets[name]; return ws ? XLSX.utils.sheet_to_json(ws, { defval: '' }) : []; };
-        if (!confirm('Remplacer toutes les données ?')) return;
+        if (!confirm('⚠️ Remplacer TOUTES les données du cloud ?')) return;
         const ns = { currency:'DA', sections:[], categories:[], transactions:[], cashDays:[], clients:[], clientOps:[], admins:[], adminOps:[], receptions:[], supplierPayments:[] };
         const r = getSheet('Reglages'); if (r.length && r[0].Devise) ns.currency = String(r[0].Devise);
         getSheet('Sections').forEach(x => { if (!x.ID && !x.Nom) return; ns.sections.push({ id: x.ID || uid('sec'), name: x.Nom || 'Sans nom', type: x.Type || 'global', color: x.Couleur || '#4ade80' }); });
@@ -1844,7 +2038,7 @@ $('#importFile').addEventListener('change', e => {
         getSheet('Admins').forEach(x => { if (!x.Nom && !x.ID) return; ns.admins.push({ id: x.ID || uid('adm'), name: x.Nom || 'Sans nom', phone: x.Telephone || '', createdAt: todayStr() }); });
         getSheet('Receptions').forEach(x => { if (!x.Date && !x.Produit) return; ns.receptions.push({ id: x.ID || uid('rec'), date: String(x.Date).slice(0,10), supplier: x.Fournisseur || '', product: x.Produit || '', sectionId: ns.sections[0].id, quantity: Number(x.Quantite) || 0, unitPrice: Number(x.PrixUnitaire) || 0, total: Number(x.Total) || 0, paid: Number(x.Paye) || 0, source: x.Source || '', adminId: null }); });
         getSheet('JoursCaisse').forEach(x => { if (!x.Date) return; ns.cashDays.push({ id: x.ID || uid('day'), date: String(x.Date).slice(0,10), openingExpected: Number(x.OuverturePrevue) || 0, openingActual: Number(x.OuvertureReelle) || 0, closingActual: x.ClotureReelle === '' || x.ClotureReelle === undefined ? null : Number(x.ClotureReelle) }); });
-        state = ns; save(); renderAll();
+        state = ns; save();
         alert('✅ Import XLSX réussi !');
       } catch(err){ console.error(err); alert('Erreur XLSX : ' + err.message); }
     };
@@ -1855,6 +2049,13 @@ $('#importFile').addEventListener('change', e => {
   e.target.value = '';
 });
 
+window.resetTest = function(){
+  if (!confirm('⚠️ Effacer TOUTES les données du cloud ?\n\nCela affectera TOUS les utilisateurs.')) return;
+  if (!confirm('Vraiment sûr ? Cette action est irréversible.')) return;
+  state = defaults();
+  save();
+};
+
 ['#dashSection', '#dashFrom', '#dashTo'].forEach(s => { const el = $(s); if (el) el.addEventListener('change', renderDashboard); });
 $('#dashReset').addEventListener('click', () => {
   $('#dashSection').value = ''; $('#dashFrom').value = ''; $('#dashTo').value = ''; renderDashboard();
@@ -1862,6 +2063,7 @@ $('#dashReset').addEventListener('click', () => {
 ['#fltSection', '#fltType'].forEach(s => $(s).addEventListener('change', renderTransactions));
 
 function renderAll(){
+  if (!state) return;
   fillSectionSelects();
   fillCategorySelect();
   fillAdminSelects();
@@ -1877,16 +2079,14 @@ function renderAll(){
   $('#cashBadge').textContent = fmtNum(cc.value) + ' ' + state.currency;
 }
 
-load();
+// Initialisation des dates
 $('#txDate').value = todayStr();
 $('#dayDate').value = todayStr();
 $('#clientOpDate').value = todayStr();
 $('#adminOpDate').value = todayStr();
 $('#recDate').value = todayStr();
 $('#supPayDate').value = todayStr();
-$('#setCurrency').value = state.currency;
-renderAll();
-goTab('dashboard');
+
 </script>
 </body>
 </html>
