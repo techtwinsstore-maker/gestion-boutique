@@ -2,13 +2,14 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TechTwins — Gestion Boutique</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
+<meta name="theme-color" content="#0d0d0d">
+<title>TECH TWINS — Gestion Boutique</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <style>
 :root{
-  --sidebar-bg:#080808;--sidebar-hover:#1a1a1a;--sidebar-text:#666;
+  --sidebar-bg:#080808;--sidebar-hover:#1a1a1a;--sidebar-text:#888;
   --bg:#0d0d0d;--card:#1a1a1a;--card-soft:#222222;
   --text:#e8e8e8;--muted:#888888;--muted2:#555555;--border:#2a2a2a;--border2:#333333;
   --green:#4ade80;--green-soft:rgba(74,222,128,.15);
@@ -16,12 +17,13 @@
   --blue:#60a5fa;--blue-soft:rgba(96,165,250,.15);
   --gray:#666666;--gray-soft:#2a2a2a;
   --violet:#a78bfa;--violet-soft:rgba(167,139,250,.15);
-  --lime:#c5f542;
   --radius:14px;
   --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 12px rgba(0,0,0,.2);
 }
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:#000;color:var(--text);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+html{overflow-x:hidden;max-width:100vw}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;max-width:100%}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:#000;color:var(--text);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;max-width:100vw;width:100%;position:relative}
+img,svg,table{max-width:100%}
 input,select,textarea,button{font-family:inherit}
 h1,h2,h3,h4{font-weight:700;letter-spacing:-.02em}
 
@@ -31,18 +33,25 @@ h1,h2,h3,h4{font-weight:700;letter-spacing:-.02em}
 @media(max-width:1200px){.app.no-stats{grid-template-columns:64px 1fr}}
 
 .sidebar{background:var(--sidebar-bg);display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:6px;position:sticky;top:0;height:100vh;border-right:1px solid var(--border);overflow-y:auto}
-.logo-mark{width:36px;height:36px;border-radius:10px;background:var(--green);display:flex;align-items:center;justify-content:center;color:#0d0d0d;font-weight:900;font-size:20px;margin-bottom:24px;letter-spacing:-.05em;flex-shrink:0}
+.logo-mark{width:36px;height:36px;border-radius:10px;background:var(--green);display:flex;align-items:center;justify-content:center;color:#0d0d0d;font-weight:900;font-size:20px;margin-bottom:24px;flex-shrink:0}
 .nav-icon-btn{width:44px;height:44px;border-radius:12px;background:transparent;border:none;color:var(--sidebar-text);font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s;position:relative;flex-shrink:0}
 .nav-icon-btn:hover{background:var(--sidebar-hover);color:#fff}
 .nav-icon-btn.active{background:var(--green);color:#0d0d0d}
 .nav-icon-btn::after{content:attr(data-label);position:absolute;left:56px;background:#000;color:#fff;padding:5px 10px;border-radius:6px;font-size:11px;white-space:nowrap;opacity:0;pointer-events:none;transition:.15s;z-index:100;border:1px solid var(--border)}
 .nav-icon-btn:hover::after{opacity:1;left:60px}
+.nav-label-mobile{display:none}
 .sidebar-bottom{margin-top:auto;display:flex;flex-direction:column;gap:6px}
+
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:998;backdrop-filter:blur(4px)}
+.sidebar-overlay.show{display:block}
+
+.mobile-menu-btn{display:none;background:var(--card-soft);border:1px solid var(--border2);color:var(--text);width:42px;height:42px;border-radius:11px;font-size:20px;cursor:pointer;align-items:center;justify-content:center;flex-shrink:0}
 
 .main{padding:22px 26px;overflow-y:auto;max-height:100vh;background:var(--bg)}
 .main-card{background:var(--card);border-radius:22px;padding:24px 26px;box-shadow:var(--shadow);min-height:calc(100vh - 44px);border:1px solid var(--border)}
-.top-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;flex-wrap:wrap;gap:12px}
-.brand-title{font-size:32px;font-weight:800;letter-spacing:-.03em;color:#fff}
+.top-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.top-header-left{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.brand-title{font-size:28px;font-weight:900;letter-spacing:.08em;color:#fff;text-transform:uppercase;white-space:nowrap}
 .cash-pill{background:var(--green-soft);color:var(--green);padding:10px 20px;border-radius:999px;font-size:13px;font-weight:600;white-space:nowrap;display:flex;align-items:center;gap:8px;border:1px solid rgba(74,222,128,.3)}
 .cash-pill .dot-live{width:8px;height:8px;background:var(--green);border-radius:50%;box-shadow:0 0 8px var(--green)}
 
@@ -58,20 +67,18 @@ h1,h2,h3,h4{font-weight:700;letter-spacing:-.02em}
 
 .kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
 .kpi-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:22px}
-@media(max-width:820px){.kpi-grid,.kpi-grid-3{grid-template-columns:1fr}}
 .kpi{background:var(--card-soft);border:1px solid var(--border);border-radius:16px;padding:18px 20px;transition:.15s}
 .kpi:hover{transform:translateY(-1px);box-shadow:var(--shadow);border-color:var(--border2)}
-.kpi .label{font-size:13px;color:var(--muted);font-weight:500;margin-bottom:8px;text-transform:lowercase}
+.kpi .label{font-size:13px;color:var(--muted);font-weight:500;margin-bottom:8px}
 .kpi .value{font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1.1;display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
 .kpi .value .unit{font-size:20px;font-weight:700}
 .kpi.green .value{color:var(--green)}
 .kpi.red .value{color:var(--red)}
 .kpi.gray .value{color:#fff}
 
-.section-title{font-size:15px;font-weight:700;color:#fff;margin-bottom:14px;letter-spacing:-.01em}
+.section-title{font-size:15px;font-weight:700;color:#fff;margin-bottom:14px}
 .tx-list{display:flex;flex-direction:column;gap:8px;max-height:340px;overflow-y:auto}
-.tx-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;background:var(--card-soft);border:1px solid var(--border);transition:.15s}
-.tx-row:hover{background:#282828;border-color:var(--border2)}
+.tx-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;background:var(--card-soft);border:1px solid var(--border)}
 .tx-icon{width:40px;height:40px;border-radius:10px;background:#2a2a2a;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .tx-body{flex:1;min-width:0}
 .tx-title{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff}
@@ -91,8 +98,7 @@ h1,h2,h3,h4{font-weight:700;letter-spacing:-.02em}
 .legend-item{display:flex;align-items:center;gap:7px;font-weight:500}
 .legend-dot{width:11px;height:11px;border-radius:3px;flex-shrink:0}
 .top-list{display:flex;flex-direction:column;gap:10px}
-.top-item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;background:var(--card-soft);border:1px solid var(--border);transition:.15s}
-.top-item:hover{background:#282828;border-color:var(--border2)}
+.top-item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;background:var(--card-soft);border:1px solid var(--border)}
 .top-icon{width:44px;height:44px;border-radius:10px;background:#2a2a2a;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
 .top-body{flex:1;min-width:0}
 .top-title{font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -135,7 +141,7 @@ tr:hover td{background:rgba(74,222,128,.03)}
 .muted{color:var(--muted)}
 .empty{text-align:center;color:var(--muted);padding:32px 10px;font-size:13px}
 
-.pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:10px;font-weight:700;white-space:nowrap;letter-spacing:.02em}
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:10px;font-weight:700;white-space:nowrap}
 .pill.rev{background:var(--green-soft);color:var(--green)}
 .pill.dep{background:var(--red-soft);color:var(--red)}
 .pill.cash{background:rgba(245,197,66,.15);color:#f5c542}
@@ -152,7 +158,7 @@ tr:hover td{background:rgba(74,222,128,.03)}
 .bar-label{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
 .bar-track{background:#2a2a2a;height:8px;border-radius:999px;overflow:hidden}
 .bar-fill{height:100%;border-radius:999px;transition:width .3s;background:var(--green)}
-.bar-value{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.bar-value{text-align:right;font-weight:700}
 
 .day-card{background:var(--card-soft);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px}
 .day-card.open{border-left:3px solid #f5a623}
@@ -162,11 +168,10 @@ tr:hover td{background:rgba(74,222,128,.03)}
 .day-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:14px}
 .day-stat{background:#0d0d0d;border:1px solid var(--border);border-radius:10px;padding:12px 14px}
 .day-stat .l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:700}
-.day-stat .v{font-size:17px;font-weight:800;margin-top:4px;font-variant-numeric:tabular-nums;color:#fff}
+.day-stat .v{font-size:17px;font-weight:800;margin-top:4px;color:#fff}
 .day-stat.hl{background:var(--green-soft);border-color:rgba(74,222,128,.3)}
 .hint{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6}
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:16px}
-.kpi.sm .value{font-size:22px}
 
 .search-bar{position:relative;margin-bottom:14px}
 .search-bar input{padding-left:42px;padding-right:38px;font-size:14px;height:44px}
@@ -179,24 +184,149 @@ tr:hover td{background:rgba(74,222,128,.03)}
 .export-actions{display:flex;gap:10px;flex-wrap:wrap}
 .export-actions .btn{display:inline-flex;align-items:center;gap:6px}
 .settings-note{background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.25);color:var(--blue);padding:12px 16px;border-radius:10px;font-size:12px;margin-top:12px;line-height:1.6}
+
+.stats-mobile{display:none!important}
+
+.settings-section{margin-bottom:16px}
+.settings-section-title{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700;color:#fff;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.settings-section-title .badge{background:var(--green-soft);color:var(--green);font-size:10px;padding:2px 8px;border-radius:999px;font-weight:700}
+
+@media(max-width:820px){
+  html,body{overflow-x:hidden!important;max-width:100vw;width:100%}
+  *{max-width:100%!important}
+  .app,.main,.main-card{overflow-x:hidden!important;max-width:100vw;width:100%}
+
+  body{font-size:15px}
+  .app{display:block;min-height:auto}
+  .app.no-stats{display:block}
+  .right-stats{display:none!important}
+  .mobile-menu-btn{display:flex}
+  .sidebar{
+    position:fixed;top:0;left:0;bottom:0;width:270px;max-width:85vw;height:100vh;
+    background:var(--sidebar-bg);z-index:999;transform:translateX(-100%);
+    transition:transform .28s ease;flex-direction:column;align-items:stretch;
+    padding:16px 12px;overflow-y:auto;box-shadow:10px 0 30px rgba(0,0,0,.6);
+    border-right:1px solid var(--border);
+  }
+  .sidebar.open{transform:translateX(0)}
+  .logo-mark{margin-bottom:16px;align-self:flex-start}
+  .sidebar-bottom{margin-top:16px;flex-direction:column;gap:4px;width:100%}
+  .nav-icon-btn{
+    width:100%;height:auto;padding:12px 14px;flex-direction:row;
+    justify-content:flex-start;gap:12px;font-size:17px;border-radius:10px;text-align:left;
+    max-width:100%!important;
+  }
+  .nav-icon-btn::after{display:none}
+  .nav-label-mobile{display:inline;font-size:14px;font-weight:600;letter-spacing:0;color:inherit}
+  .nav-icon-btn.active{background:var(--green);color:#0d0d0d}
+  .main{padding:0;max-height:none;overflow:visible}
+  .main-card{border-radius:0;padding:14px 14px 30px 14px!important;min-height:auto;border:none;border-top:none}
+  .top-header{flex-direction:column;align-items:stretch;gap:10px;margin-bottom:16px;overflow:hidden}
+  .top-header-left{width:100%;justify-content:space-between;overflow:hidden}
+  .brand-title{font-size:18px;letter-spacing:.08em;white-space:nowrap}
+  .cash-pill{justify-content:center;font-size:12px;padding:9px 14px}
+  .kpi-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .kpi-grid-3{grid-template-columns:1fr 1fr;gap:10px}
+  .kpi{padding:14px}
+  .kpi .label{font-size:12px;margin-bottom:6px}
+  .kpi .value{font-size:20px}
+  .kpi .value .unit{font-size:14px}
+  .stats-mobile{display:block!important;margin-bottom:16px}
+  .stats-mobile .stats-title{font-size:16px;margin-bottom:14px;text-align:center;color:var(--green)}
+  .stats-mobile .donut-wrap svg{width:170px;height:170px;max-width:170px}
+  .stats-mobile .donut-total-value{font-size:17px}
+  .stats-mobile .legend{justify-content:center;font-size:11px;gap:10px;margin-bottom:0}
+  .filters{gap:6px;overflow:hidden}
+  .filter-pill{padding:8px 12px;font-size:12px;flex:1;min-width:0;justify-content:center}
+  .filter-pill select,.filter-pill input[type=date]{font-size:12px;text-align:center}
+  .filter-pill.reset{flex-basis:100%;padding:10px}
+  .page-head{flex-direction:column;align-items:stretch;gap:12px;margin-bottom:14px}
+  .page-head h1{font-size:20px}
+  .page-head p{font-size:12px}
+  .page-head > .btn{width:100%}
+  .panel{padding:14px;border-radius:14px;margin-bottom:12px;overflow:hidden}
+  .panel-head h3{font-size:14px}
+  .form-grid{grid-template-columns:1fr;gap:10px}
+  input,select,textarea{padding:12px 14px;font-size:15px}
+  label{font-size:12px}
+  button.btn{width:100%;padding:13px 18px;font-size:15px;border-radius:11px}
+  button.btn.sm{width:auto;padding:8px 12px;font-size:13px}
+  .form-grid .field[style*="grid-column"]{grid-column:auto!important}
+  .table-wrap{margin:0!important;padding:0!important;overflow-x:hidden!important;max-width:100%}
+  table{min-width:0!important;display:block;width:100%;max-width:100%}
+  thead{display:none}
+  tbody{display:block}
+  tr{display:block;background:#0d0d0d;border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:10px;overflow:hidden;max-width:100%}
+  tr:hover td{background:transparent}
+  td{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border:none;text-align:right;gap:12px;font-size:14px;border-bottom:1px solid rgba(42,42,42,.4);word-break:break-word;overflow-wrap:anywhere;max-width:100%}
+  td:last-child{border-bottom:none;padding-bottom:0}
+  td:first-child{padding-top:0}
+  td[data-label]::before{content:attr(data-label);color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;text-align:left;flex-shrink:0;margin-right:auto}
+  .num{text-align:right}
+  .row-actions{justify-content:flex-end;gap:8px;width:auto}
+  .row-actions .btn{width:auto!important}
+  .day-head{flex-direction:column;align-items:flex-start}
+  .day-head .date{font-size:15px}
+  .day-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .day-stat{padding:10px 12px}
+  .day-stat .v{font-size:15px}
+  .kpis{grid-template-columns:1fr 1fr;gap:10px}
+  .bar-row{grid-template-columns:1fr;gap:4px}
+  .bar-label{font-size:12px}
+  .bar-value{text-align:left}
+  .export-actions{flex-direction:column}
+  .export-actions .btn,.export-actions label.btn{width:100%;justify-content:center;padding:13px}
+  .search-bar input{font-size:15px;height:46px}
+  .icon-btn{width:34px;height:34px;font-size:15px}
+  .settings-section-title{font-size:13px;flex-wrap:wrap}
+  .settings-section-title .btn{margin-left:auto;width:auto}
+}
+
+@media(max-width:400px){
+  .brand-title{font-size:16px;letter-spacing:.06em}
+  .kpi-grid,.kpi-grid-3{grid-template-columns:1fr}
+  .kpis{grid-template-columns:1fr}
+  .day-grid{grid-template-columns:1fr}
+  .main-card{padding:12px 12px 30px 12px!important}
+  .stats-mobile .donut-wrap svg{width:150px;height:150px;max-width:150px}
+}
 </style>
 </head>
 <body>
 
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
 <div class="app" id="appContainer">
 
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
     <div class="logo-mark">T</div>
-    <button class="nav-icon-btn active" data-tab="dashboard" data-label="Tableau de bord">▦</button>
-    <button class="nav-icon-btn" data-tab="campaigns" data-label="Produits & Campagnes">◈</button>
-    <button class="nav-icon-btn" data-tab="transactions" data-label="Transactions">⇄</button>
-    <button class="nav-icon-btn" data-tab="clients" data-label="Clients">◉</button>
-    <button class="nav-icon-btn" data-tab="admins" data-label="Admins">⬢</button>
-    <button class="nav-icon-btn" data-tab="receptions" data-label="Réceptions">▤</button>
+
+    <button class="nav-icon-btn active" data-tab="dashboard" data-label="Tableau de bord">
+      <span>▦</span><span class="nav-label-mobile">Tableau de bord</span>
+    </button>
+    <button class="nav-icon-btn" data-tab="campaigns" data-label="Produits & Campagnes">
+      <span>◈</span><span class="nav-label-mobile">Produits & Campagnes</span>
+    </button>
+    <button class="nav-icon-btn" data-tab="transactions" data-label="Transactions">
+      <span>⇄</span><span class="nav-label-mobile">Transactions</span>
+    </button>
+    <button class="nav-icon-btn" data-tab="clients" data-label="Clients">
+      <span>◉</span><span class="nav-label-mobile">Clients</span>
+    </button>
+    <button class="nav-icon-btn" data-tab="receptions" data-label="Réceptions">
+      <span>▤</span><span class="nav-label-mobile">Réceptions</span>
+    </button>
+
     <div class="sidebar-bottom">
-      <button class="nav-icon-btn" data-tab="categories" data-label="Catégories">◇</button>
-      <button class="nav-icon-btn" data-tab="caisse" data-label="Caisse">▣</button>
-      <button class="nav-icon-btn" data-tab="settings" data-label="Réglages">⚙</button>
+      <button class="nav-icon-btn" data-tab="categories" data-label="Catégories">
+        <span>◇</span><span class="nav-label-mobile">Catégories</span>
+      </button>
+      <button class="nav-icon-btn" data-tab="caisse" data-label="Caisse">
+        <span>▣</span><span class="nav-label-mobile">Caisse</span>
+      </button>
+      <button class="nav-icon-btn" data-tab="settings" data-label="Réglages">
+        <span>⚙</span><span class="nav-label-mobile">Réglages</span>
+      </button>
     </div>
   </aside>
 
@@ -204,7 +334,10 @@ tr:hover td{background:rgba(74,222,128,.03)}
     <div class="main-card">
 
       <div class="top-header">
-        <div><div class="brand-title">TechTwins</div></div>
+        <div class="top-header-left">
+          <button class="mobile-menu-btn" onclick="openSidebar()">☰</button>
+          <div class="brand-title">TECH TWINS</div>
+        </div>
         <div class="cash-pill"><span class="dot-live"></span> caisse : <span id="cashBadge">00,00 DA</span></div>
       </div>
 
@@ -214,7 +347,32 @@ tr:hover td{background:rgba(74,222,128,.03)}
           <div class="filter-pill"><span class="muted">section</span><select id="dashSection"></select></div>
           <div class="filter-pill"><input type="date" id="dashFrom"></div>
           <div class="filter-pill"><input type="date" id="dashTo"></div>
-          <button class="filter-pill reset" id="dashReset">reinitialiser</button>
+          <button class="filter-pill reset" id="dashReset">réinitialiser</button>
+        </div>
+
+        <div class="panel stats-mobile" id="mobileStats">
+          <div class="stats-title">STATS</div>
+          <div class="donut-wrap">
+            <svg width="180" height="180" viewBox="0 0 220 220">
+              <g transform="translate(110,110)">
+                <circle r="80" fill="none" stroke="#2a2a2a" stroke-width="22"/>
+                <circle id="mSegVentes" r="80" fill="none" stroke="#4ade80" stroke-width="22" stroke-dasharray="0 502" stroke-dashoffset="0" transform="rotate(-90)"/>
+                <circle id="mSegPubs" r="80" fill="none" stroke="#f87171" stroke-width="22" stroke-dasharray="0 502" stroke-dashoffset="0" transform="rotate(-90)"/>
+                <circle id="mSegProduits" r="80" fill="none" stroke="#666666" stroke-width="22" stroke-dasharray="0 502" stroke-dashoffset="0" transform="rotate(-90)"/>
+                <circle id="mSegDettes" r="80" fill="none" stroke="#60a5fa" stroke-width="22" stroke-dasharray="0 502" stroke-dashoffset="0" transform="rotate(-90)"/>
+              </g>
+            </svg>
+            <div class="donut-center">
+              <div class="donut-total-value" id="mDonutTotal">0,00</div>
+              <div class="donut-total-unit" id="mDonutUnit">DA</div>
+            </div>
+          </div>
+          <div class="legend">
+            <div class="legend-item"><span class="legend-dot" style="background:#4ade80"></span>ventes</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#f87171"></span>pubs</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#666"></span>produits</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#60a5fa"></span>dettes</div>
+          </div>
         </div>
 
         <div class="kpi-grid">
@@ -235,7 +393,6 @@ tr:hover td{background:rgba(74,222,128,.03)}
       <!-- CAMPAGNES -->
       <section id="tab-campaigns" class="tab-panel">
         <div class="page-head"><div><h1>Produits & Campagnes</h1><p>Statistiques isolées par produit ou campagne</p></div></div>
-
         <div class="panel">
           <div class="panel-head"><h3>🎯 Nouvelle section</h3></div>
           <form id="secForm">
@@ -252,12 +409,10 @@ tr:hover td{background:rgba(74,222,128,.03)}
             </div>
           </form>
         </div>
-
         <div class="panel">
           <div class="panel-head"><h3>📋 Vue comparative</h3></div>
           <div class="table-wrap"><div id="secList"></div></div>
         </div>
-
         <div class="panel" id="sectionDetailsPanel" style="display:none">
           <div class="panel-head">
             <h3 id="sectionDetailsTitle"></h3>
@@ -265,7 +420,7 @@ tr:hover td{background:rgba(74,222,128,.03)}
           </div>
           <div class="kpis" id="sectionKpis" style="margin-bottom:16px"></div>
           <div class="grid2" style="margin-bottom:16px">
-            <div class="panel" style="margin-bottom:0"><div class="panel-head"><h3>📊 Répartition des dépenses</h3></div><div id="sectionBreakdown"></div></div>
+            <div class="panel" style="margin-bottom:0"><div class="panel-head"><h3>📊 Répartition</h3></div><div id="sectionBreakdown"></div></div>
             <div class="panel" style="margin-bottom:0"><div class="panel-head"><h3>📈 Indicateurs</h3></div><div id="sectionIndicators"></div></div>
           </div>
           <div class="panel-head" style="margin-top:20px"><h3>📋 Transactions</h3></div>
@@ -276,7 +431,6 @@ tr:hover td{background:rgba(74,222,128,.03)}
       <!-- TRANSACTIONS -->
       <section id="tab-transactions" class="tab-panel">
         <div class="page-head"><div><h1>Transactions</h1><p>Chaque transaction appartient à une section</p></div></div>
-
         <div class="panel">
           <div class="panel-head"><h3>➕ Nouvelle transaction</h3></div>
           <form id="txForm">
@@ -300,7 +454,6 @@ tr:hover td{background:rgba(74,222,128,.03)}
           </form>
           <p class="hint">💡 Les transactions en <b>Espèces</b> alimentent la caisse du jour.</p>
         </div>
-
         <div class="panel">
           <div class="panel-head">
             <h3>Historique</h3>
@@ -321,7 +474,6 @@ tr:hover td{background:rgba(74,222,128,.03)}
           <div><h1>Clients</h1><p>Suivi des achats, versements et soldes</p></div>
           <button class="btn" onclick="toggleClientForm()">＋ Ajouter un client</button>
         </div>
-
         <div class="panel" id="clientFormPanel" style="display:none">
           <div class="panel-head">
             <h3>➕ Nouveau client</h3>
@@ -335,7 +487,6 @@ tr:hover td{background:rgba(74,222,128,.03)}
             </div>
           </form>
         </div>
-
         <div class="panel">
           <div class="panel-head"><h3>Liste des clients</h3></div>
           <div class="search-bar">
@@ -346,7 +497,6 @@ tr:hover td{background:rgba(74,222,128,.03)}
           <div class="search-results-info" id="clientResultsInfo"></div>
           <div class="table-wrap"><div id="clientList"></div></div>
         </div>
-
         <div class="panel" id="clientDetailsPanel" style="display:none">
           <div class="panel-head">
             <h3 id="clientDetailsTitle"></h3>
@@ -372,70 +522,9 @@ tr:hover td{background:rgba(74,222,128,.03)}
         </div>
       </section>
 
-      <!-- ADMINS -->
-      <section id="tab-admins" class="tab-panel">
-        <div class="page-head">
-          <div><h1>Admins</h1><p>Charges payées et emprunts par administrateur</p></div>
-          <button class="btn" onclick="toggleAdminForm()">＋ Ajouter un admin</button>
-        </div>
-
-        <div class="panel" id="adminFormPanel" style="display:none">
-          <div class="panel-head">
-            <h3>➕ Nouvel admin</h3>
-            <button class="icon-btn" onclick="toggleAdminForm()" title="Fermer">✕</button>
-          </div>
-          <form id="adminForm">
-            <div class="form-grid">
-              <div class="field"><label>Nom</label><input type="text" id="adminName" placeholder="Ex: Zakaria" required></div>
-              <div class="field"><label>Téléphone</label><input type="tel" id="adminPhone" placeholder="0555 00 00 00"></div>
-              <button class="btn" type="submit">Ajouter</button>
-            </div>
-          </form>
-        </div>
-
-        <div class="panel">
-          <div class="panel-head"><h3>Liste des admins</h3></div>
-          <div class="search-bar">
-            <span class="search-bar-icon">🔍</span>
-            <input type="text" id="adminSearch" placeholder="Rechercher un admin…" oninput="renderAdmins()">
-            <button type="button" class="search-bar-clear" id="adminSearchClear" onclick="clearAdminSearch()" title="Effacer">✕</button>
-          </div>
-          <div class="search-results-info" id="adminResultsInfo"></div>
-          <div class="table-wrap"><div id="adminList"></div></div>
-          <p class="hint">💡 Solde <b>positif</b> = la boutique doit à l'admin. Solde <b>négatif</b> = l'admin doit à la boutique.</p>
-        </div>
-
-        <div class="panel" id="adminDetailsPanel" style="display:none">
-          <div class="panel-head">
-            <h3 id="adminDetailsTitle"></h3>
-            <button class="btn ghost sm" onclick="closeAdminDetails()">Fermer</button>
-          </div>
-          <div class="kpis" id="adminKpis" style="margin-bottom:16px"></div>
-          <form id="adminOpForm">
-            <div class="form-grid">
-              <div class="field"><label>Date</label><input type="date" id="adminOpDate" required></div>
-              <div class="field"><label>Type d'opération</label>
-                <select id="adminOpType">
-                  <option value="charge">💸 Charge payée (admin → boutique)</option>
-                  <option value="versement">💵 Versement (admin → boutique)</option>
-                  <option value="emprunt">🏦 Emprunt (boutique → admin)</option>
-                  <option value="remboursement">↩️ Remboursement (boutique → admin)</option>
-                </select>
-              </div>
-              <div class="field"><label>Montant</label><input type="number" step="0.01" id="adminOpAmount" placeholder="0.00" required></div>
-              <div class="field" style="grid-column:span 2"><label>Description</label><input type="text" id="adminOpDesc" placeholder="Ex: Payé pub Facebook"></div>
-              <button class="btn" type="submit">Ajouter l'opération</button>
-            </div>
-          </form>
-          <div class="panel-head" style="margin-top:20px"><h3>Historique</h3></div>
-          <div class="table-wrap"><div id="adminOpList"></div></div>
-        </div>
-      </section>
-
       <!-- RÉCEPTIONS -->
       <section id="tab-receptions" class="tab-panel">
         <div class="page-head"><div><h1>Réceptions</h1><p>Entrées de stock et fournisseurs</p></div></div>
-
         <div class="panel">
           <div class="panel-head"><h3>➕ Nouvelle réception</h3></div>
           <form id="receptionForm">
@@ -459,12 +548,10 @@ tr:hover td{background:rgba(74,222,128,.03)}
             </div>
           </form>
         </div>
-
         <div class="panel">
           <div class="panel-head"><h3>🏭 Fournisseurs & soldes</h3></div>
           <div class="table-wrap"><div id="supplierList"></div></div>
         </div>
-
         <div class="panel" id="supplierDetailsPanel" style="display:none">
           <div class="panel-head">
             <h3 id="supplierDetailsTitle"></h3>
@@ -488,7 +575,6 @@ tr:hover td{background:rgba(74,222,128,.03)}
           <div class="panel-head" style="margin-top:20px"><h3>Historique</h3></div>
           <div class="table-wrap"><div id="supplierHistory"></div></div>
         </div>
-
         <div class="panel">
           <div class="panel-head"><h3>📦 Toutes les réceptions</h3></div>
           <div class="table-wrap"><div id="receptionList"></div></div>
@@ -498,7 +584,6 @@ tr:hover td{background:rgba(74,222,128,.03)}
       <!-- CATÉGORIES -->
       <section id="tab-categories" class="tab-panel">
         <div class="page-head"><div><h1>Catégories</h1><p>Revenus et dépenses</p></div></div>
-
         <div class="panel">
           <div class="panel-head"><h3>➕ Nouvelle catégorie</h3></div>
           <form id="catForm">
@@ -512,7 +597,6 @@ tr:hover td{background:rgba(74,222,128,.03)}
           </form>
           <p class="hint">💡 "pub/ads" → compté comme publicité. "stock/product/achat" → coût produit.</p>
         </div>
-
         <div class="grid2">
           <div class="panel"><div class="panel-head"><h3>Revenus</h3></div><div id="catRevList"></div></div>
           <div class="panel"><div class="panel-head"><h3>Dépenses</h3></div><div id="catDepList"></div></div>
@@ -521,68 +605,138 @@ tr:hover td{background:rgba(74,222,128,.03)}
 
       <!-- CAISSE -->
       <section id="tab-caisse" class="tab-panel">
-        <div class="page-head"><div><h1>Caisse journalière</h1><p>Ouvrez et clôturez vos journées</p></div></div>
-
+        <div class="page-head"><div><h1>Caisse</h1><p>Ouvrez et clôturez vos journées</p></div></div>
         <div class="panel">
           <div class="panel-head"><h3>🔓 Ouvrir une journée</h3></div>
           <form id="dayForm">
             <div class="form-grid">
               <div class="field"><label>Date</label><input type="date" id="dayDate" required></div>
-              <div class="field"><label>Ouverture prévue <span style="color:#888;text-transform:none;font-weight:400;font-size:11px">(auto)</span></label><input type="number" step="0.01" id="dayOpenExp" readonly></div>
+              <div class="field"><label>Ouverture prévue (auto)</label><input type="number" step="0.01" id="dayOpenExp" readonly></div>
               <div class="field"><label>Ouverture réelle</label><input type="number" step="0.01" id="dayOpenAct" placeholder="0.00" required></div>
               <button class="btn" type="submit">Ouvrir</button>
             </div>
           </form>
-          <p class="hint">💡 L'ouverture prévue est calculée automatiquement depuis la dernière clôture.</p>
+          <p class="hint">💡 L'ouverture prévue est calculée automatiquement.</p>
         </div>
-
         <div id="dayList"></div>
       </section>
 
-      <!-- RÉGLAGES -->
+      <!-- RÉGLAGES (contient ADMINS) -->
       <section id="tab-settings" class="tab-panel">
-        <div class="page-head"><div><h1>Réglages</h1><p>Devise et sauvegarde des données</p></div></div>
+        <div class="page-head"><div><h1>Réglages</h1><p>Admins, devise et sauvegarde</p></div></div>
 
-        <div class="panel">
-          <div class="panel-head"><h3>💱 Devise</h3></div>
-          <div class="form-grid">
-            <div class="field"><label>Symbole</label><input type="text" id="setCurrency" placeholder="DA"></div>
-            <button class="btn" id="saveCurrency">Enregistrer</button>
+        <!-- ADMINS -->
+        <div class="settings-section">
+          <div class="settings-section-title">
+            <span>⬢ Gestion des Admins</span>
+            <span class="badge" id="adminCountBadge">0</span>
+            <button class="btn sm" style="margin-left:auto" onclick="toggleAdminForm()">＋ Ajouter</button>
+          </div>
+
+          <div class="panel" id="adminFormPanel" style="display:none">
+            <div class="panel-head">
+              <h3>➕ Nouvel admin</h3>
+              <button class="icon-btn" onclick="toggleAdminForm()" title="Fermer">✕</button>
+            </div>
+            <form id="adminForm">
+              <div class="form-grid">
+                <div class="field"><label>Nom</label><input type="text" id="adminName" placeholder="Ex: Zakaria" required></div>
+                <div class="field"><label>Téléphone</label><input type="tel" id="adminPhone" placeholder="0555 00 00 00"></div>
+                <button class="btn" type="submit">Ajouter</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h3>Liste des admins</h3></div>
+            <div class="search-bar">
+              <span class="search-bar-icon">🔍</span>
+              <input type="text" id="adminSearch" placeholder="Rechercher un admin…" oninput="renderAdmins()">
+              <button type="button" class="search-bar-clear" id="adminSearchClear" onclick="clearAdminSearch()" title="Effacer">✕</button>
+            </div>
+            <div class="search-results-info" id="adminResultsInfo"></div>
+            <div class="table-wrap"><div id="adminList"></div></div>
+            <p class="hint">💡 Solde <b>positif</b> = la boutique doit à l'admin. Solde <b>négatif</b> = l'admin doit à la boutique.</p>
+          </div>
+
+          <div class="panel" id="adminDetailsPanel" style="display:none">
+            <div class="panel-head">
+              <h3 id="adminDetailsTitle"></h3>
+              <button class="btn ghost sm" onclick="closeAdminDetails()">Fermer</button>
+            </div>
+            <div class="kpis" id="adminKpis" style="margin-bottom:16px"></div>
+            <form id="adminOpForm">
+              <div class="form-grid">
+                <div class="field"><label>Date</label><input type="date" id="adminOpDate" required></div>
+                <div class="field"><label>Type d'opération</label>
+                  <select id="adminOpType">
+                    <option value="charge">💸 Charge payée (admin → boutique)</option>
+                    <option value="versement">💵 Versement (admin → boutique)</option>
+                    <option value="emprunt">🏦 Emprunt (boutique → admin)</option>
+                    <option value="remboursement">↩️ Remboursement (boutique → admin)</option>
+                  </select>
+                </div>
+                <div class="field"><label>Montant</label><input type="number" step="0.01" id="adminOpAmount" placeholder="0.00" required></div>
+                <div class="field" style="grid-column:span 2"><label>Description</label><input type="text" id="adminOpDesc" placeholder="Ex: Payé pub Facebook"></div>
+                <button class="btn" type="submit">Ajouter l'opération</button>
+              </div>
+            </form>
+            <div class="panel-head" style="margin-top:20px"><h3>Historique</h3></div>
+            <div class="table-wrap"><div id="adminOpList"></div></div>
           </div>
         </div>
 
-        <div class="panel">
-          <div class="panel-head"><h3>⬇️ Exporter les données</h3></div>
-          <div class="export-actions">
-            <button class="btn" id="exportJsonBtn">📥 Exporter en JSON</button>
-            <button class="btn blue" id="exportXlsxBtn">📊 Exporter en XLSX (Excel)</button>
-          </div>
-          <div class="settings-note">
-            <b>JSON</b> : idéal pour sauvegarder/restaurer toutes vos données fidèlement (recommandé).<br>
-            <b>XLSX</b> : fichier Excel avec une feuille par catégorie (Transactions, Clients, Admins, etc.). Pratique pour consulter/imprimer dans Excel.
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-head"><h3>⬆️ Importer les données</h3></div>
-          <div class="export-actions">
-            <label class="btn" style="display:inline-flex;align-items:center;cursor:pointer">
-              📂 Importer depuis un fichier<input type="file" id="importFile" accept=".json,.xlsx,.xls" style="display:none">
-            </label>
-          </div>
-          <div class="settings-note">
-            Accepte les fichiers <b>.json</b> (sauvegarde complète) et <b>.xlsx</b> (Excel avec les feuilles correspondantes).<br>
-            ⚠️ L'import <b>remplace</b> toutes les données actuelles.
+        <!-- DEVISE -->
+        <div class="settings-section">
+          <div class="settings-section-title">💱 Devise</div>
+          <div class="panel">
+            <div class="form-grid">
+              <div class="field"><label>Symbole</label><input type="text" id="setCurrency" placeholder="DA"></div>
+              <button class="btn" id="saveCurrency">Enregistrer</button>
+            </div>
           </div>
         </div>
 
-        <div class="panel">
-          <div class="panel-head"><h3>🗑️ Réinitialiser</h3></div>
-          <div class="export-actions">
-            <button class="btn red" onclick="resetTest()">Tout effacer</button>
+        <!-- EXPORT -->
+        <div class="settings-section">
+          <div class="settings-section-title">⬇️ Exporter les données</div>
+          <div class="panel">
+            <div class="export-actions">
+              <button class="btn" id="exportJsonBtn">📥 Exporter en JSON</button>
+              <button class="btn blue" id="exportXlsxBtn">📊 Exporter en XLSX</button>
+            </div>
+            <div class="settings-note">
+              <b>JSON</b> : sauvegarde complète.<br>
+              <b>XLSX</b> : fichier Excel multi-feuilles.
+            </div>
           </div>
-          <p class="hint">⚠️ Efface définitivement toutes les données locales.</p>
         </div>
+
+        <!-- IMPORT -->
+        <div class="settings-section">
+          <div class="settings-section-title">⬆️ Importer les données</div>
+          <div class="panel">
+            <div class="export-actions">
+              <label class="btn" style="display:inline-flex;align-items:center;cursor:pointer">
+                📂 Importer un fichier<input type="file" id="importFile" accept=".json,.xlsx,.xls" style="display:none">
+              </label>
+            </div>
+            <div class="settings-note">
+              Accepte <b>.json</b> et <b>.xlsx</b>. Remplace tout.
+            </div>
+          </div>
+        </div>
+
+        <!-- RESET -->
+        <div class="settings-section">
+          <div class="settings-section-title">🗑️ Réinitialiser</div>
+          <div class="panel">
+            <div class="export-actions">
+              <button class="btn red" onclick="resetTest()">Tout effacer</button>
+            </div>
+          </div>
+        </div>
+
       </section>
 
     </div>
@@ -590,9 +744,8 @@ tr:hover td{background:rgba(74,222,128,.03)}
 
   <aside class="right-stats" id="rightStats">
     <div class="stats-title">STATS</div>
-
     <div class="donut-wrap">
-      <svg width="220" height="220" viewBox="0 0 220 220" id="donutSvg">
+      <svg width="220" height="220" viewBox="0 0 220 220">
         <g transform="translate(110,110)">
           <circle r="80" fill="none" stroke="#2a2a2a" stroke-width="22"/>
           <circle id="segVentes" r="80" fill="none" stroke="#4ade80" stroke-width="22" stroke-dasharray="0 502" stroke-dashoffset="0" transform="rotate(-90)"/>
@@ -606,14 +759,12 @@ tr:hover td{background:rgba(74,222,128,.03)}
         <div class="donut-total-unit" id="donutUnit">DA</div>
       </div>
     </div>
-
     <div class="legend">
       <div class="legend-item"><span class="legend-dot" style="background:#4ade80"></span>ventes</div>
       <div class="legend-item"><span class="legend-dot" style="background:#f87171"></span>pubs</div>
       <div class="legend-item"><span class="legend-dot" style="background:#666666"></span>produits</div>
       <div class="legend-item"><span class="legend-dot" style="background:#60a5fa"></span>dettes</div>
     </div>
-
     <div class="section-title" style="color:#fff;font-size:13px;text-transform:uppercase;letter-spacing:.05em">Top transactions</div>
     <div class="top-list" id="topTransactions"></div>
   </aside>
@@ -621,11 +772,7 @@ tr:hover td{background:rgba(74,222,128,.03)}
 </div>
 
 <script>
-/* ============================================================
-   MODE TEST — Sans Firebase
-============================================================ */
-const LS_KEY = 'boutique_test_v8';
-
+const LS_KEY = 'boutique_test_v12';
 let state = null;
 let selectedClientId = null;
 let selectedSupplier = null;
@@ -648,34 +795,23 @@ function defaults(){
       { id: uid('cat'), name: 'Achat stock',          type: 'depense' },
       { id: uid('cat'), name: 'Emballage',            type: 'depense' }
     ],
-    transactions: [],
-    cashDays: [],
-    clients: [],
-    clientOps: [],
-    admins: [],
-    adminOps: [],
-    receptions: [],
-    supplierPayments: []
+    transactions: [], cashDays: [], clients: [], clientOps: [],
+    admins: [], adminOps: [], receptions: [], supplierPayments: []
   };
 }
 function save(){ try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch(e){} }
 function load(){
   try { const raw = localStorage.getItem(LS_KEY); state = raw ? JSON.parse(raw) : defaults(); }
   catch(e){ state = defaults(); }
-  ['sections','categories','transactions','cashDays','clients','clientOps','admins','adminOps','receptions','supplierPayments'].forEach(k => {
-    state[k] = state[k] || [];
-  });
+  ['sections','categories','transactions','cashDays','clients','clientOps','admins','adminOps','receptions','supplierPayments'].forEach(k => { state[k] = state[k] || []; });
   state.currency = state.currency || 'DA';
 }
 function resetTest(){
   if (!confirm('Réinitialiser TOUTES les données ?')) return;
-  if (!confirm('Vraiment sûr ? Cette action est irréversible.')) return;
+  if (!confirm('Vraiment sûr ?')) return;
   localStorage.removeItem(LS_KEY); load(); renderAll();
 }
-
-function fmtNum(n){
-  return (Number(n) || 0).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-}
+function fmtNum(n){ return (Number(n) || 0).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 function fmt(n){
   const v = Number(n) || 0;
   const s = fmtNum(Math.abs(v));
@@ -698,7 +834,6 @@ function isStockCategory(catId){
   const n = c.name.toLowerCase();
   return n.includes('stock') || n.includes('product') || n.includes('achat') || n.includes('marchandise');
 }
-
 function sectionStats(sectionId){
   const list = state.transactions.filter(t => t.sectionId === sectionId);
   const revenues = list.filter(t => t.type === 'revenu');
@@ -713,16 +848,13 @@ function sectionStats(sectionId){
   const tauxMarge = ca > 0 ? (margeBrute / ca * 100) : 0;
   const roas = pub > 0 ? (ca / pub) : 0;
   const roi = totalDep > 0 ? (margeNette / totalDep * 100) : 0;
-  return {
-    count: list.length, revenueCount: revenues.length, expenseCount: expenses.length,
+  return { count: list.length, revenueCount: revenues.length, expenseCount: expenses.length,
     ca, totalDep, pub, stock, other,
     pubCount: expenses.filter(t => isPubCategory(t.categoryId)).length,
     stockCount: expenses.filter(t => isStockCategory(t.categoryId)).length,
     margeBrute, margeNette, tauxMarge, roas, roi,
-    rentable: margeNette > 0, transactions: list
-  };
+    rentable: margeNette > 0, transactions: list };
 }
-
 function txFiltered({ sectionId = '', from = '', to = '', type = '' } = {}){
   return state.transactions.filter(t => {
     if (sectionId && t.sectionId !== sectionId) return false;
@@ -732,6 +864,19 @@ function txFiltered({ sectionId = '', from = '', to = '', type = '' } = {}){
     return true;
   });
 }
+
+function openSidebar(){
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sidebarOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+window.openSidebar = openSidebar;
+window.closeSidebar = closeSidebar;
 
 function goTab(tab){
   document.querySelectorAll('.nav-icon-btn').forEach(b => b.classList.remove('active'));
@@ -750,6 +895,8 @@ function goTab(tab){
     statsPanel.classList.add('hidden');
     appContainer.classList.add('no-stats');
   }
+  closeSidebar();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 document.querySelectorAll('.nav-icon-btn').forEach(btn => {
   btn.addEventListener('click', () => goTab(btn.dataset.tab));
@@ -806,7 +953,6 @@ function renderDashboard(){
         <div class="tx-amount ${t.type === 'revenu' ? 'pos' : 'neg'}">${t.type === 'revenu' ? '+' : '−'} ${fmtNum(t.amount)}</div>
       </div>`).join('');
   }
-
   renderDonut(list);
   renderTopTransactions();
 }
@@ -819,25 +965,29 @@ function renderDonut(list){
   const total = rev + pub + stock + other;
   $('#donutTotal').textContent = fmtNum(total);
   $('#donutUnit').textContent = state.currency;
+  $('#mDonutTotal').textContent = fmtNum(total);
+  $('#mDonutUnit').textContent = state.currency;
   const CIRC = 2 * Math.PI * 80;
+  const parts = [
+    { id: 'segVentes', mid: 'mSegVentes', value: rev },
+    { id: 'segPubs', mid: 'mSegPubs', value: pub },
+    { id: 'segProduits', mid: 'mSegProduits', value: stock },
+    { id: 'segDettes', mid: 'mSegDettes', value: other }
+  ];
   if (total === 0){
-    ['segVentes','segPubs','segProduits','segDettes'].forEach(id => {
-      $('#' + id).setAttribute('stroke-dasharray', '0 ' + CIRC);
-    });
+    parts.forEach(p => { [p.id, p.mid].forEach(elId => { const el = document.getElementById(elId); if (el) el.setAttribute('stroke-dasharray', '0 ' + CIRC); }); });
     return;
   }
-  const parts = [
-    { id: 'segVentes',   value: rev },
-    { id: 'segPubs',     value: pub },
-    { id: 'segProduits', value: stock },
-    { id: 'segDettes',   value: other }
-  ];
   let offset = 0;
   parts.forEach(p => {
     const len = (p.value / total) * CIRC;
-    const el = $('#' + p.id);
-    el.setAttribute('stroke-dasharray', len + ' ' + CIRC);
-    el.setAttribute('stroke-dashoffset', -offset);
+    [p.id, p.mid].forEach(elId => {
+      const el = document.getElementById(elId);
+      if (el){
+        el.setAttribute('stroke-dasharray', len + ' ' + CIRC);
+        el.setAttribute('stroke-dashoffset', -offset);
+      }
+    });
     offset += len;
   });
 }
@@ -860,7 +1010,6 @@ function renderTopTransactions(){
     </div>`).join('');
 }
 
-/* TRANSACTIONS */
 $('#txForm').addEventListener('submit', e => {
   e.preventDefault();
   const amount = parseFloat($('#txAmount').value);
@@ -875,30 +1024,27 @@ $('#txForm').addEventListener('submit', e => {
   save(); $('#txAmount').value = ''; $('#txDesc').value = ''; renderAll();
 });
 function renderTransactions(){
-  const list = txFiltered({ sectionId: $('#fltSection').value, type: $('#fltType').value })
-    .sort((a, b) => b.date.localeCompare(a.date));
+  const list = txFiltered({ sectionId: $('#fltSection').value, type: $('#fltType').value }).sort((a, b) => b.date.localeCompare(a.date));
   if (!list.length){ $('#txList').innerHTML = '<p class="empty">Aucune transaction.</p>'; return; }
   const payLabel = { espece: '💵 Espèces', carte: '💳 Carte', virement: '🏦 Virement', autre: '📦 Autre' };
   $('#txList').innerHTML = `<table>
     <thead><tr><th>Date</th><th>Type</th><th>Section</th><th>Catégorie</th><th>Paiement</th><th>Description</th><th class="num">Montant</th><th></th></tr></thead>
     <tbody>${list.map(t => `<tr>
-      <td>${t.date}</td>
-      <td><span class="pill ${t.type === 'revenu' ? 'rev' : 'dep'}">${t.type === 'revenu' ? 'Revenu' : 'Dépense'}</span></td>
-      <td><span class="dot" style="background:${secColor(t.sectionId)}"></span>${esc(secName(t.sectionId))}</td>
-      <td>${esc(catName(t.categoryId))}</td>
-      <td><span class="pill ${t.payment === 'espece' ? 'cash' : 'gray'}">${payLabel[t.payment] || t.payment}</span></td>
-      <td class="muted">${esc(t.desc) || '—'}</td>
-      <td class="num ${t.type === 'revenu' ? 'pos' : 'neg'}">${t.type === 'revenu' ? '+' : '−'}${fmt(t.amount)}</td>
+      <td data-label="Date">${t.date}</td>
+      <td data-label="Type"><span class="pill ${t.type === 'revenu' ? 'rev' : 'dep'}">${t.type === 'revenu' ? 'Revenu' : 'Dépense'}</span></td>
+      <td data-label="Section"><span><span class="dot" style="background:${secColor(t.sectionId)}"></span>${esc(secName(t.sectionId))}</span></td>
+      <td data-label="Catégorie">${esc(catName(t.categoryId))}</td>
+      <td data-label="Paiement"><span class="pill ${t.payment === 'espece' ? 'cash' : 'gray'}">${payLabel[t.payment] || t.payment}</span></td>
+      <td data-label="Description" class="muted">${esc(t.desc) || '—'}</td>
+      <td data-label="Montant" class="num ${t.type === 'revenu' ? 'pos' : 'neg'}">${t.type === 'revenu' ? '+' : '−'}${fmt(t.amount)}</td>
       <td><button class="icon-btn" onclick="delTx('${t.id}')">✕</button></td>
     </tr>`).join('')}</tbody></table>`;
 }
 window.delTx = function(id){
   if (!confirm('Supprimer cette transaction ?')) return;
-  state.transactions = state.transactions.filter(t => t.id !== id);
-  save(); renderAll();
+  state.transactions = state.transactions.filter(t => t.id !== id); save(); renderAll();
 };
 
-/* SECTIONS */
 $('#secForm').addEventListener('submit', e => {
   e.preventDefault();
   const name = $('#secName').value.trim(); if (!name) return;
@@ -916,13 +1062,13 @@ function renderSections(){
       const netCls = st.margeNette >= 0 ? 'pos' : 'neg';
       const roasCls = st.roas >= 1 ? 'pos' : (st.roas > 0 ? 'neg' : 'muted');
       return `<tr>
-        <td><span class="dot" style="background:${s.color}"></span><b>${esc(s.name)}</b></td>
-        <td><span class="pill gray">${typeLabel[s.type] || s.type}</span></td>
-        <td class="num pos">${fmt(st.ca)}</td>
-        <td class="num neg">${fmt(st.pub)}</td>
-        <td class="num">${fmt(st.stock)}</td>
-        <td class="num ${netCls}">${fmt(st.margeNette)}</td>
-        <td class="num ${roasCls}">${st.roas > 0 ? st.roas.toFixed(2) + 'x' : '—'}</td>
+        <td data-label="Section"><span><span class="dot" style="background:${s.color}"></span><b>${esc(s.name)}</b></span></td>
+        <td data-label="Type"><span class="pill gray">${typeLabel[s.type] || s.type}</span></td>
+        <td data-label="CA" class="num pos">${fmt(st.ca)}</td>
+        <td data-label="Pub" class="num neg">${fmt(st.pub)}</td>
+        <td data-label="Stock" class="num">${fmt(st.stock)}</td>
+        <td data-label="Marge" class="num ${netCls}">${fmt(st.margeNette)}</td>
+        <td data-label="ROAS" class="num ${roasCls}">${st.roas > 0 ? st.roas.toFixed(2) + 'x' : '—'}</td>
         <td><div class="row-actions">
           <button class="btn ghost sm" onclick="selectSection('${s.id}')">Détails</button>
           <button class="icon-btn" onclick="delSection('${s.id}')">✕</button>
@@ -931,10 +1077,7 @@ function renderSections(){
     }).join('')}</tbody></table>`;
   renderSectionDetails();
 }
-window.selectSection = function(id){
-  selectedSectionId = id; renderSectionDetails();
-  $('#sectionDetailsPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
-};
+window.selectSection = function(id){ selectedSectionId = id; renderSectionDetails(); $('#sectionDetailsPanel').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
 window.closeSectionDetails = function(){ selectedSectionId = null; $('#sectionDetailsPanel').style.display = 'none'; };
 window.delSection = function(id){
   if (state.transactions.some(t => t.sectionId === id)){ alert('Des transactions sont liées.'); return; }
@@ -981,18 +1124,17 @@ function renderSectionDetails(){
         const tag = isPubCategory(t.categoryId) ? '<span class="pill pub">📣 Pub</span> ' :
                     isStockCategory(t.categoryId) ? '<span class="pill stock">📦 Stock</span> ' : '';
         return `<tr>
-          <td>${t.date}</td>
-          <td><span class="pill ${t.type === 'revenu' ? 'rev' : 'dep'}">${t.type === 'revenu' ? 'Revenu' : 'Dépense'}</span></td>
-          <td>${tag}${esc(catName(t.categoryId))}</td>
-          <td class="muted">${esc(t.desc) || '—'}</td>
-          <td class="num ${t.type === 'revenu' ? 'pos' : 'neg'}">${t.type === 'revenu' ? '+' : '−'}${fmt(t.amount)}</td>
+          <td data-label="Date">${t.date}</td>
+          <td data-label="Type"><span class="pill ${t.type === 'revenu' ? 'rev' : 'dep'}">${t.type === 'revenu' ? 'Revenu' : 'Dépense'}</span></td>
+          <td data-label="Catégorie"><span>${tag}${esc(catName(t.categoryId))}</span></td>
+          <td data-label="Description" class="muted">${esc(t.desc) || '—'}</td>
+          <td data-label="Montant" class="num ${t.type === 'revenu' ? 'pos' : 'neg'}">${t.type === 'revenu' ? '+' : '−'}${fmt(t.amount)}</td>
           <td><button class="icon-btn" onclick="delTx('${t.id}')">✕</button></td>
         </tr>`;
       }).join('')}</tbody></table>`;
   }
 }
 
-/* CLIENTS */
 function clientById(id){ return state.clients.find(c => c.id === id); }
 function clientBalance(clientId){
   const ops = state.clientOps.filter(o => o.clientId === clientId);
@@ -1000,17 +1142,13 @@ function clientBalance(clientId){
   const versements = ops.filter(o => o.type === 'versement').reduce((a, b) => a + Number(b.amount || 0), 0);
   return { achats, versements, balance: achats - versements, count: ops.length };
 }
-
 function toggleClientForm(){
   const p = $('#clientFormPanel');
   const isHidden = p.style.display === 'none' || !p.style.display;
   p.style.display = isHidden ? 'block' : 'none';
-  if (isHidden) setTimeout(() => $('#clientName').focus(), 50);
+  if (isHidden) setTimeout(() => { $('#clientName').focus(); p.scrollIntoView({behavior:'smooth',block:'nearest'}); }, 50);
 }
-function clearClientSearch(){
-  $('#clientSearch').value = '';
-  renderClients();
-}
+function clearClientSearch(){ $('#clientSearch').value = ''; renderClients(); }
 window.toggleClientForm = toggleClientForm;
 window.clearClientSearch = clearClientSearch;
 
@@ -1018,24 +1156,15 @@ $('#clientForm').addEventListener('submit', e => {
   e.preventDefault();
   const name = $('#clientName').value.trim(); if (!name) return;
   state.clients.push({ id: uid('cli'), name, phone: $('#clientPhone').value.trim(), createdAt: todayStr() });
-  save();
-  $('#clientName').value = '';
-  $('#clientPhone').value = '';
-  $('#clientFormPanel').style.display = 'none';
-  renderAll();
+  save(); $('#clientName').value = ''; $('#clientPhone').value = '';
+  $('#clientFormPanel').style.display = 'none'; renderAll();
 });
-
 function renderClients(){
-  const searchInput = $('#clientSearch');
-  const clearBtn = $('#clientSearchClear');
-  const q = (searchInput?.value || '').trim().toLowerCase();
+  const q = ($('#clientSearch')?.value || '').trim().toLowerCase();
   const qClean = q.replace(/\s+/g, '');
-
-  if (clearBtn) clearBtn.classList.toggle('show', q.length > 0);
-
+  $('#clientSearchClear')?.classList.toggle('show', q.length > 0);
   let clients = state.clients || [];
   const total = clients.length;
-
   if (q){
     clients = clients.filter(c => {
       const name = (c.name || '').toLowerCase();
@@ -1043,18 +1172,14 @@ function renderClients(){
       return name.includes(q) || phone.includes(qClean);
     });
   }
-
   const infoEl = $('#clientResultsInfo');
   if (infoEl){
     if (q) infoEl.textContent = clients.length + ' client(s) trouvé(s) sur ' + total;
     else if (total > 0) infoEl.textContent = total + ' client(s)';
     else infoEl.textContent = '';
   }
-
   if (!clients.length){
-    $('#clientList').innerHTML = q
-      ? '<p class="empty">Aucun client ne correspond à « ' + esc(q) + ' »</p>'
-      : '<p class="empty">Aucun client pour le moment.</p>';
+    $('#clientList').innerHTML = q ? '<p class="empty">Aucun client ne correspond.</p>' : '<p class="empty">Aucun client.</p>';
   } else {
     $('#clientList').innerHTML = `<table>
       <thead><tr><th>Nom</th><th>Téléphone</th><th class="num">Achats</th><th class="num">Versements</th><th class="num">Solde</th><th>Actions</th></tr></thead>
@@ -1063,11 +1188,11 @@ function renderClients(){
         const cls = b.balance > 0 ? 'neg' : (b.balance < 0 ? 'pos' : 'muted');
         const label = b.balance > 0 ? 'À encaisser' : (b.balance < 0 ? 'Crédit' : 'À jour');
         return `<tr>
-          <td><b>${esc(c.name)}</b></td>
-          <td>${esc(c.phone) || '<span class="muted">—</span>'}</td>
-          <td class="num">${fmt(b.achats)}</td>
-          <td class="num">${fmt(b.versements)}</td>
-          <td class="num ${cls}">${fmt(b.balance)}<div class="muted" style="font-size:10px;font-weight:400">${label}</div></td>
+          <td data-label="Nom"><b>${esc(c.name)}</b></td>
+          <td data-label="Tél.">${esc(c.phone) || '—'}</td>
+          <td data-label="Achats" class="num">${fmt(b.achats)}</td>
+          <td data-label="Versements" class="num">${fmt(b.versements)}</td>
+          <td data-label="Solde" class="num ${cls}">${fmt(b.balance)}</td>
           <td><div class="row-actions">
             <button class="btn ghost sm" onclick="selectClient('${c.id}')">Détails</button>
             <button class="icon-btn" onclick="delClient('${c.id}')">✕</button>
@@ -1077,7 +1202,6 @@ function renderClients(){
   }
   renderClientDetails();
 }
-
 window.selectClient = function(id){ selectedClientId = id; renderClientDetails(); $('#clientDetailsPanel').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
 window.closeClientDetails = function(){ selectedClientId = null; $('#clientDetailsPanel').style.display = 'none'; };
 window.delClient = function(id){
@@ -1106,10 +1230,10 @@ function renderClientDetails(){
     $('#clientOpList').innerHTML = `<table>
       <thead><tr><th>Date</th><th>Type</th><th>Description</th><th class="num">Montant</th><th></th></tr></thead>
       <tbody>${ops.map(o => `<tr>
-        <td>${o.date}</td>
-        <td><span class="pill ${o.type === 'achat' ? 'dep' : 'rev'}">${o.type === 'achat' ? '🛒 Achat' : '💵 Versement'}</span></td>
-        <td class="muted">${esc(o.desc) || '—'}</td>
-        <td class="num ${o.type === 'achat' ? 'neg' : 'pos'}">${o.type === 'achat' ? '+' : '−'}${fmt(o.amount)}</td>
+        <td data-label="Date">${o.date}</td>
+        <td data-label="Type"><span class="pill ${o.type === 'achat' ? 'dep' : 'rev'}">${o.type === 'achat' ? '🛒 Achat' : '💵 Versement'}</span></td>
+        <td data-label="Description" class="muted">${esc(o.desc) || '—'}</td>
+        <td data-label="Montant" class="num ${o.type === 'achat' ? 'neg' : 'pos'}">${o.type === 'achat' ? '+' : '−'}${fmt(o.amount)}</td>
         <td><button class="icon-btn" onclick="delClientOp('${o.id}')">✕</button></td>
       </tr>`).join('')}</tbody></table>`;
   }
@@ -1123,48 +1247,30 @@ $('#clientOpForm').addEventListener('submit', e => {
   save(); $('#clientOpAmount').value = ''; $('#clientOpDesc').value = ''; renderAll();
 });
 window.delClientOp = function(id){
-  if (!confirm('Supprimer cette opération ?')) return;
+  if (!confirm('Supprimer ?')) return;
   state.clientOps = state.clientOps.filter(o => o.id !== id); save(); renderAll();
 };
 
 /* ADMINS */
 function adminById(id){ return state.admins.find(a => a.id === id); }
-
 function adminBalance(adminId){
   const ops = state.adminOps.filter(o => o.adminId === adminId);
-  let balance = 0;
-  let totalIn = 0;
-  let totalOut = 0;
+  let balance = 0, totalIn = 0, totalOut = 0;
   ops.forEach(o => {
     const amt = Number(o.amount) || 0;
-    if (o.type === 'charge' || o.type === 'versement'){
-      balance += amt;
-      totalIn += amt;
-    } else if (o.type === 'emprunt' || o.type === 'remboursement'){
-      balance -= amt;
-      totalOut += amt;
-    }
+    if (o.type === 'charge' || o.type === 'versement'){ balance += amt; totalIn += amt; }
+    else if (o.type === 'emprunt' || o.type === 'remboursement'){ balance -= amt; totalOut += amt; }
   });
   return { totalIn, totalOut, balance, count: ops.length };
 }
-
-const ADMIN_OP_LABELS = {
-  charge: '💸 Charge payée',
-  versement: '💵 Versement',
-  emprunt: '🏦 Emprunt',
-  remboursement: '↩️ Remboursement'
-};
-
+const ADMIN_OP_LABELS = { charge: '💸 Charge payée', versement: '💵 Versement', emprunt: '🏦 Emprunt', remboursement: '↩️ Remboursement' };
 function toggleAdminForm(){
   const p = $('#adminFormPanel');
   const isHidden = p.style.display === 'none' || !p.style.display;
   p.style.display = isHidden ? 'block' : 'none';
-  if (isHidden) setTimeout(() => $('#adminName').focus(), 50);
+  if (isHidden) setTimeout(() => { $('#adminName').focus(); p.scrollIntoView({behavior:'smooth',block:'nearest'}); }, 50);
 }
-function clearAdminSearch(){
-  $('#adminSearch').value = '';
-  renderAdmins();
-}
+function clearAdminSearch(){ $('#adminSearch').value = ''; renderAdmins(); }
 window.toggleAdminForm = toggleAdminForm;
 window.clearAdminSearch = clearAdminSearch;
 
@@ -1172,24 +1278,18 @@ $('#adminForm').addEventListener('submit', e => {
   e.preventDefault();
   const name = $('#adminName').value.trim(); if (!name) return;
   state.admins.push({ id: uid('adm'), name, phone: $('#adminPhone').value.trim(), createdAt: todayStr() });
-  save();
-  $('#adminName').value = '';
-  $('#adminPhone').value = '';
-  $('#adminFormPanel').style.display = 'none';
-  renderAll();
+  save(); $('#adminName').value = ''; $('#adminPhone').value = '';
+  $('#adminFormPanel').style.display = 'none'; renderAll();
 });
-
 function renderAdmins(){
-  const searchInput = $('#adminSearch');
-  const clearBtn = $('#adminSearchClear');
-  const q = (searchInput?.value || '').trim().toLowerCase();
+  const badge = $('#adminCountBadge');
+  if (badge) badge.textContent = (state.admins || []).length;
+
+  const q = ($('#adminSearch')?.value || '').trim().toLowerCase();
   const qClean = q.replace(/\s+/g, '');
-
-  if (clearBtn) clearBtn.classList.toggle('show', q.length > 0);
-
+  $('#adminSearchClear')?.classList.toggle('show', q.length > 0);
   let admins = state.admins || [];
   const total = admins.length;
-
   if (q){
     admins = admins.filter(a => {
       const name = (a.name || '').toLowerCase();
@@ -1197,31 +1297,27 @@ function renderAdmins(){
       return name.includes(q) || phone.includes(qClean);
     });
   }
-
   const infoEl = $('#adminResultsInfo');
   if (infoEl){
     if (q) infoEl.textContent = admins.length + ' admin(s) trouvé(s) sur ' + total;
     else if (total > 0) infoEl.textContent = total + ' admin(s)';
     else infoEl.textContent = '';
   }
-
   if (!admins.length){
-    $('#adminList').innerHTML = q
-      ? '<p class="empty">Aucun admin ne correspond à « ' + esc(q) + ' »</p>'
-      : '<p class="empty">Aucun admin pour le moment.</p>';
+    $('#adminList').innerHTML = q ? '<p class="empty">Aucun admin ne correspond.</p>' : '<p class="empty">Aucun admin. Cliquez sur "＋ Ajouter" ci-dessus.</p>';
   } else {
     $('#adminList').innerHTML = `<table>
-      <thead><tr><th>Nom</th><th>Téléphone</th><th class="num">A mis dans la boutique</th><th class="num">A pris de la boutique</th><th class="num">Solde</th><th>Actions</th></tr></thead>
+      <thead><tr><th>Nom</th><th>Téléphone</th><th class="num">A mis</th><th class="num">A pris</th><th class="num">Solde</th><th>Actions</th></tr></thead>
       <tbody>${admins.map(a => {
         const b = adminBalance(a.id);
         const cls = b.balance > 0 ? 'pos' : (b.balance < 0 ? 'neg' : 'muted');
         const label = b.balance > 0 ? 'La boutique doit' : (b.balance < 0 ? 'Doit à la boutique' : 'À jour');
         return `<tr>
-          <td><b>${esc(a.name)}</b></td>
-          <td>${esc(a.phone) || '<span class="muted">—</span>'}</td>
-          <td class="num">${fmt(b.totalIn)}</td>
-          <td class="num">${fmt(b.totalOut)}</td>
-          <td class="num ${cls}">${fmt(b.balance)}<div class="muted" style="font-size:10px;font-weight:400">${label}</div></td>
+          <td data-label="Nom"><b>${esc(a.name)}</b></td>
+          <td data-label="Tél.">${esc(a.phone) || '—'}</td>
+          <td data-label="A mis" class="num">${fmt(b.totalIn)}</td>
+          <td data-label="A pris" class="num">${fmt(b.totalOut)}</td>
+          <td data-label="Solde" class="num ${cls}">${fmt(b.balance)}</td>
           <td><div class="row-actions">
             <button class="btn ghost sm" onclick="selectAdmin('${a.id}')">Détails</button>
             <button class="icon-btn" onclick="delAdmin('${a.id}')">✕</button>
@@ -1231,20 +1327,15 @@ function renderAdmins(){
   }
   renderAdminDetails();
 }
-
-window.selectAdmin = function(id){
-  selectedAdminId = id; renderAdminDetails();
-  $('#adminDetailsPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
-};
+window.selectAdmin = function(id){ selectedAdminId = id; renderAdminDetails(); $('#adminDetailsPanel').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
 window.closeAdminDetails = function(){ selectedAdminId = null; $('#adminDetailsPanel').style.display = 'none'; };
 window.delAdmin = function(id){
-  if (!confirm('Supprimer cet admin et son historique ?')) return;
+  if (!confirm('Supprimer cet admin ?')) return;
   state.admins = state.admins.filter(a => a.id !== id);
   state.adminOps = state.adminOps.filter(o => o.adminId !== id);
   if (selectedAdminId === id) selectedAdminId = null;
   save(); renderAll();
 };
-
 function renderAdminDetails(){
   if (!selectedAdminId){ $('#adminDetailsPanel').style.display = 'none'; return; }
   const a = adminById(selectedAdminId);
@@ -1253,52 +1344,38 @@ function renderAdminDetails(){
   $('#adminDetailsTitle').textContent = '👤 ' + a.name + (a.phone ? ' — ' + a.phone : '');
   const b = adminBalance(a.id);
   $('#adminKpis').innerHTML = `
-    <div class="kpi green"><div class="label">A mis dans la boutique</div><div class="value">${fmt(b.totalIn)}</div></div>
-    <div class="kpi red"><div class="label">A pris de la boutique</div><div class="value">${fmt(b.totalOut)}</div></div>
-    <div class="kpi ${b.balance > 0 ? 'green' : (b.balance < 0 ? 'red' : 'gray')}">
-      <div class="label">Solde</div>
-      <div class="value">${fmt(b.balance)}</div>
-      <div class="sub muted" style="font-size:11px;margin-top:4px">${b.balance > 0 ? 'La boutique doit à l\'admin' : (b.balance < 0 ? 'L\'admin doit à la boutique' : 'À jour')}</div>
+    <div class="kpi green"><div class="label">A mis</div><div class="value">${fmt(b.totalIn)}</div></div>
+    <div class="kpi red"><div class="label">A pris</div><div class="value">${fmt(b.totalOut)}</div></div>
+    <div class="kpi ${b.balance > 0 ? 'green' : (b.balance < 0 ? 'red' : 'gray')}"><div class="label">Solde</div><div class="value">${fmt(b.balance)}</div>
+      <div class="sub muted" style="font-size:11px;margin-top:4px">${b.balance > 0 ? 'La boutique doit' : (b.balance < 0 ? 'L\'admin doit' : 'À jour')}</div>
     </div>`;
   const ops = state.adminOps.filter(o => o.adminId === a.id).sort((a, b) => b.date.localeCompare(a.date));
-  if (!ops.length){
-    $('#adminOpList').innerHTML = '<p class="empty">Aucune opération.</p>';
-  } else {
+  if (!ops.length){ $('#adminOpList').innerHTML = '<p class="empty">Aucune opération.</p>'; }
+  else {
     $('#adminOpList').innerHTML = `<table>
       <thead><tr><th>Date</th><th>Type</th><th>Description</th><th class="num">Montant</th><th></th></tr></thead>
       <tbody>${ops.map(o => {
         const isIn = o.type === 'charge' || o.type === 'versement';
         return `<tr>
-          <td>${o.date}</td>
-          <td><span class="pill ${isIn ? 'rev' : 'dep'}">${ADMIN_OP_LABELS[o.type] || o.type}</span></td>
-          <td class="muted">${esc(o.desc) || '—'}</td>
-          <td class="num ${isIn ? 'pos' : 'neg'}">${isIn ? '+' : '−'}${fmt(o.amount)}</td>
+          <td data-label="Date">${o.date}</td>
+          <td data-label="Type"><span class="pill ${isIn ? 'rev' : 'dep'}">${ADMIN_OP_LABELS[o.type] || o.type}</span></td>
+          <td data-label="Description" class="muted">${esc(o.desc) || '—'}</td>
+          <td data-label="Montant" class="num ${isIn ? 'pos' : 'neg'}">${isIn ? '+' : '−'}${fmt(o.amount)}</td>
           <td><button class="icon-btn" onclick="delAdminOp('${o.id}')">✕</button></td>
         </tr>`;
       }).join('')}</tbody></table>`;
   }
 }
-
 $('#adminOpForm').addEventListener('submit', e => {
   e.preventDefault();
   if (!selectedAdminId) return;
   const amount = parseFloat($('#adminOpAmount').value);
   if (!(amount > 0)) return;
-  state.adminOps.push({
-    id: uid('aop'),
-    adminId: selectedAdminId,
-    date: $('#adminOpDate').value,
-    type: $('#adminOpType').value,
-    amount,
-    desc: $('#adminOpDesc').value.trim()
-  });
-  save();
-  $('#adminOpAmount').value = '';
-  $('#adminOpDesc').value = '';
-  renderAll();
+  state.adminOps.push({ id: uid('aop'), adminId: selectedAdminId, date: $('#adminOpDate').value, type: $('#adminOpType').value, amount, desc: $('#adminOpDesc').value.trim() });
+  save(); $('#adminOpAmount').value = ''; $('#adminOpDesc').value = ''; renderAll();
 });
 window.delAdminOp = function(id){
-  if (!confirm('Supprimer cette opération ?')) return;
+  if (!confirm('Supprimer ?')) return;
   state.adminOps = state.adminOps.filter(o => o.id !== id); save(); renderAll();
 };
 
@@ -1354,14 +1431,14 @@ function renderReceptions(){
   if (!suppliers.length){ $('#supplierList').innerHTML = '<p class="empty">Aucun fournisseur.</p>'; }
   else {
     $('#supplierList').innerHTML = `<table>
-      <thead><tr><th>Fournisseur</th><th class="num">Total reçu</th><th class="num">Total payé</th><th class="num">Solde</th><th>Actions</th></tr></thead>
+      <thead><tr><th>Fournisseur</th><th class="num">Reçu</th><th class="num">Payé</th><th class="num">Solde</th><th>Actions</th></tr></thead>
       <tbody>${suppliers.map(s => {
         const cls = s.balance > 0 ? 'neg' : (s.balance < 0 ? 'pos' : 'muted');
         return `<tr>
-          <td><b>${esc(s.name)}</b></td>
-          <td class="num">${fmt(s.total)}</td>
-          <td class="num">${fmt(s.paid)}</td>
-          <td class="num ${cls}">${fmt(s.balance)}</td>
+          <td data-label="Fournisseur"><b>${esc(s.name)}</b></td>
+          <td data-label="Reçu" class="num">${fmt(s.total)}</td>
+          <td data-label="Payé" class="num">${fmt(s.paid)}</td>
+          <td data-label="Solde" class="num ${cls}">${fmt(s.balance)}</td>
           <td><button class="btn ghost sm" onclick="selectSupplier('${esc(s.name).replace(/'/g,"\\'")}')">Détails</button></td>
         </tr>`;
       }).join('')}</tbody></table>`;
@@ -1372,20 +1449,20 @@ function renderReceptions(){
     $('#receptionList').innerHTML = `<table>
       <thead><tr><th>Date</th><th>Fournisseur</th><th>Produit</th><th>Section</th><th class="num">Qté</th><th class="num">Total</th><th class="num">Payé</th><th></th></tr></thead>
       <tbody>${recs.map(r => `<tr>
-        <td>${r.date}</td>
-        <td>${esc(r.supplier)}</td>
-        <td>${esc(r.product)}</td>
-        <td><span class="dot" style="background:${secColor(r.sectionId)}"></span>${esc(secName(r.sectionId))}</td>
-        <td class="num">${r.quantity}</td>
-        <td class="num">${fmt(r.total)}</td>
-        <td class="num ${Number(r.paid) >= Number(r.total) ? 'pos' : 'neg'}">${fmt(r.paid)}</td>
+        <td data-label="Date">${r.date}</td>
+        <td data-label="Fournisseur">${esc(r.supplier)}</td>
+        <td data-label="Produit">${esc(r.product)}</td>
+        <td data-label="Section"><span><span class="dot" style="background:${secColor(r.sectionId)}"></span>${esc(secName(r.sectionId))}</span></td>
+        <td data-label="Qté" class="num">${r.quantity}</td>
+        <td data-label="Total" class="num">${fmt(r.total)}</td>
+        <td data-label="Payé" class="num ${Number(r.paid) >= Number(r.total) ? 'pos' : 'neg'}">${fmt(r.paid)}</td>
         <td><button class="icon-btn" onclick="delReception('${r.id}')">✕</button></td>
       </tr>`).join('')}</tbody></table>`;
   }
   renderSupplierDetails();
 }
 window.delReception = function(id){
-  if (!confirm('Supprimer cette réception ?')) return;
+  if (!confirm('Supprimer ?')) return;
   state.receptions = state.receptions.filter(r => r.id !== id); save(); renderAll();
 };
 window.selectSupplier = function(name){ selectedSupplier = name; renderSupplierDetails(); $('#supplierDetailsPanel').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
@@ -1405,12 +1482,12 @@ function renderSupplierDetails(){
   $('#supplierHistory').innerHTML = all.length ? `<table>
     <thead><tr><th>Date</th><th>Type</th><th>Détails</th><th class="num">Débit</th><th class="num">Crédit</th><th></th></tr></thead>
     <tbody>${all.map(o => o.kind === 'rec' ? `<tr>
-      <td>${o.date}</td><td><span class="pill dep">📦 Réception</span></td><td>${esc(o.label)}</td>
-      <td class="num neg">+${fmt(o.amount)}</td><td class="num pos">${o.paid ? '−' + fmt(o.paid) : '—'}</td>
+      <td data-label="Date">${o.date}</td><td data-label="Type"><span class="pill dep">📦 Réception</span></td><td data-label="Détails">${esc(o.label)}</td>
+      <td data-label="Débit" class="num neg">+${fmt(o.amount)}</td><td data-label="Crédit" class="num pos">${o.paid ? '−' + fmt(o.paid) : '—'}</td>
       <td><button class="icon-btn" onclick="delReception('${o.id}')">✕</button></td>
     </tr>` : `<tr>
-      <td>${o.date}</td><td><span class="pill rev">💵 Paiement</span></td><td>${esc(o.label)}</td>
-      <td class="num">—</td><td class="num pos">−${fmt(o.amount)}</td>
+      <td data-label="Date">${o.date}</td><td data-label="Type"><span class="pill rev">💵 Paiement</span></td><td data-label="Détails">${esc(o.label)}</td>
+      <td data-label="Débit" class="num">—</td><td data-label="Crédit" class="num pos">−${fmt(o.amount)}</td>
       <td><button class="icon-btn" onclick="delSupplierPayment('${o.id}')">✕</button></td>
     </tr>`).join('')}</tbody></table>` : '<p class="empty">Aucune opération.</p>';
 }
@@ -1476,9 +1553,7 @@ function lastClosedDay(){
   return [...state.cashDays].filter(d => d.closingActual !== null && d.closingActual !== undefined).sort((a, b) => b.date.localeCompare(a.date))[0];
 }
 function lastClosedDayBefore(date){
-  return [...state.cashDays]
-    .filter(d => d.closingActual !== null && d.closingActual !== undefined && d.date < date)
-    .sort((a, b) => b.date.localeCompare(a.date))[0];
+  return [...state.cashDays].filter(d => d.closingActual !== null && d.closingActual !== undefined && d.date < date).sort((a, b) => b.date.localeCompare(a.date))[0];
 }
 function computeOpeningExpected(date){
   if (!date) return 0;
@@ -1501,28 +1576,16 @@ $('#dayForm').addEventListener('submit', e => {
   const date = $('#dayDate').value;
   if (!date){ alert('Choisissez une date.'); return; }
   if (state.cashDays.some(d => d.date === date)){ alert('Journée déjà existante.'); return; }
-  state.cashDays.push({
-    id: uid('day'),
-    date,
-    openingExpected: computeOpeningExpected(date),
-    openingActual: parseFloat($('#dayOpenAct').value) || 0,
-    closingActual: null
-  });
-  save();
-  $('#dayOpenAct').value = '';
-  renderAll();
+  state.cashDays.push({ id: uid('day'), date, openingExpected: computeOpeningExpected(date), openingActual: parseFloat($('#dayOpenAct').value) || 0, closingActual: null });
+  save(); $('#dayOpenAct').value = ''; renderAll();
 });
 $('#dayDate').addEventListener('change', () => {
   const date = $('#dayDate').value;
-  if (date){
-    $('#dayOpenExp').value = computeOpeningExpected(date).toFixed(2);
-  }
+  if (date){ $('#dayOpenExp').value = computeOpeningExpected(date).toFixed(2); }
 });
 function renderCaisse(){
   const dateInput = $('#dayDate').value;
-  if (dateInput){
-    $('#dayOpenExp').value = computeOpeningExpected(dateInput).toFixed(2);
-  }
+  if (dateInput){ $('#dayOpenExp').value = computeOpeningExpected(dateInput).toFixed(2); }
   const days = [...state.cashDays].sort((a, b) => b.date.localeCompare(a.date));
   if (!days.length){ $('#dayList').innerHTML = '<p class="empty">Aucune journée.</p>'; return; }
   $('#dayList').innerHTML = days.map(d => {
@@ -1555,364 +1618,93 @@ window.delDay = function(id){
   state.cashDays = state.cashDays.filter(d => d.id !== id); save(); renderAll();
 };
 
-/* ============================================================
-   RÉGLAGES — Devise
-============================================================ */
 $('#saveCurrency').addEventListener('click', () => {
   state.currency = $('#setCurrency').value.trim() || 'DA'; save(); renderAll();
 });
-
-/* ============================================================
-   EXPORT JSON
-============================================================ */
 $('#exportJsonBtn').addEventListener('click', () => {
   const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = 'tech-twins-' + todayStr() + '.json';
-  a.click();
-  URL.revokeObjectURL(a.href);
+  a.click(); URL.revokeObjectURL(a.href);
 });
-
-/* ============================================================
-   EXPORT XLSX
-============================================================ */
 $('#exportXlsxBtn').addEventListener('click', () => {
   try {
-    if (typeof XLSX === 'undefined'){
-      alert('La bibliothèque XLSX n\'est pas chargée. Vérifiez votre connexion internet.');
-      return;
-    }
+    if (typeof XLSX === 'undefined'){ alert('Bibliothèque XLSX non chargée.'); return; }
     const wb = XLSX.utils.book_new();
-
-    // --- Feuille Sections ---
-    const sectionsRows = state.sections.map(s => ({
-      ID: s.id, Nom: s.name, Type: s.type, Couleur: s.color
-    }));
+    const sectionsRows = state.sections.map(s => ({ ID: s.id, Nom: s.name, Type: s.type, Couleur: s.color }));
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(sectionsRows.length ? sectionsRows : [{ID:'',Nom:'',Type:'',Couleur:''}]), 'Sections');
-
-    // --- Feuille Catégories ---
-    const catsRows = state.categories.map(c => ({
-      ID: c.id, Nom: c.name, Type: c.type
-    }));
+    const catsRows = state.categories.map(c => ({ ID: c.id, Nom: c.name, Type: c.type }));
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(catsRows.length ? catsRows : [{ID:'',Nom:'',Type:''}]), 'Categories');
-
-    // --- Feuille Transactions ---
-    const txRows = state.transactions.map(t => ({
-      ID: t.id,
-      Date: t.date,
-      Type: t.type,
-      SectionID: t.sectionId,
-      Section: secName(t.sectionId),
-      CategorieID: t.categoryId,
-      Categorie: catName(t.categoryId),
-      Montant: Number(t.amount),
-      Paiement: t.payment,
-      Description: t.desc || ''
-    }));
+    const txRows = state.transactions.map(t => ({ ID: t.id, Date: t.date, Type: t.type, Section: secName(t.sectionId), Categorie: catName(t.categoryId), Montant: Number(t.amount), Paiement: t.payment, Description: t.desc || '' }));
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(txRows.length ? txRows : [{ID:'',Date:'',Type:'',Section:'',Categorie:'',Montant:0,Paiement:'',Description:''}]), 'Transactions');
-
-    // --- Feuille Clients ---
-    const clientsRows = state.clients.map(c => {
-      const b = clientBalance(c.id);
-      return {
-        ID: c.id, Nom: c.name, Telephone: c.phone || '',
-        TotalAchats: b.achats, TotalVersements: b.versements, Solde: b.balance,
-        DateCreation: c.createdAt || ''
-      };
-    });
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(clientsRows.length ? clientsRows : [{ID:'',Nom:'',Telephone:'',TotalAchats:0,TotalVersements:0,Solde:0,DateCreation:''}]), 'Clients');
-
-    // --- Feuille Opérations Clients ---
-    const clientOpsRows = state.clientOps.map(o => {
-      const c = clientById(o.clientId);
-      return {
-        ID: o.id, ClientID: o.clientId, Client: c ? c.name : '',
-        Date: o.date, Type: o.type, Montant: Number(o.amount), Description: o.desc || ''
-      };
-    });
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(clientOpsRows.length ? clientOpsRows : [{ID:'',ClientID:'',Client:'',Date:'',Type:'',Montant:0,Description:''}]), 'OperationsClients');
-
-    // --- Feuille Admins ---
-    const adminsRows = state.admins.map(a => {
-      const b = adminBalance(a.id);
-      return {
-        ID: a.id, Nom: a.name, Telephone: a.phone || '',
-        TotalMis: b.totalIn, TotalPris: b.totalOut, Solde: b.balance,
-        DateCreation: a.createdAt || ''
-      };
-    });
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(adminsRows.length ? adminsRows : [{ID:'',Nom:'',Telephone:'',TotalMis:0,TotalPris:0,Solde:0,DateCreation:''}]), 'Admins');
-
-    // --- Feuille Opérations Admins ---
-    const adminOpsRows = state.adminOps.map(o => {
-      const a = adminById(o.adminId);
-      return {
-        ID: o.id, AdminID: o.adminId, Admin: a ? a.name : '',
-        Date: o.date, Type: o.type, Montant: Number(o.amount), Description: o.desc || ''
-      };
-    });
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(adminOpsRows.length ? adminOpsRows : [{ID:'',AdminID:'',Admin:'',Date:'',Type:'',Montant:0,Description:''}]), 'OperationsAdmins');
-
-    // --- Feuille Réceptions ---
-    const recRows = state.receptions.map(r => ({
-      ID: r.id, Date: r.date, Fournisseur: r.supplier, Produit: r.product,
-      SectionID: r.sectionId, Section: secName(r.sectionId),
-      Quantite: r.quantity, PrixUnitaire: r.unitPrice, Total: r.total,
-      Paye: r.paid || 0, Source: r.source || ''
-    }));
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(recRows.length ? recRows : [{ID:'',Date:'',Fournisseur:'',Produit:'',Section:'',Quantite:0,PrixUnitaire:0,Total:0,Paye:0,Source:''}]), 'Receptions');
-
-    // --- Feuille Paiements Fournisseurs ---
-    const supPayRows = state.supplierPayments.map(p => ({
-      ID: p.id, Fournisseur: p.supplier, Date: p.date,
-      Montant: Number(p.amount), Source: p.source || '', Description: p.desc || ''
-    }));
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(supPayRows.length ? supPayRows : [{ID:'',Fournisseur:'',Date:'',Montant:0,Source:'',Description:''}]), 'PaiementsFournisseurs');
-
-    // --- Feuille Jours de caisse ---
-    const dayRows = state.cashDays.map(d => ({
-      ID: d.id, Date: d.date,
-      OuverturePrevue: d.openingExpected, OuvertureReelle: d.openingActual,
-      CloturePrevue: dayComputed(d).closingExpected,
-      ClotureReelle: d.closingActual === null || d.closingActual === undefined ? '' : d.closingActual
-    }));
+    const clientsRows = state.clients.map(c => { const b = clientBalance(c.id); return { ID: c.id, Nom: c.name, Telephone: c.phone || '', TotalAchats: b.achats, TotalVersements: b.versements, Solde: b.balance }; });
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(clientsRows.length ? clientsRows : [{ID:'',Nom:'',Telephone:'',TotalAchats:0,TotalVersements:0,Solde:0}]), 'Clients');
+    const adminsRows = state.admins.map(a => { const b = adminBalance(a.id); return { ID: a.id, Nom: a.name, Telephone: a.phone || '', TotalMis: b.totalIn, TotalPris: b.totalOut, Solde: b.balance }; });
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(adminsRows.length ? adminsRows : [{ID:'',Nom:'',Telephone:'',TotalMis:0,TotalPris:0,Solde:0}]), 'Admins');
+    const recRows = state.receptions.map(r => ({ ID: r.id, Date: r.date, Fournisseur: r.supplier, Produit: r.product, Quantite: r.quantity, PrixUnitaire: r.unitPrice, Total: r.total, Paye: r.paid || 0 }));
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(recRows.length ? recRows : [{ID:'',Date:'',Fournisseur:'',Produit:'',Quantite:0,PrixUnitaire:0,Total:0,Paye:0}]), 'Receptions');
+    const dayRows = state.cashDays.map(d => ({ ID: d.id, Date: d.date, OuverturePrevue: d.openingExpected, OuvertureReelle: d.openingActual, CloturePrevue: dayComputed(d).closingExpected, ClotureReelle: d.closingActual ?? '' }));
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(dayRows.length ? dayRows : [{ID:'',Date:'',OuverturePrevue:0,OuvertureReelle:0,CloturePrevue:0,ClotureReelle:''}]), 'JoursCaisse');
-
-    // --- Feuille Réglages ---
-    const settingsRows = [{ Devise: state.currency, ExportDate: todayStr() }];
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(settingsRows), 'Reglages');
-
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet([{ Devise: state.currency, ExportDate: todayStr() }]), 'Reglages');
     XLSX.writeFile(wb, 'tech-twins-' + todayStr() + '.xlsx');
-  } catch(err){
-    console.error(err);
-    alert('Erreur lors de l\'export XLSX : ' + err.message);
-  }
+  } catch(err){ console.error(err); alert('Erreur XLSX : ' + err.message); }
 });
-
-/* ============================================================
-   IMPORT (JSON + XLSX)
-============================================================ */
 $('#importFile').addEventListener('change', e => {
-  const file = e.target.files[0];
-  if (!file) return;
+  const file = e.target.files[0]; if (!file) return;
   const ext = (file.name.split('.').pop() || '').toLowerCase();
-
   if (ext === 'json'){
     const reader = new FileReader();
     reader.onload = ev => {
       try {
         const data = JSON.parse(ev.target.result);
-        if (!confirm('Remplacer TOUTES les données actuelles par ce fichier JSON ?')) return;
+        if (!confirm('Remplacer toutes les données ?')) return;
         state = data;
-        // S'assurer que tous les tableaux existent
-        ['sections','categories','transactions','cashDays','clients','clientOps','admins','adminOps','receptions','supplierPayments'].forEach(k => {
-          state[k] = state[k] || [];
-        });
+        ['sections','categories','transactions','cashDays','clients','clientOps','admins','adminOps','receptions','supplierPayments'].forEach(k => { state[k] = state[k] || []; });
         state.currency = state.currency || 'DA';
         save(); renderAll();
         alert('✅ Import JSON réussi !');
-      } catch(err){
-        console.error(err);
-        alert('Fichier JSON invalide : ' + err.message);
-      }
+      } catch(err){ alert('Fichier JSON invalide.'); }
     };
-    reader.readAsText(file);
-    e.target.value = '';
+    reader.readAsText(file); e.target.value = '';
     return;
   }
-
   if (ext === 'xlsx' || ext === 'xls'){
     const reader = new FileReader();
     reader.onload = ev => {
       try {
         const data = new Uint8Array(ev.target.result);
         const wb = XLSX.read(data, { type: 'array' });
-        const getSheet = (name) => {
-          const ws = wb.Sheets[name];
-          if (!ws) return [];
-          return XLSX.utils.sheet_to_json(ws, { defval: '' });
-        };
-
-        if (!confirm('Remplacer TOUTES les données actuelles par ce fichier XLSX ?')) return;
-
-        const newState = {
-          currency: 'DA',
-          sections: [],
-          categories: [],
-          transactions: [],
-          cashDays: [],
-          clients: [],
-          clientOps: [],
-          admins: [],
-          adminOps: [],
-          receptions: [],
-          supplierPayments: []
-        };
-
-        // Réglages
-        const reglages = getSheet('Reglages');
-        if (reglages.length && reglages[0].Devise) newState.currency = String(reglages[0].Devise);
-
-        // Sections
-        getSheet('Sections').forEach(r => {
-          if (!r.ID && !r.Nom) return;
-          newState.sections.push({
-            id: r.ID || uid('sec'),
-            name: r.Nom || 'Sans nom',
-            type: r.Type || 'global',
-            color: r.Couleur || '#4ade80'
-          });
-        });
-        if (!newState.sections.length) newState.sections.push({ id: 'sec_global', name: 'Boutique (global)', type: 'global', color: '#4ade80' });
-
-        // Catégories
-        getSheet('Categories').forEach(r => {
-          if (!r.ID && !r.Nom) return;
-          newState.categories.push({
-            id: r.ID || uid('cat'),
-            name: r.Nom || 'Sans nom',
-            type: r.Type || 'depense'
-          });
-        });
-        if (!newState.categories.length){
-          newState.categories = defaults().categories;
-        }
-
-        // Transactions
-        getSheet('Transactions').forEach(r => {
-          if (!r.Date && !r.Montant) return;
-          newState.transactions.push({
-            id: r.ID || uid('tx'),
-            date: String(r.Date).slice(0, 10),
-            type: r.Type || 'depense',
-            sectionId: r.SectionID || 'sec_global',
-            categoryId: r.CategorieID || (newState.categories[0]?.id || ''),
-            amount: Number(r.Montant) || 0,
-            payment: r.Paiement || 'carte',
-            desc: r.Description || ''
-          });
-        });
-
-        // Clients
-        getSheet('Clients').forEach(r => {
-          if (!r.Nom && !r.ID) return;
-          newState.clients.push({
-            id: r.ID || uid('cli'),
-            name: r.Nom || 'Sans nom',
-            phone: r.Telephone || '',
-            createdAt: r.DateCreation || todayStr()
-          });
-        });
-
-        // Opérations Clients
-        getSheet('OperationsClients').forEach(r => {
-          if (!r.Date && !r.Montant) return;
-          newState.clientOps.push({
-            id: r.ID || uid('cop'),
-            clientId: r.ClientID || '',
-            date: String(r.Date).slice(0, 10),
-            type: r.Type || 'achat',
-            amount: Number(r.Montant) || 0,
-            desc: r.Description || ''
-          });
-        });
-
-        // Admins
-        getSheet('Admins').forEach(r => {
-          if (!r.Nom && !r.ID) return;
-          newState.admins.push({
-            id: r.ID || uid('adm'),
-            name: r.Nom || 'Sans nom',
-            phone: r.Telephone || '',
-            createdAt: r.DateCreation || todayStr()
-          });
-        });
-
-        // Opérations Admins
-        getSheet('OperationsAdmins').forEach(r => {
-          if (!r.Date && !r.Montant) return;
-          newState.adminOps.push({
-            id: r.ID || uid('aop'),
-            adminId: r.AdminID || '',
-            date: String(r.Date).slice(0, 10),
-            type: r.Type || 'charge',
-            amount: Number(r.Montant) || 0,
-            desc: r.Description || ''
-          });
-        });
-
-        // Réceptions
-        getSheet('Receptions').forEach(r => {
-          if (!r.Date && !r.Produit) return;
-          newState.receptions.push({
-            id: r.ID || uid('rec'),
-            date: String(r.Date).slice(0, 10),
-            supplier: r.Fournisseur || '',
-            product: r.Produit || '',
-            sectionId: r.SectionID || 'sec_global',
-            quantity: Number(r.Quantite) || 0,
-            unitPrice: Number(r.PrixUnitaire) || 0,
-            total: Number(r.Total) || 0,
-            paid: Number(r.Paye) || 0,
-            source: r.Source || ''
-          });
-        });
-
-        // Paiements Fournisseurs
-        getSheet('PaiementsFournisseurs').forEach(r => {
-          if (!r.Date && !r.Montant) return;
-          newState.supplierPayments.push({
-            id: r.ID || uid('sp'),
-            supplier: r.Fournisseur || '',
-            date: String(r.Date).slice(0, 10),
-            amount: Number(r.Montant) || 0,
-            source: r.Source || '',
-            desc: r.Description || ''
-          });
-        });
-
-        // Jours Caisse
-        getSheet('JoursCaisse').forEach(r => {
-          if (!r.Date) return;
-          newState.cashDays.push({
-            id: r.ID || uid('day'),
-            date: String(r.Date).slice(0, 10),
-            openingExpected: Number(r.OuverturePrevue) || 0,
-            openingActual: Number(r.OuvertureReelle) || 0,
-            closingActual: r.ClotureReelle === '' || r.ClotureReelle === undefined ? null : Number(r.ClotureReelle)
-          });
-        });
-
-        state = newState;
-        save(); renderAll();
-        alert('✅ Import XLSX réussi !\n\nSections: ' + state.sections.length + '\nCatégories: ' + state.categories.length + '\nTransactions: ' + state.transactions.length + '\nClients: ' + state.clients.length + '\nAdmins: ' + state.admins.length + '\nRéceptions: ' + state.receptions.length);
-      } catch(err){
-        console.error(err);
-        alert('Erreur lors de la lecture du fichier XLSX : ' + err.message);
-      }
+        const getSheet = (name) => { const ws = wb.Sheets[name]; return ws ? XLSX.utils.sheet_to_json(ws, { defval: '' }) : []; };
+        if (!confirm('Remplacer toutes les données ?')) return;
+        const ns = { currency:'DA', sections:[], categories:[], transactions:[], cashDays:[], clients:[], clientOps:[], admins:[], adminOps:[], receptions:[], supplierPayments:[] };
+        const r = getSheet('Reglages'); if (r.length && r[0].Devise) ns.currency = String(r[0].Devise);
+        getSheet('Sections').forEach(x => { if (!x.ID && !x.Nom) return; ns.sections.push({ id: x.ID || uid('sec'), name: x.Nom || 'Sans nom', type: x.Type || 'global', color: x.Couleur || '#4ade80' }); });
+        if (!ns.sections.length) ns.sections.push({ id: 'sec_global', name: 'Boutique (global)', type: 'global', color: '#4ade80' });
+        getSheet('Categories').forEach(x => { if (!x.ID && !x.Nom) return; ns.categories.push({ id: x.ID || uid('cat'), name: x.Nom || 'Sans nom', type: x.Type || 'depense' }); });
+        if (!ns.categories.length) ns.categories = defaults().categories;
+        getSheet('Transactions').forEach(x => { if (!x.Date && !x.Montant) return; ns.transactions.push({ id: x.ID || uid('tx'), date: String(x.Date).slice(0,10), type: x.Type || 'depense', sectionId: ns.sections[0].id, categoryId: ns.categories[0].id, amount: Number(x.Montant) || 0, payment: x.Paiement || 'carte', desc: x.Description || '' }); });
+        getSheet('Clients').forEach(x => { if (!x.Nom && !x.ID) return; ns.clients.push({ id: x.ID || uid('cli'), name: x.Nom || 'Sans nom', phone: x.Telephone || '', createdAt: todayStr() }); });
+        getSheet('Admins').forEach(x => { if (!x.Nom && !x.ID) return; ns.admins.push({ id: x.ID || uid('adm'), name: x.Nom || 'Sans nom', phone: x.Telephone || '', createdAt: todayStr() }); });
+        getSheet('Receptions').forEach(x => { if (!x.Date && !x.Produit) return; ns.receptions.push({ id: x.ID || uid('rec'), date: String(x.Date).slice(0,10), supplier: x.Fournisseur || '', product: x.Produit || '', sectionId: ns.sections[0].id, quantity: Number(x.Quantite) || 0, unitPrice: Number(x.PrixUnitaire) || 0, total: Number(x.Total) || 0, paid: Number(x.Paye) || 0, source: '' }); });
+        getSheet('JoursCaisse').forEach(x => { if (!x.Date) return; ns.cashDays.push({ id: x.ID || uid('day'), date: String(x.Date).slice(0,10), openingExpected: Number(x.OuverturePrevue) || 0, openingActual: Number(x.OuvertureReelle) || 0, closingActual: x.ClotureReelle === '' || x.ClotureReelle === undefined ? null : Number(x.ClotureReelle) }); });
+        state = ns; save(); renderAll();
+        alert('✅ Import XLSX réussi !');
+      } catch(err){ console.error(err); alert('Erreur XLSX : ' + err.message); }
     };
-    reader.readAsArrayBuffer(file);
-    e.target.value = '';
+    reader.readAsArrayBuffer(file); e.target.value = '';
     return;
   }
-
-  alert('Format de fichier non supporté. Utilisez .json ou .xlsx');
+  alert('Format non supporté (.json ou .xlsx)');
   e.target.value = '';
 });
 
-/* ============================================================
-   FILTRES
-============================================================ */
 ['#dashSection', '#dashFrom', '#dashTo'].forEach(s => { const el = $(s); if (el) el.addEventListener('change', renderDashboard); });
 $('#dashReset').addEventListener('click', () => {
   $('#dashSection').value = ''; $('#dashFrom').value = ''; $('#dashTo').value = ''; renderDashboard();
 });
 ['#fltSection', '#fltType'].forEach(s => $(s).addEventListener('change', renderTransactions));
 
-/* ============================================================
-   RENDU GLOBAL
-============================================================ */
 function renderAll(){
   fillSectionSelects();
   fillCategorySelect();
@@ -1928,7 +1720,6 @@ function renderAll(){
   $('#cashBadge').textContent = fmtNum(cc.value) + ' ' + state.currency;
 }
 
-/* DÉMARRAGE */
 load();
 $('#txDate').value = todayStr();
 $('#dayDate').value = todayStr();
