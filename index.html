@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#0a0e1a">
 <title>Boutique COD — Manager</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
 :root{
   --bg:#f5f7fb;--surface:#fff;--surface-2:#f8fafc;--border:#e5e9f2;--border-2:#d8dfeb;
@@ -30,21 +31,18 @@ input,select,textarea,button{font-family:inherit;font-size:16px;-webkit-appearan
 
 /* AUTH */
 .auth{position:fixed;inset:0;background:radial-gradient(circle at 15% 15%,rgba(79,110,247,.25),transparent 45%),radial-gradient(circle at 85% 85%,rgba(139,92,246,.20),transparent 45%),#0a0e1a;display:flex;align-items:center;justify-content:center;padding:20px;z-index:2000;overflow-y:auto}
-.auth-card{position:relative;background:rgba(20,26,46,.85);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.08);border-radius:24px;padding:36px 28px;width:100%;max-width:420px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
-.auth-logo{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,#4f6ef7,#8b5cf6);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;box-shadow:0 12px 30px rgba(79,110,247,.4);font-size:28px}
+.auth-card{background:rgba(20,26,46,.85);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.08);border-radius:24px;padding:36px 28px;width:100%;max-width:420px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.auth-logo{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,#4f6ef7,#8b5cf6);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:28px}
 .auth-card h1{font-size:22px;font-weight:800;text-align:center;color:#fff;margin-bottom:4px}
 .auth-card p.sub{text-align:center;color:#8894a8;font-size:13px;margin-bottom:24px}
 .auth-card label{display:block;font-size:11px;color:#8894a8;margin-bottom:6px;font-weight:600;letter-spacing:.05em}
-.auth-card input{background:rgba(10,14,26,.6);border:1px solid rgba(255,255,255,.08);color:#fff;padding:13px 15px;border-radius:11px;width:100%;outline:none;margin-bottom:14px;transition:.2s}
+.auth-card input{background:rgba(10,14,26,.6);border:1px solid rgba(255,255,255,.08);color:#fff;padding:13px 15px;border-radius:11px;width:100%;outline:none;margin-bottom:14px}
 .auth-card input:focus{border-color:var(--accent);background:rgba(10,14,26,.9);box-shadow:0 0 0 4px var(--glow)}
-.auth-card button{width:100%;padding:14px;background:linear-gradient(135deg,#4f6ef7,#6d8cff);color:#fff;border:0;border-radius:11px;font-weight:700;cursor:pointer;transition:.2s}
-.auth-card button:hover{transform:translateY(-1px)}
-.auth-card button:disabled{opacity:.6;cursor:wait}
+.auth-card button{width:100%;padding:14px;background:linear-gradient(135deg,#4f6ef7,#6d8cff);color:#fff;border:0;border-radius:11px;font-weight:700;cursor:pointer}
 .auth-err{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#fca5a5;padding:10px 14px;border-radius:9px;font-size:12px;margin-bottom:14px;display:none}
-.picker-btn{width:100%;padding:14px;background:rgba(20,26,46,.85);color:#fff;border:1px solid rgba(255,255,255,.08);border-radius:12px;font-weight:600;cursor:pointer;text-align:left;margin-bottom:8px;display:flex;align-items:center;gap:12px;transition:.15s}
+.picker-btn{width:100%;padding:14px;background:rgba(20,26,46,.85);color:#fff;border:1px solid rgba(255,255,255,.08);border-radius:12px;font-weight:600;cursor:pointer;text-align:left;margin-bottom:8px;display:flex;align-items:center;gap:12px}
 .picker-btn:hover{background:rgba(79,110,247,.15);border-color:var(--accent)}
 .picker-av{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#4f6ef7,#8b5cf6);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0}
-
 .loading{position:fixed;inset:0;background:#0a0e1a;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:2000;color:#8894a8;gap:16px}
 .spinner{width:38px;height:38px;border:3px solid rgba(255,255,255,.08);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -57,7 +55,7 @@ aside{width:250px;background:var(--sidebar);color:#fff;padding:20px 12px;overflo
 .brand-title{font-size:14px;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
 .brand-sub{font-size:10.5px;color:#4a5568}
 aside .section{font-size:9.5px;color:#4a5568;text-transform:uppercase;margin:14px 8px 6px;letter-spacing:.1em;font-weight:700}
-aside button.nav{display:flex;align-items:center;gap:10px;width:100%;padding:9px 11px;margin-bottom:2px;background:transparent;color:#a0aec0;border:0;border-radius:9px;text-align:left;cursor:pointer;font-size:13px;transition:.15s}
+aside button.nav{display:flex;align-items:center;gap:10px;width:100%;padding:9px 11px;margin-bottom:2px;background:transparent;color:#a0aec0;border:0;border-radius:9px;text-align:left;cursor:pointer;font-size:13px}
 aside button.nav:hover{background:var(--sidebar-hover);color:#fff}
 aside button.nav.active{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-weight:600;box-shadow:0 4px 14px rgba(79,110,247,.35)}
 aside button.nav .ni{width:18px;text-align:center;font-size:14px;flex-shrink:0}
@@ -66,7 +64,7 @@ aside button.nav .ni{width:18px;text-align:center;font-size:14px;flex-shrink:0}
 .user-av{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#4f6ef7,#8b5cf6);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px}
 .user-name{font-size:12.5px;font-weight:600}
 .user-email{font-size:10.5px;color:#4a5568;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px}
-.logout-btn{padding:8px 11px;background:transparent;border:1px solid rgba(255,255,255,.08);color:#a0aec0;border-radius:8px;cursor:pointer;font-size:12px;text-align:left;transition:.15s}
+.logout-btn{padding:8px 11px;background:transparent;border:1px solid rgba(255,255,255,.08);color:#a0aec0;border-radius:8px;cursor:pointer;font-size:12px;text-align:left}
 .logout-btn:hover{border-color:var(--accent);color:#93b4ff;background:rgba(79,110,247,.08)}
 
 main{flex:1;padding:24px 28px;overflow-y:auto;max-height:100vh;min-width:0}
@@ -80,9 +78,8 @@ main{flex:1;padding:24px 28px;overflow-y:auto;max-height:100vh;min-width:0}
 h3.sh{font-size:14px;margin:22px 0 10px;display:flex;align-items:center;gap:6px}
 
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:16px}
-.card{background:var(--surface);padding:16px;border-radius:var(--r);box-shadow:var(--sh);border:1px solid var(--border);position:relative;overflow:hidden;transition:.2s}
+.card{background:var(--surface);padding:16px;border-radius:var(--r);box-shadow:var(--sh);border:1px solid var(--border);position:relative;overflow:hidden}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent);opacity:0;transition:.2s}
-.card:hover{transform:translateY(-2px);box-shadow:var(--sh-lg)}
 .card:hover::before{opacity:1}
 .card small{color:var(--text-3);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;display:block}
 .card span{display:block;font-size:20px;font-weight:800;margin-top:8px;font-family:'JetBrains Mono',monospace;color:var(--text)}
@@ -103,14 +100,15 @@ form.inline{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:14px;background:va
 label.field{display:flex;flex-direction:column;gap:5px;font-size:11px;color:var(--text-2);font-weight:600}
 input,select,textarea{padding:9px 12px;border:1px solid var(--border-2);border-radius:var(--r-sm);background:var(--surface);color:var(--text);outline:none;transition:.15s;font-size:13.5px}
 input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--glow)}
-input[readonly]{background:var(--green-s);color:var(--green);font-weight:700;border-color:rgba(16,185,129,.3);font-family:'JetBrains Mono',monospace}
+input[readonly]{background:var(--green-s);color:var(--green);font-weight:700;font-family:'JetBrains Mono',monospace}
 
-button[type=submit],.btn{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border:0;padding:9px 16px;border-radius:var(--r-sm);cursor:pointer;font-size:13px;font-weight:600;transition:.2s;white-space:nowrap;min-height:38px;display:inline-flex;align-items:center;gap:5px}
+button[type=submit],.btn{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border:0;padding:9px 16px;border-radius:var(--r-sm);cursor:pointer;font-size:13px;font-weight:600;white-space:nowrap;min-height:38px;display:inline-flex;align-items:center;gap:5px}
 button[type=submit]:hover,.btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(79,110,247,.3)}
 .btn.gray{background:var(--surface-2);color:var(--text-2);border:1px solid var(--border-2)}
 .btn.green{background:linear-gradient(135deg,#10b981,#059669)}
 .btn.orange{background:linear-gradient(135deg,#f59e0b,#d97706)}
 .btn.red{background:linear-gradient(135deg,#ef4444,#dc2626)}
+.btn.sm{padding:6px 11px;font-size:12px;min-height:30px}
 .danger{background:transparent;color:var(--text-3);border:1px solid var(--border-2);border-radius:7px;padding:4px 8px;cursor:pointer;font-size:11.5px;font-weight:600}
 .danger:hover{background:var(--red-s);color:var(--red);border-color:rgba(239,68,68,.3)}
 
@@ -125,13 +123,33 @@ button[type=submit]:hover,.btn:hover{transform:translateY(-1px);box-shadow:0 6px
 .alert.warn{background:var(--orange-s);color:#92400e;border-color:var(--orange)}
 .alert.info{background:var(--blue-s);color:#1e40af;border-color:var(--blue)}
 .alert.danger{background:var(--red-s);color:#991b1b;border-color:var(--red)}
+.alert.success{background:var(--green-s);color:#065f46;border-color:var(--green)}
 
 .toolbar{display:flex;gap:9px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
 .search{padding:9px 13px;border:1px solid var(--border-2);border-radius:var(--r-sm);min-width:220px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .src-tag{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:700}
 .src-c{background:var(--green-s);color:var(--green)}
 .src-a{background:var(--purple-s);color:var(--purple)}
+
+/* Funnel visuel */
+.funnel-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;font-size:13px}
+.funnel-bar{flex:1;height:22px;background:var(--surface-2);border-radius:6px;overflow:hidden;position:relative}
+.funnel-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));border-radius:6px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;color:#fff;font-size:11px;font-weight:700;min-width:36px}
+.funnel-lbl{width:130px;color:var(--text-2);font-size:12px}
+.funnel-val{width:70px;text-align:right;font-weight:700;font-family:'JetBrains Mono',monospace}
+
+/* Comparison table */
+.cmp-table td.num{text-align:right;font-family:'JetBrains Mono',monospace;font-weight:600}
+.cmp-table .verdict{padding:4px 8px;border-radius:6px;font-size:11px;font-weight:700}
+
+/* Platform bar */
+.platform-bar{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:13px}
+.platform-bar .name{width:80px;font-weight:600}
+.platform-bar .bar{flex:1;height:20px;background:var(--surface-2);border-radius:6px;overflow:hidden}
+.platform-bar .bar-fill{height:100%;border-radius:6px}
+.platform-bar .amount{width:100px;text-align:right;font-family:'JetBrains Mono',monospace;font-weight:600}
 
 .mob-head{display:none;align-items:center;gap:10px;margin-bottom:14px}
 .mob-btn{display:none;background:var(--surface);border:1px solid var(--border);width:42px;height:42px;border-radius:11px;font-size:20px;cursor:pointer;align-items:center;justify-content:center}
@@ -139,14 +157,27 @@ button[type=submit]:hover,.btn:hover{transform:translateY(-1px);box-shadow:0 6px
 .overlay.show{display:block}
 .close-side{display:none;background:transparent;border:0;color:#4a5568;font-size:20px;padding:6px;cursor:pointer;align-self:flex-end;margin-bottom:6px}
 
+.chart-wrap{background:var(--surface);border-radius:var(--r);padding:16px;box-shadow:var(--sh);border:1px solid var(--border);margin-bottom:16px}
+.chart-wrap h4{font-size:13px;margin-bottom:12px;color:var(--text-2)}
+.chart-wrap canvas{max-height:260px}
+
+/* Simulateur */
+.simu{background:linear-gradient(135deg,rgba(79,110,247,.06),rgba(139,92,246,.06));border:1px solid rgba(79,110,247,.2);border-radius:var(--r);padding:16px;margin-top:16px}
+.simu h4{font-size:13px;margin-bottom:12px;color:var(--accent)}
+.simu-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.simu-row label{font-size:12px;color:var(--text-2)}
+.simu-row input{width:140px}
+.simu-result{background:var(--surface);border-radius:10px;padding:12px;margin-top:10px;font-size:13px;line-height:1.9}
+.simu-result strong{font-family:'JetBrains Mono',monospace}
+
 @media(max-width:900px){
   aside{position:fixed;top:0;left:0;bottom:0;transform:translateX(-100%);transition:transform .3s;z-index:999;width:280px;max-width:85vw;height:100vh;box-shadow:20px 0 60px rgba(0,0,0,.4)}
   aside.open{transform:translateX(0)}
   .close-side{display:block}
-  main{padding:14px 12px 24px}
+  main{padding:14px 12px 24px;max-height:none;min-height:100vh}
   .mob-head{display:flex}
   .mob-btn{display:flex}
-  .grid2{grid-template-columns:1fr}
+  .grid2,.grid3{grid-template-columns:1fr}
   .page-title{font-size:20px}
   .stats{grid-template-columns:1fr 1fr;gap:9px}
   .card{padding:12px}
@@ -155,14 +186,16 @@ button[type=submit]:hover,.btn:hover{transform:translateY(-1px);box-shadow:0 6px
   form.inline input,form.inline select,form.inline button,form.inline label.field{width:100%}
   input,select,textarea{padding:11px 13px;min-height:44px}
   button[type=submit],.btn{min-height:44px;justify-content:center}
-  .table-wrap{background:transparent;box-shadow:none;border:none;border-radius:0}
+  .table-wrap{background:transparent;box-shadow:none;border:none}
   table{display:block}
   thead{display:none}
   tbody{display:block}
-  tbody tr{display:block;background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;padding:12px}
+  tbody tr{display:block;background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;padding:12px;box-shadow:var(--sh)}
   td{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border:none;border-bottom:1px solid var(--border);text-align:right;font-size:13.5px;gap:10px;min-height:34px}
   td:last-child{border-bottom:none;justify-content:flex-end;padding-top:9px;flex-wrap:wrap}
   td[data-l]::before{content:attr(data-l);color:var(--text-3);font-size:10.5px;font-weight:700;text-transform:uppercase;text-align:left;flex-shrink:0;padding-right:6px}
+  .funnel-lbl{width:90px;font-size:11px}
+  .funnel-val{width:55px;font-size:11px}
 }
 @media(max-width:500px){
   .stats{grid-template-columns:1fr 1fr;gap:8px}
@@ -182,7 +215,7 @@ button[type=submit]:hover,.btn:hover{transform:translateY(-1px);box-shadow:0 6px
     <div class="auth-err" id="authErr"></div>
     <form id="loginForm">
       <label>ADRESSE E-MAIL</label>
-      <input type="email" id="loginEmail" required autocomplete="email">
+      <input type="email" id="loginEmail" required autocomplete="email" value="techtwinsstore@gmail.com">
       <label>MOT DE PASSE</label>
       <input type="password" id="loginPass" required autocomplete="current-password">
       <button type="submit" id="loginBtn">Se connecter</button>
@@ -190,22 +223,15 @@ button[type=submit]:hover,.btn:hover{transform:translateY(-1px);box-shadow:0 6px
   </div>
 </div>
 
-<!-- LOADING -->
-<div class="loading" id="loadingScreen">
-  <div class="spinner"></div><span>Chargement…</span>
-</div>
+<div class="loading" id="loadingScreen"><div class="spinner"></div><span>Chargement…</span></div>
 
-<!-- APP -->
 <div class="app" id="appRoot">
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 <aside id="sidebar">
   <button class="close-side" onclick="closeSidebar()">✕</button>
   <div class="brand">
     <div class="brand-logo">🛍️</div>
-    <div>
-      <div class="brand-title">Boutique COD</div>
-      <div class="brand-sub">Manager</div>
-    </div>
+    <div><div class="brand-title">Boutique COD</div><div class="brand-sub">Manager</div></div>
   </div>
 
   <button class="nav active" data-tab="dash"><span class="ni">📊</span> Tableau de bord</button>
@@ -230,10 +256,7 @@ button[type=submit]:hover,.btn:hover{transform:translateY(-1px);box-shadow:0 6px
   <div class="user-info">
     <div class="user-badge">
       <div class="user-av" id="userAv">?</div>
-      <div>
-        <div class="user-name" id="userName">—</div>
-        <div class="user-email" id="userEmail">—</div>
-      </div>
+      <div><div class="user-name" id="userName">—</div><div class="user-email" id="userEmail">—</div></div>
     </div>
     <button class="logout-btn" onclick="switchUser()">🔄 Changer d'identité</button>
     <button class="logout-btn" onclick="logout()">⎋ Déconnexion</button>
@@ -250,6 +273,7 @@ button[type=submit]:hover,.btn:hover{transform:translateY(-1px);box-shadow:0 6px
   <section id="dash" class="tab active">
     <div class="page-head"><div><div class="page-title">📊 Tableau de bord</div><div class="page-sub">Vue d'ensemble</div></div></div>
     <div id="dashAlerts"></div>
+
     <h3 class="sh">💵 Trésorerie</h3>
     <div class="stats">
       <div class="card green"><small>💰 Solde caisse</small><span id="kCaisse">0</span></div>
@@ -257,13 +281,18 @@ button[type=submit]:hover,.btn:hover{transform:translateY(-1px);box-shadow:0 6px
       <div class="card blue"><small>🚚 Chez transporteurs</small><span id="kTransit">0</span></div>
       <div class="card purple"><small>💸 Avances totales</small><span id="kAvances">0</span></div>
     </div>
-    <h3 class="sh">📈 Résultat (base livrée)</h3>
+
+    <h3 class="sh">📈 Résultat boutique (base livrée)</h3>
     <div class="stats">
       <div class="card blue"><small>CA livré</small><span id="kCA">0</span></div>
       <div class="card orange"><small>Charges</small><span id="kCharges">0</span></div>
       <div class="card green"><small>Bénéfice net</small><span id="kNet">0</span></div>
-      <div class="card purple"><small>ROI Ads</small><span id="kROI">0%</span></div>
+      <div class="card purple"><small>ROI global Ads</small><span id="kROI">0%</span></div>
     </div>
+
+    <h3 class="sh">📢 Publicité — Vue globale</h3>
+    <div id="dashAdBlock"></div>
+
     <div class="grid2">
       <div>
         <h3 class="sh">🤝 Soldes associés</h3>
@@ -274,6 +303,7 @@ button[type=submit]:hover,.btn:hover{transform:translateY(-1px);box-shadow:0 6px
         <div class="table-wrap"><table id="dashOrders"></table></div>
       </div>
     </div>
+
     <h3 class="sh">⚠️ Alertes stock</h3>
     <div class="table-wrap"><table id="dashStock"></table></div>
   </section>
@@ -282,12 +312,12 @@ button[type=submit]:hover,.btn:hover{transform:translateY(-1px);box-shadow:0 6px
   <section id="caisse" class="tab">
     <div class="page-head"><div><div class="page-title">💰 Caisse / Journal</div><div class="page-sub">Toutes les opérations d'argent</div></div></div>
 
-    <div class="alert info"><span>ℹ️</span><div><b>Journal unique = source de vérité.</b> Le solde de caisse, les dettes et les résultats sont calculés à partir de ce journal. Une erreur se corrige par une <b>annulation</b> (jamais de suppression).</div></div>
+    <div class="alert info"><span>ℹ️</span><div><b>Journal unique = source de vérité.</b> Une dépense pub saisie ici apparaît automatiquement dans le P&L global et dans la campagne concernée — jamais comptée deux fois.</div></div>
 
     <form id="txForm" class="inline">
       <label class="field">Type
         <select name="type" id="txType">
-          <option value="sortie">📤 Sortie (dépense)</option>
+          <option value="sortie">📤 Sortie</option>
           <option value="entree">📥 Entrée</option>
         </select>
       </label>
@@ -301,6 +331,7 @@ button[type=submit]:hover,.btn:hover{transform:translateY(-1px);box-shadow:0 6px
         </select>
       </label>
       <label class="field" id="partnerWrap" style="display:none">Associé<select name="partnerId" id="txPartner"></select></label>
+      <label class="field" id="campWrap" style="display:none">Campagne<select name="campaignId" id="txCamp"><option value="">— Aucune —</option></select></label>
       <label class="field" style="flex:1">Description<input name="description" placeholder="Ex: Achat 10x power bank"></label>
       <button type="submit">➕ Enregistrer</button>
     </form>
@@ -309,7 +340,6 @@ button[type=submit]:hover,.btn:hover{transform:translateY(-1px);box-shadow:0 6px
       <input class="search" id="searchTx" placeholder="🔍 Rechercher...">
       <select id="filterTxType"><option value="">Tous types</option><option value="entree">Entrées</option><option value="sortie">Sorties</option></select>
       <select id="filterTxPaid"><option value="">Tous payeurs</option><option value="caisse">Caisse</option><option value="associe">Associés</option></select>
-      <button class="btn gray" onclick="exportJSON()">⬇️ Export</button>
     </div>
     <div class="table-wrap"><table id="txTable"></table></div>
   </section>
@@ -318,7 +348,7 @@ button[type=submit]:hover,.btn:hover{transform:translateY(-1px);box-shadow:0 6px
   <section id="associes" class="tab">
     <div class="page-head"><div><div class="page-title">🤝 Associés</div><div class="page-sub">Avances et remboursements FIFO</div></div></div>
 
-    <div class="alert info"><span>ℹ️</span><div>Quand un associé paie une charge de sa poche → une <b>avance</b> est créée automatiquement. Le remboursement se fait <b>FIFO</b> (avances les plus anciennes d'abord), et uniquement si la caisse reste au-dessus de la <b>réserve minimale</b>.</div></div>
+    <div class="alert info"><span>ℹ️</span><div>Un associé qui paie une charge (stock, pub) → <b>avance</b> automatique. Remboursement <b>FIFO</b> (plus anciennes d'abord), uniquement si la caisse reste au-dessus de la <b>réserve minimale</b>.</div></div>
 
     <h3 class="sh">👥 Soldes</h3>
     <div class="table-wrap"><table id="avSoldes"></table></div>
@@ -360,6 +390,7 @@ button[type=submit]:hover,.btn:hover{transform:translateY(-1px);box-shadow:0 6px
       <label class="field">Wilaya<input name="wilaya" required></label>
       <label class="field">Total<input type="number" name="totalPrice" min="0" required></label>
       <label class="field">Frais livraison<input type="number" name="deliveryFee" value="0"></label>
+      <label class="field">Coût article<input type="number" name="itemsCost" value="0"></label>
       <label class="field">Produit<input name="productName" placeholder="Ex: Power Bank"></label>
       <label class="field">Campagne<select name="campaignId" id="orderCampaign"></select></label>
       <button type="submit">➕ Ajouter</button>
@@ -385,7 +416,7 @@ button[type=submit]:hover,.btn:hover{transform:translateY(-1px);box-shadow:0 6px
       <label class="field">Date<input type="date" name="date" required></label>
       <label class="field">Frais livraison déduits<input type="number" name="deliveryFees" value="0"></label>
       <label class="field">Frais retour déduits<input type="number" name="returnFees" value="0"></label>
-      <label class="field" style="flex:1">Commandes (IDs séparés par virgule)<input name="orderIds" placeholder="CMD-001,CMD-002"></label>
+      <label class="field" style="flex:1">Références commandes (séparées par virgule)<input name="orderIds" placeholder="CMD-001,CMD-002"></label>
       <button type="submit">✅ Enregistrer virement</button>
     </form>
 
@@ -426,12 +457,7 @@ button[type=submit]:hover,.btn:hover{transform:translateY(-1px);box-shadow:0 6px
       <label class="field">Quantité<input type="number" name="quantity" min="1" required></label>
       <label class="field">Coût unitaire<input type="number" name="unitCost" min="0" required></label>
       <label class="field">Frais transport<input type="number" name="transportFees" value="0"></label>
-      <label class="field">Payé par
-        <select name="paidFrom">
-          <option value="caisse">💰 Caisse</option>
-          <option value="associe">👤 Associé</option>
-        </select>
-      </label>
+      <label class="field">Payé par<select name="paidFrom"><option value="caisse">💰 Caisse</option><option value="associe">👤 Associé</option></select></label>
       <label class="field">Associé<select name="partnerId" id="purchasePartner"><option value="">—</option></select></label>
       <button type="submit">➕ Enregistrer achat</button>
     </form>
@@ -440,51 +466,54 @@ button[type=submit]:hover,.btn:hover{transform:translateY(-1px);box-shadow:0 6px
 
   <!-- CAMPAGNES -->
   <section id="campagnes" class="tab">
-    <div class="page-head"><div><div class="page-title">📢 Campagnes pub</div><div class="page-sub">Meta, TikTok… verdict automatique</div></div></div>
+    <div class="page-head"><div><div class="page-title">📢 Campagnes publicitaires</div><div class="page-sub">Meta, TikTok… verdict automatique, entonnoir et ROI</div></div></div>
 
+    <div class="alert info"><span>💡</span><div>Chaque dépense pub est <b>une transaction du journal</b> liée à la campagne. Elle impacte le résultat global <b>une seule fois</b> et s'affiche aussi dans l'analyse isolée.</div></div>
+
+    <h3 class="sh">➕ Nouvelle campagne</h3>
     <form id="campForm" class="inline">
-      <label class="field">Nom<input name="name" required></label>
+      <label class="field">Nom<input name="name" required placeholder="Ex: Meta Mars"></label>
       <label class="field">Plateforme<select name="platform"><option>META</option><option>TIKTOK</option><option>AUTRE</option></select></label>
       <label class="field">Début<input type="date" name="startDate" required></label>
+      <label class="field">Fin (option)<input type="date" name="endDate"></label>
       <label class="field">Budget prévu<input type="number" name="plannedBudget" value="0"></label>
-      <button type="submit">➕ Créer campagne</button>
+      <label class="field">Créatif URL<input name="creative"></label>
+      <button type="submit">➕ Créer</button>
     </form>
 
+    <h3 class="sh">💸 Ajouter une dépense pub</h3>
     <form id="spendForm" class="inline">
       <label class="field">Campagne<select name="campaignId" id="spendCamp" required></select></label>
       <label class="field">Date<input type="date" name="date" required></label>
       <label class="field">Montant<input type="number" name="amount" min="1" required></label>
-      <label class="field">Payé par
-        <select name="paidFrom"><option value="caisse">💰 Caisse</option><option value="associe">👤 Associé</option></select>
-      </label>
+      <label class="field">Payé par<select name="paidFrom"><option value="caisse">💰 Caisse</option><option value="associe">👤 Associé</option></select></label>
       <label class="field">Associé<select name="partnerId" id="spendPartner"><option value="">—</option></select></label>
-      <button type="submit">💸 Ajouter dépense pub</button>
+      <button type="submit">💸 Ajouter</button>
     </form>
 
+    <h3 class="sh">📊 Toutes les campagnes</h3>
     <div class="table-wrap"><table id="campTable"></table></div>
 
-    <div id="campDetail" style="display:none;margin-top:20px">
-      <div class="page-head">
-        <div><div class="page-title" id="campDetailTitle" style="font-size:18px"></div><div class="page-sub">Analyse de la campagne</div></div>
-        <button class="btn gray" onclick="closeCampDetail()">✕ Fermer</button>
-      </div>
-      <div class="stats" id="campKpis"></div>
-      <h3 class="sh">🛒 Commandes rattachées</h3>
-      <div class="table-wrap"><table id="campOrders"></table></div>
-    </div>
+    <div id="campDetail" style="display:none;margin-top:24px"></div>
   </section>
 
-  <!-- STATS -->
+  <!-- STATISTIQUES -->
   <section id="stats" class="tab">
-    <div class="page-head"><div><div class="page-title">📈 Statistiques</div><div class="page-sub">Résultat (base livrée) vs Trésorerie (base encaissée)</div></div></div>
+    <div class="page-head"><div><div class="page-title">📈 Statistiques</div><div class="page-sub">Résultat (livré) vs Trésorerie (encaissé)</div></div></div>
 
     <div class="grid2">
       <div class="card"><h3 style="margin-bottom:12px">📊 Résultat (base livrée)</h3><div id="pnlBreakdown"></div></div>
       <div class="card"><h3 style="margin-bottom:12px">💵 Trésorerie (base encaissée)</h3><div id="cashBreakdown"></div></div>
     </div>
 
+    <h3 class="sh">📢 Publicité — Vue globale</h3>
+    <div id="statsAdBlock"></div>
+
     <h3 class="sh">🏆 Classement des campagnes</h3>
-    <div class="table-wrap"><table id="campRanking"></table></div>
+    <div class="table-wrap"><table id="campRanking" class="cmp-table"></table></div>
+
+    <h3 class="sh">📱 Répartition par plateforme</h3>
+    <div class="card" id="platformBreakdown"></div>
 
     <h3 class="sh">📍 Ventes par wilaya</h3>
     <div class="table-wrap"><table id="wilayaStats"></table></div>
@@ -496,13 +525,11 @@ button[type=submit]:hover,.btn:hover{transform:translateY(-1px);box-shadow:0 6px
   <!-- BILAN -->
   <section id="bilan" class="tab">
     <div class="page-head"><div><div class="page-title">📋 Bilan mensuel</div><div class="page-sub">Résultat et répartition</div></div></div>
-
     <form class="inline">
       <label class="field">Mois<input type="month" id="bilanMonth"></label>
       <button type="button" onclick="renderBilan()">Voir</button>
       <button type="button" class="btn gray" onclick="exportBilanCSV()">⬇️ CSV</button>
     </form>
-
     <div class="card"><h3 style="margin-bottom:12px">Résultat</h3><div id="bilanPnL"></div></div>
     <h3 class="sh">👥 Répartition par associé</h3>
     <div class="table-wrap"><table id="bilanDist"></table></div>
@@ -523,7 +550,7 @@ button[type=submit]:hover,.btn:hover{transform:translateY(-1px);box-shadow:0 6px
   <section id="params" class="tab">
     <div class="page-head"><div><div class="page-title">⚙️ Paramètres</div><div class="page-sub">Seuils et règles</div></div></div>
     <form id="paramsForm" class="inline">
-      <label class="field">Réserve minimale caisse (DZD)<input type="number" name="minCashReserve" min="0"></label>
+      <label class="field">Réserve min. caisse (DZD)<input type="number" name="minCashReserve" min="0"></label>
       <label class="field">Alerte transporteur (jours)<input type="number" name="courierAlertDays" min="1"></label>
       <label class="field">Campagne gagnante : nb livrées min<input type="number" name="campaignMinOrdersWin" min="1"></label>
       <label class="field">Campagne perdante : dépense min<input type="number" name="campaignMinSpendLose" min="0"></label>
@@ -549,7 +576,6 @@ import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut }
 import { getFirestore, doc, onSnapshot, setDoc }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-/* ⚠️ REMPLACE PAR TA CONFIG FIREBASE ⚠️ */
 const firebaseConfig = {
   apiKey: "AIzaSyAN6jwUW7SUpy8zR9MPGERVwXSCRKo1FU",
   authDomain: "techtwins-861d7.firebaseapp.com",
@@ -567,8 +593,7 @@ const USER_KEY = 'boutique_user';
 
 /* ===================== ÉTAT ===================== */
 const DEFAULT = {
-  transactions: [], // journal unique
-  partners: [],
+  transactions: [], partners: [],
   categories: [
     { id:'c1', name:'Achat stock', type:'sortie' },
     { id:'c2', name:'Publicité', type:'sortie' },
@@ -602,6 +627,7 @@ let unsub = null;
 let firstLoad = true;
 let saveTimer = null;
 let selectedCampaign = null;
+let profitChart = null;
 
 function norm(d) {
   const s = { ...DEFAULT, ...(d || {}) };
@@ -620,7 +646,7 @@ function subscribe() {
     else { state = JSON.parse(JSON.stringify(DEFAULT)); setDoc(SHOP_REF, state); return; }
     if (firstLoad) { firstLoad = false; showApp(); }
     render();
-  }, err => alert('Erreur sync: ' + err.message));
+  }, err => alert('Erreur sync : ' + err.message));
 }
 
 function save() {
@@ -629,16 +655,17 @@ function save() {
   saveTimer = setTimeout(() => setDoc(SHOP_REF, { ...state, currentUser: null }).catch(e => alert('Save: ' + e.message)), 400);
 }
 
-/* ===================== AUTH ===================== */
+/* ===================== UTILS ===================== */
 const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 const uid = () => Math.random().toString(36).slice(2, 10);
 const fmt = n => Number(n || 0).toLocaleString('fr-FR') + ' DA';
 const todayISO = () => new Date().toISOString().slice(0, 10);
 const esc = s => String(s ?? '').replace(/[<>&"']/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[c]));
-const algolia = d => d ? new Date(d).toLocaleDateString('fr-FR') : '—';
-const algoliaDT = d => d ? new Date(d).toLocaleString('fr-FR') : '—';
+const dtFr = d => d ? new Date(d).toLocaleDateString('fr-FR') : '—';
+const dtFrTime = d => d ? new Date(d).toLocaleString('fr-FR') : '—';
 
+/* ===================== AUTH ===================== */
 $('#loginForm').addEventListener('submit', async e => {
   e.preventDefault();
   const err = $('#authErr'), btn = $('#loginBtn');
@@ -651,6 +678,7 @@ $('#loginForm').addEventListener('submit', async e => {
       'auth/user-not-found': 'Aucun compte avec cet e-mail.',
       'auth/wrong-password': 'Mot de passe incorrect.',
       'auth/invalid-credential': 'E-mail ou mot de passe incorrect.',
+      'auth/api-key-not-valid': 'Config Firebase invalide — vérifie ta clé API.',
     })[ex.code] || ex.message;
     err.textContent = m; err.style.display = 'block';
   }
@@ -669,12 +697,9 @@ function showApp() {
 }
 function showPicker() {
   let p = $('#pickerScreen');
-  if (!p) {
-    p = document.createElement('div'); p.id = 'pickerScreen'; p.className = 'auth';
-    document.body.appendChild(p);
-  }
+  if (!p) { p = document.createElement('div'); p.id = 'pickerScreen'; p.className = 'auth'; document.body.appendChild(p); }
   p.style.display = 'flex';
-  const partners = (state?.partners || []);
+  const partners = state?.partners || [];
   const btns = partners.map(x => `
     <button class="picker-btn" data-name="${esc(x.name)}">
       <span class="picker-av">${esc(x.name).charAt(0).toUpperCase()}</span>
@@ -684,7 +709,7 @@ function showPicker() {
     <div class="auth-logo">🛍️</div>
     <h1>Boutique COD</h1>
     <p class="sub">Qui êtes-vous ?</p>
-    ${btns || '<p style="color:#8894a8;text-align:center;font-size:13px">Aucun associé configuré. Crée-en dans l\'onglet Associés avec le compte admin.</p>'}
+    ${btns || '<p style="color:#8894a8;text-align:center;font-size:13px">Aucun associé configuré. Va dans l\'onglet Associés pour en créer.</p>'}
     <p style="color:#4a5568;font-size:11.5px;text-align:center;margin-top:20px">Cette identité est utilisée pour le journal d'audit.</p>
   </div>`;
   p.querySelectorAll('.picker-btn').forEach(b => b.onclick = () => pickUser(b.dataset.name));
@@ -711,18 +736,18 @@ function updateUserDisplay() {
   $('#userEmail').textContent = auth.currentUser?.email || '—';
   $('#userAv').textContent = u.charAt(0).toUpperCase();
 }
-
-onAuthStateChanged(auth, user => {
-  if (user) { firstLoad = true; subscribe(); }
-  else { if (unsub) { unsub(); unsub = null; } state = null; $('#appRoot').style.display = 'none'; showPickerlessAuth(); }
-});
 function showPickerlessAuth() {
   const p = $('#pickerScreen'); if (p) p.style.display = 'none';
   $('#appRoot').style.display = 'none';
   $('#authScreen').style.display = 'flex';
 }
 
-/* ===================== NAVIGATION ===================== */
+onAuthStateChanged(auth, user => {
+  if (user) { firstLoad = true; subscribe(); }
+  else { if (unsub) { unsub(); unsub = null; } state = null; showPickerlessAuth(); }
+});
+
+/* ===================== NAV ===================== */
 $$('aside button.nav[data-tab]').forEach(btn => {
   btn.onclick = () => {
     $$('aside button.nav[data-tab]').forEach(b => b.classList.remove('active'));
@@ -737,17 +762,13 @@ $$('aside button.nav[data-tab]').forEach(btn => {
 window.openSidebar = () => { $('#sidebar').classList.add('open'); $('#overlay').classList.add('show'); };
 window.closeSidebar = () => { $('#sidebar').classList.remove('open'); $('#overlay').classList.remove('show'); };
 
-/* ===================== LOGIQUE MÉTIER (finance) ===================== */
+/* ===================== LOGIQUE FINANCE ===================== */
 const isActive = t => !t.cancelledAt && !t.reversalOfId;
 const cashBalance = () => state.transactions
   .filter(t => isActive(t) && t.paidFrom === 'caisse')
   .reduce((s, t) => s + (t.type === 'entree' ? t.amount : -t.amount), 0);
 
-const totalPartnerDebt = () => state.partners.reduce((s, p) => {
-  const adv = state.advances.filter(a => a.partnerId === p.id);
-  const rep = state.repayments.filter(r => r.partnerId === p.id);
-  return s + adv.reduce((x, a) => x + a.amount, 0) - rep.reduce((x, r) => x + r.amount, 0);
-}, 0);
+const totalPartnerDebt = () => state.partners.reduce((s, p) => s + partnerDebt(p.id), 0);
 
 function partnerDebt(partnerId) {
   const adv = state.advances.filter(a => a.partnerId === partnerId);
@@ -770,57 +791,85 @@ function allocateFIFO(advances, amount) {
   return { allocations, remaining: rem };
 }
 
-function deliveredOrders() { return state.orders.filter(o => o.status === 'LIVREE'); }
-function itemsCost(o) { return (o.items || []).reduce((s, it) => s + (it.unitCost || 0) * (it.quantity || 0), 0); }
+const deliveredOrders = () => state.orders.filter(o => o.status === 'LIVREE');
+const orderCost = o => (o.items || []).reduce((s, it) => s + (it.unitCost || 0) * (it.quantity || 0), 0);
 
-function adSpend(filter = {}) {
-  const ids = state.categories.filter(c => c.name === 'Publicité').map(c => c.id);
+/* ===================== CAMPAGNES ===================== */
+function getAdCategoryId() {
+  return state.categories.find(c => c.name === 'Publicité')?.id;
+}
+function campaignSpend(campaignId) {
   return state.transactions
-    .filter(t => isActive(t) && t.type === 'sortie' && ids.includes(t.categoryId))
-    .filter(t => !filter.campaignId || t.campaignId === filter.campaignId)
+    .filter(t => isActive(t) && t.type === 'sortie' && t.campaignId === campaignId)
+    .reduce((s, t) => s + t.amount, 0);
+}
+function totalAdSpend() {
+  return state.transactions
+    .filter(t => isActive(t) && t.type === 'sortie' && t.categoryId === getAdCategoryId())
     .reduce((s, t) => s + t.amount, 0);
 }
 
-function globalResult() {
-  const delivered = deliveredOrders();
-  const revenue = delivered.reduce((s, o) => s + (o.totalPrice || 0), 0);
-  const cost = delivered.reduce((s, o) => s + itemsCost(o), 0);
-  const ship = delivered.reduce((s, o) => s + (o.deliveryFee || 0), 0);
-  const returnIds = state.categories.filter(c => c.name === 'Frais de retour').map(c => c.id);
-  const returnFees = state.transactions.filter(t => isActive(t) && t.type === 'sortie' && returnIds.includes(t.categoryId)).reduce((s, t) => s + t.amount, 0);
-  const ads = adSpend();
-  const excludeNames = ['Publicité','Frais de retour','Frais de livraison','Achat stock','Remboursement associé','Retrait associé'];
-  const otherIds = state.categories.filter(c => c.type === 'sortie' && !excludeNames.includes(c.name)).map(c => c.id);
-  const other = state.transactions.filter(t => isActive(t) && t.type === 'sortie' && otherIds.includes(t.categoryId)).reduce((s, t) => s + t.amount, 0);
-  return { revenue, cost, ship, returnFees, ads, other, net: revenue - cost - ship - returnFees - ads - other };
-}
-
 function campaignStats(campaignId) {
-  const spends = state.campaignSpends.filter(s => s.campaignId === campaignId).reduce((s, x) => s + x.amount, 0);
+  const spends = campaignSpend(campaignId);
   const orders = state.orders.filter(o => o.campaignId === campaignId);
   const deliv = orders.filter(o => o.status === 'LIVREE');
   const ret = orders.filter(o => o.status === 'RETOURNEE');
   const confirmed = orders.filter(o => ['CONFIRMEE','EXPEDIEE','LIVREE','RETOURNEE'].includes(o.status));
+  const shipped = orders.filter(o => ['EXPEDIEE','LIVREE','RETOURNEE'].includes(o.status));
   const pending = orders.filter(o => ['NOUVELLE','CONFIRMEE','EXPEDIEE'].includes(o.status));
-  const rev = deliv.reduce((s, o) => s + o.totalPrice, 0);
-  const cost = deliv.reduce((s, o) => s + itemsCost(o), 0);
+  const rev = deliv.reduce((s, o) => s + (o.totalPrice || 0), 0);
+  const cost = deliv.reduce((s, o) => s + orderCost(o), 0);
   const ship = deliv.reduce((s, o) => s + (o.deliveryFee || 0), 0);
-  const returnFees = 0; // simplifié
-  const profit = rev - cost - ship - returnFees - spends;
+  const profit = rev - cost - ship - spends;
   const cpa = deliv.length ? Math.round(spends / deliv.length) : null;
   const roas = spends > 0 ? +(rev / spends).toFixed(2) : null;
   const marginUnit = deliv.length ? Math.round((rev - cost - ship) / deliv.length) : null;
   const confirmRate = orders.length ? confirmed.length / orders.length : 0;
   const deliveryRate = confirmed.length ? deliv.length / confirmed.length : 0;
   const returnRate = orders.length ? ret.length / orders.length : 0;
+  const avgUnitProfitDelivered = deliv.length ? (rev - cost - ship) / deliv.length : 0;
+  const estimatedProfitPending = Math.round(pending.length * deliveryRate * avgUnitProfitDelivered);
   const { campaignMinOrdersWin: N, campaignMinSpendLose: S } = state.settings;
   let verdict = 'A_SURVEILLER';
   if (profit > 0 && deliv.length >= N) verdict = 'GAGNANTE';
   else if (profit < 0 && spends >= S) verdict = 'PERDANTE';
-  return { spends, orders, deliv, ret, confirmed, pending, rev, cost, ship, profit, cpa, roas, marginUnit, confirmRate, deliveryRate, returnRate, verdict };
+  return {
+    spends, orders, deliv, ret, confirmed, shipped, pending,
+    rev, cost, ship, profit, cpa, roas, marginUnit,
+    confirmRate, deliveryRate, returnRate,
+    estimatedProfitPending, verdict,
+  };
 }
 
-/* ===================== ACTIONS ===================== */
+function globalAdStats() {
+  const total = totalAdSpend();
+  const campaigns = state.campaigns.map(c => ({ c, s: campaignStats(c.id) }));
+  const withDeliv = campaigns.filter(x => x.s.deliv.length > 0);
+  const totalRev = withDeliv.reduce((s, x) => s + x.s.rev, 0);
+  const totalProfit = withDeliv.reduce((s, x) => s + x.s.profit, 0);
+  const roas = total > 0 ? +(totalRev / total).toFixed(2) : 0;
+  const gagnantes = campaigns.filter(x => x.s.verdict === 'GAGNANTE').length;
+  const perdantes = campaigns.filter(x => x.s.verdict === 'PERDANTE').length;
+  const surveiller = campaigns.filter(x => x.s.verdict === 'A_SURVEILLER').length;
+  return { total, totalRev, totalProfit, roas, gagnantes, perdantes, surveiller, campaigns };
+}
+
+/* ===================== RÉSULTAT GLOBAL ===================== */
+function globalResult() {
+  const delivered = deliveredOrders();
+  const revenue = delivered.reduce((s, o) => s + (o.totalPrice || 0), 0);
+  const cost = delivered.reduce((s, o) => s + orderCost(o), 0);
+  const ship = delivered.reduce((s, o) => s + (o.deliveryFee || 0), 0);
+  const returnId = state.categories.find(c => c.name === 'Frais de retour')?.id;
+  const returnFees = state.transactions.filter(t => isActive(t) && t.type === 'sortie' && t.categoryId === returnId).reduce((s, t) => s + t.amount, 0);
+  const ads = totalAdSpend();
+  const excludeNames = ['Publicité','Frais de retour','Frais de livraison','Achat stock','Remboursement associé','Retrait associé'];
+  const otherIds = state.categories.filter(c => c.type === 'sortie' && !excludeNames.includes(c.name)).map(c => c.id);
+  const other = state.transactions.filter(t => isActive(t) && t.type === 'sortie' && otherIds.includes(t.categoryId)).reduce((s, t) => s + t.amount, 0);
+  return { revenue, cost, ship, returnFees, ads, other, net: revenue - cost - ship - returnFees - ads - other };
+}
+
+/* ===================== AUDIT / ACTIONS ===================== */
 function log(action, details) {
   if (!state) return;
   state.audit.unshift({ date: new Date().toISOString(), user: state.currentUser || 'Anonyme', action, details });
@@ -833,7 +882,7 @@ function addTx(tx) {
   return t;
 }
 
-function reverseTx(id) {
+window.reverseTx = function(id) {
   const orig = state.transactions.find(t => t.id === id);
   if (!orig || orig.cancelledAt) return;
   if (!confirm('Annuler cette opération ? Une écriture inverse sera créée (aucune suppression).')) return;
@@ -845,21 +894,22 @@ function reverseTx(id) {
     description: 'Annulation — ' + (orig.description || ''),
     paidFrom: orig.paidFrom,
     partnerId: orig.partnerId || null,
+    campaignId: orig.campaignId || null,
     reversalOfId: orig.id,
   });
   orig.cancelledAt = new Date().toISOString();
   log('REVERSE', `Annulation transaction ${id.slice(0,6)}`);
   save(); render();
-}
-window.reverseTx = reverseTx;
-window.exportJSON = () => {
-  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `boutique-backup-${todayISO()}.json`;
-  a.click();
-  log('EXPORT', 'Sauvegarde JSON'); save();
 };
+
+window.delItem = (type, i) => {
+  if (!confirm('Supprimer cet élément ?')) return;
+  const item = state[type][i];
+  log('DELETE', `${type}: ${JSON.stringify(item).slice(0, 80)}`);
+  state[type].splice(i, 1);
+  save(); render();
+};
+window.clearAudit = () => { if (confirm('Vider l\'audit ?')) { state.audit = []; save(); render(); } };
 
 /* ===================== RENDER ===================== */
 function render() {
@@ -880,36 +930,35 @@ function render() {
 }
 
 function refreshSelects() {
-  // Catégories dans le formulaire de tx
   const txType = $('#txType')?.value;
   const cats = state.categories.filter(c => c.type === txType);
   const catSel = $('#txCat');
   if (catSel) catSel.innerHTML = cats.map(c => `<option value="${c.id}">${esc(c.name)}</option>`).join('');
-  // Partenaires
+
   const partnersOpts = state.partners.map(p => `<option value="${p.id}">${esc(p.name)}</option>`).join('');
   ['#txPartner','#repayPartner','#purchasePartner','#spendPartner'].forEach(sel => {
     const el = $(sel);
     if (el) el.innerHTML = '<option value="">—</option>' + partnersOpts;
   });
-  // Campagnes
+
   const campOpts = state.campaigns.map(c => `<option value="${c.id}">${esc(c.name)}</option>`).join('');
-  ['#orderCampaign','#spendCamp'].forEach(sel => {
+  ['#orderCampaign','#spendCamp','#txCamp'].forEach(sel => {
     const el = $(sel);
     if (el) el.innerHTML = '<option value="">— Aucune —</option>' + campOpts;
   });
-  // Produits
+
   const prodSel = $('#varProduct');
   if (prodSel) prodSel.innerHTML = state.products.map(p => `<option value="${p.id}">${esc(p.name)}</option>`).join('');
-  // Variantes
+
   const varSel = $('#purchaseVariant');
   if (varSel) varSel.innerHTML = state.variants.map(v => {
     const prod = state.products.find(p => p.id === v.productId);
     return `<option value="${v.id}">${esc(prod?.name || '?')} · ${esc(v.color || v.sku)}</option>`;
   }).join('');
-  // Transporteurs
+
   const courSel = $('#remitCourier');
   if (courSel) courSel.innerHTML = state.couriers.map(c => `<option value="${c.id}">${esc(c.name)}</option>`).join('');
-  // Filtre statut commande
+
   const sf = $('#filterOrderStatus');
   if (sf && sf.options.length <= 1) {
     ['NOUVELLE','CONFIRMEE','EXPEDIEE','LIVREE','RETOURNEE','ANNULEE','INJOIGNABLE'].forEach(s => {
@@ -918,12 +967,27 @@ function refreshSelects() {
   }
 }
 
+function statusBadge(s) {
+  const map = {
+    NOUVELLE:'info', CONFIRMEE:'warn', EXPEDIEE:'info', LIVREE:'ok',
+    RETOURNEE:'danger', ANNULEE:'danger', INJOIGNABLE:'warn',
+  };
+  return `<span class="badge ${map[s] || 'info'}">${esc(s)}</span>`;
+}
+function verdictBadge(v) {
+  const map = { GAGNANTE:'ok', PERDANTE:'danger', A_SURVEILLER:'warn' };
+  const icon = { GAGNANTE:'🟢', PERDANTE:'🔴', A_SURVEILLER:'🟠' };
+  return `<span class="badge ${map[v]}">${icon[v]} ${v.replace('_',' ')}</span>`;
+}
+
+/* ---------- DASHBOARD ---------- */
 function renderDash() {
   const caisse = cashBalance();
   const dette = totalPartnerDebt();
   const pending = state.orders.filter(o => o.status === 'LIVREE' && !o.remitted).reduce((s, o) => s + o.totalPrice, 0);
   const avancesTotal = state.advances.reduce((s, a) => s + a.amount, 0);
   const g = globalResult();
+  const ad = globalAdStats();
 
   $('#kCaisse').textContent = fmt(caisse);
   $('#kDette').textContent = fmt(dette);
@@ -935,9 +999,28 @@ function renderDash() {
   $('#kNet').style.color = g.net >= 0 ? 'var(--green)' : 'var(--red)';
   $('#kROI').textContent = g.ads > 0 ? (((g.revenue - g.ads) / g.ads) * 100).toFixed(1) + '%' : '0%';
 
+  // Bloc pub globale
+  $('#dashAdBlock').innerHTML = `
+    <div class="stats">
+      <div class="card orange"><small>💸 Dépense pub totale</small><span>${fmt(ad.total)}</span></div>
+      <div class="card blue"><small>💰 Revenu généré</small><span>${fmt(ad.totalRev)}</span></div>
+      <div class="card ${ad.totalProfit >= 0 ? 'green' : 'red'}"><small>📈 Profit pub net</small><span>${fmt(ad.totalProfit)}</span></div>
+      <div class="card purple"><small>🎯 ROAS global</small><span>${ad.roas}x</span></div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;font-size:13px">
+      <span class="badge ok">🟢 ${ad.gagnantes} gagnante${ad.gagnantes > 1 ? 's' : ''}</span>
+      <span class="badge warn">🟠 ${ad.surveiller} à surveiller</span>
+      <span class="badge danger">🔴 ${ad.perdantes} perdante${ad.perdantes > 1 ? 's' : ''}</span>
+      <span style="color:var(--text-3)">·</span>
+      <span style="color:var(--text-3)">${state.campaigns.length} campagne${state.campaigns.length > 1 ? 's' : ''} au total</span>
+    </div>
+  `;
+
+  // Alertes
   const alerts = [];
-  if (caisse < state.settings.minCashReserve) alerts.push(`<div class="alert warn"><span>⚠️</span><div>Solde caisse (${fmt(caisse)}) sous la réserve minimale (${fmt(state.settings.minCashReserve)}).</div></div>`);
+  if (caisse < state.settings.minCashReserve) alerts.push(`<div class="alert warn"><span>⚠️</span><div>Solde caisse (${fmt(caisse)}) sous la réserve (${fmt(state.settings.minCashReserve)}).</div></div>`);
   if (dette > 0) alerts.push(`<div class="alert danger"><span>🤝</span><div>Dette envers associés : <b>${fmt(dette)}</b>.</div></div>`);
+  if (ad.perdantes > 0) alerts.push(`<div class="alert danger"><span>📢</span><div><b>${ad.perdantes}</b> campagne(s) perdante(s) — va voir l'onglet Campagnes.</div></div>`);
   const lowStock = state.variants.filter(v => v.stock <= (v.alertThreshold ?? 5));
   if (lowStock.length) alerts.push(`<div class="alert warn"><span>📦</span><div>${lowStock.length} variante(s) en stock bas.</div></div>`);
   $('#dashAlerts').innerHTML = alerts.join('');
@@ -963,15 +1046,7 @@ function renderDash() {
     }).join('') || '<tr><td colspan="3" style="text-align:center;color:var(--text-3);padding:18px">Tout est OK ✅</td></tr>') + '</tbody>';
 }
 
-function statusBadge(s) {
-  const map = {
-    NOUVELLE:'info', CONFIRMEE:'warn', EXPEDIEE:'info', LIVREE:'ok',
-    RETOURNEE:'danger', ANNULEE:'danger', INJOIGNABLE:'warn',
-    PAYE:'ok', EN_ATTENTE:'warn',
-  };
-  return `<span class="badge ${map[s] || 'info'}">${esc(s)}</span>`;
-}
-
+/* ---------- CAISSE ---------- */
 function renderCaisse() {
   const search = ($('#searchTx')?.value || '').toLowerCase();
   const fType = $('#filterTxType')?.value;
@@ -985,12 +1060,13 @@ function renderCaisse() {
     (list.length ? list.map(t => {
       const cat = state.categories.find(c => c.id === t.categoryId);
       const part = state.partners.find(p => p.id === t.partnerId);
+      const camp = state.campaigns.find(c => c.id === t.campaignId);
       const cancelled = !!t.cancelledAt;
       return `<tr style="${cancelled ? 'opacity:.5;text-decoration:line-through' : ''}">
-        <td data-l="Date">${algolia(t.date)}</td>
+        <td data-l="Date">${dtFr(t.date)}</td>
         <td data-l="Type">${t.type === 'entree' ? '<span class="badge ok">Entrée</span>' : '<span class="badge danger">Sortie</span>'}</td>
         <td data-l="Catégorie">${esc(cat?.name || '—')}</td>
-        <td data-l="Description">${esc(t.description || '—')}${t.reversalOfId ? ' <span class="badge warn">annul.</span>' : ''}</td>
+        <td data-l="Description">${esc(t.description || '—')}${camp ? ` <span class="badge purple">${esc(camp.name)}</span>` : ''}${t.reversalOfId ? ' <span class="badge warn">annul.</span>' : ''}</td>
         <td data-l="Payeur"><span class="src-tag ${t.paidFrom === 'caisse' ? 'src-c' : 'src-a'}">${t.paidFrom === 'caisse' ? '💰 Caisse' : '👤 ' + esc(part?.name || '?')}</span></td>
         <td data-l="Montant" style="font-weight:700">${fmt(t.amount)}</td>
         <td>${!cancelled && !t.reversalOfId ? `<button class="danger" onclick="reverseTx('${t.id}')">Annuler</button>` : ''}</td>
@@ -998,8 +1074,8 @@ function renderCaisse() {
     }).join('') : '<tr><td colspan="7" style="text-align:center;color:var(--text-3);padding:20px">Aucune opération</td></tr>') + '</tbody>';
 }
 
+/* ---------- ASSOCIÉS ---------- */
 function renderAssocies() {
-  // Soldes
   $('#avSoldes').innerHTML = `<thead><tr><th>Associé</th><th>Avances</th><th>Remboursé</th><th>Dette</th><th>Part</th></tr></thead><tbody>` +
     (state.partners.length ? state.partners.map(p => {
       const adv = state.advances.filter(a => a.partnerId === p.id).reduce((s, a) => s + a.amount, 0);
@@ -1008,25 +1084,23 @@ function renderAssocies() {
       return `<tr><td data-l="Associé">👤 <b>${esc(p.name)}</b></td><td data-l="Avances">${fmt(adv)}</td><td data-l="Remboursé">${fmt(rep)}</td><td data-l="Dette" style="color:${d > 0 ? 'var(--red)' : 'var(--green)'};font-weight:700">${fmt(d)}</td><td data-l="Part">${p.profitShare || 0}%</td></tr>`;
     }).join('') : '<tr><td colspan="5" style="text-align:center;color:var(--text-3);padding:18px">Aucun associé</td></tr>') + '</tbody>';
 
-  // Historique avances
   $('#avList').innerHTML = `<thead><tr><th>Date</th><th>Associé</th><th>Description</th><th>Montant</th></tr></thead><tbody>` +
     (state.advances.length ? state.advances.slice().reverse().map(a => {
       const p = state.partners.find(x => x.id === a.partnerId);
-      return `<tr><td data-l="Date">${algolia(a.date)}</td><td data-l="Associé">👤 ${esc(p?.name || '?')}</td><td data-l="Description">${esc(a.description || '—')}</td><td data-l="Montant"><b>${fmt(a.amount)}</b></td></tr>`;
+      return `<tr><td data-l="Date">${dtFr(a.date)}</td><td data-l="Associé">👤 ${esc(p?.name || '?')}</td><td data-l="Description">${esc(a.description || '—')}</td><td data-l="Montant"><b>${fmt(a.amount)}</b></td></tr>`;
     }).join('') : '<tr><td colspan="4" style="text-align:center;color:var(--text-3);padding:18px">Aucune avance</td></tr>') + '</tbody>';
 
-  // Historique remboursements
   $('#repList').innerHTML = `<thead><tr><th>Date</th><th>Associé</th><th>Montant</th></tr></thead><tbody>` +
     (state.repayments.length ? state.repayments.slice().reverse().map(r => {
       const p = state.partners.find(x => x.id === r.partnerId);
-      return `<tr><td data-l="Date">${algolia(r.date)}</td><td data-l="Associé">👤 ${esc(p?.name || '?')}</td><td data-l="Montant" style="color:var(--green);font-weight:700">${fmt(r.amount)}</td></tr>`;
+      return `<tr><td data-l="Date">${dtFr(r.date)}</td><td data-l="Associé">👤 ${esc(p?.name || '?')}</td><td data-l="Montant" style="color:var(--green);font-weight:700">${fmt(r.amount)}</td></tr>`;
     }).join('') : '<tr><td colspan="3" style="text-align:center;color:var(--text-3);padding:18px">Aucun remboursement</td></tr>') + '</tbody>';
 
-  // Liste partenaires
   $('#partnersTable').innerHTML = `<thead><tr><th>Nom</th><th>Part %</th><th></th></tr></thead><tbody>` +
     (state.partners.map((p, i) => `<tr><td data-l="Nom">${esc(p.name)}</td><td data-l="Part">${p.profitShare || 0}%</td><td><button class="danger" onclick="delItem('partners',${i})">✕</button></td></tr>`).join('') || '<tr><td colspan="3" style="text-align:center;color:var(--text-3);padding:18px">Aucun associé</td></tr>') + '</tbody>';
 }
 
+/* ---------- COMMANDES ---------- */
 function renderCommandes() {
   const search = ($('#searchOrder')?.value || '').toLowerCase();
   const fStatus = $('#filterOrderStatus')?.value;
@@ -1035,9 +1109,9 @@ function renderCommandes() {
     .filter(o => !search || (o.reference + o.customerName + o.phone).toLowerCase().includes(search))
     .slice().reverse();
 
-  $('#ordersTable').innerHTML = `<thead><tr><th>Réf</th><th>Client</th><th>Tél</th><th>Wilaya</th><th>Total</th><th>Statut</th><th>Transporteur</th><th></th></tr></thead><tbody>` +
+  $('#ordersTable').innerHTML = `<thead><tr><th>Réf</th><th>Client</th><th>Tél</th><th>Wilaya</th><th>Total</th><th>Statut</th><th>Campagne</th><th></th></tr></thead><tbody>` +
     (list.map(o => {
-      const cour = state.couriers.find(c => c.id === o.courierId);
+      const camp = state.campaigns.find(c => c.id === o.campaignId);
       const idx = state.orders.indexOf(o);
       return `<tr>
         <td data-l="Réf">${esc(o.reference)}</td>
@@ -1050,7 +1124,7 @@ function renderCommandes() {
             ${['NOUVELLE','CONFIRMEE','EXPEDIEE','LIVREE','RETOURNEE','ANNULEE','INJOIGNABLE'].map(s => `<option value="${s}" ${o.status === s ? 'selected' : ''}>${s}</option>`).join('')}
           </select>
         </td>
-        <td data-l="Transporteur">${esc(cour?.name || '—')}</td>
+        <td data-l="Campagne">${camp ? `<span class="badge purple">${esc(camp.name)}</span>` : '—'}</td>
         <td><button class="danger" onclick="delItem('orders',${idx})">✕</button></td>
       </tr>`;
     }).join('') || '<tr><td colspan="8" style="text-align:center;color:var(--text-3);padding:18px">Aucune commande</td></tr>') + '</tbody>';
@@ -1069,12 +1143,13 @@ window.updateOrderStatus = (idx, status) => {
   save(); render();
 };
 
+/* ---------- TRANSPORTEURS ---------- */
 function renderTransporteurs() {
   const pending = state.orders.filter(o => o.status === 'LIVREE' && !o.remitted);
   $('#pendingTable').innerHTML = `<thead><tr><th>Réf</th><th>Client</th><th>Transporteur</th><th>Livré le</th><th>Montant</th></tr></thead><tbody>` +
     (pending.length ? pending.map(o => {
       const c = state.couriers.find(x => x.id === o.courierId);
-      return `<tr><td data-l="Réf">${esc(o.reference)}</td><td data-l="Client">${esc(o.customerName)}</td><td data-l="Transporteur">${esc(c?.name || '—')}</td><td data-l="Livré le">${algolia(o.deliveredAt)}</td><td data-l="Montant"><b>${fmt(o.totalPrice)}</b></td></tr>`;
+      return `<tr><td data-l="Réf">${esc(o.reference)}</td><td data-l="Client">${esc(o.customerName)}</td><td data-l="Transporteur">${esc(c?.name || '—')}</td><td data-l="Livré le">${dtFr(o.deliveredAt)}</td><td data-l="Montant"><b>${fmt(o.totalPrice)}</b></td></tr>`;
     }).join('') : '<tr><td colspan="5" style="text-align:center;color:var(--text-3);padding:18px">Rien en attente</td></tr>') + '</tbody>';
 
   $('#couriersTable').innerHTML = `<thead><tr><th>Nom</th><th></th></tr></thead><tbody>` +
@@ -1083,10 +1158,11 @@ function renderTransporteurs() {
   $('#remitsTable').innerHTML = `<thead><tr><th>Date</th><th>Transporteur</th><th>Brut</th><th>Frais</th><th>Net</th></tr></thead><tbody>` +
     (state.remittances.slice().reverse().map(r => {
       const c = state.couriers.find(x => x.id === r.courierId);
-      return `<tr><td data-l="Date">${algolia(r.date)}</td><td data-l="Transporteur">${esc(c?.name || '?')}</td><td data-l="Brut">${fmt(r.gross)}</td><td data-l="Frais">${fmt((r.deliveryFees || 0) + (r.returnFees || 0))}</td><td data-l="Net"><b>${fmt(r.net)}</b></td></tr>`;
+      return `<tr><td data-l="Date">${dtFr(r.date)}</td><td data-l="Transporteur">${esc(c?.name || '?')}</td><td data-l="Brut">${fmt(r.gross)}</td><td data-l="Frais">${fmt((r.deliveryFees || 0) + (r.returnFees || 0))}</td><td data-l="Net"><b>${fmt(r.net)}</b></td></tr>`;
     }).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--text-3);padding:18px">Aucun virement</td></tr>') + '</tbody>';
 }
 
+/* ---------- STOCK ---------- */
 function renderStock() {
   $('#stockTable').innerHTML = `<thead><tr><th>Produit</th><th>Variante</th><th>SKU</th><th>Prix vente</th><th>Stock</th><th>Seuil</th><th></th></tr></thead><tbody>` +
     (state.variants.map((v, i) => {
@@ -1109,7 +1185,7 @@ function renderStock() {
       const pr = state.products.find(x => x.id === v?.productId);
       const partner = state.partners.find(x => x.id === p.partnerId);
       return `<tr>
-        <td data-l="Date">${algolia(p.date)}</td>
+        <td data-l="Date">${dtFr(p.date)}</td>
         <td data-l="Fournisseur">${esc(p.supplier)}</td>
         <td data-l="Variante">${esc(pr?.name || '?')} · ${esc(v?.color || v?.sku || '?')}</td>
         <td data-l="Qté">${p.quantity}</td>
@@ -1120,49 +1196,242 @@ function renderStock() {
     }).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--text-3);padding:18px">Aucun achat</td></tr>') + '</tbody>';
 }
 
+/* ---------- CAMPAGNES ---------- */
 function renderCampagnes() {
-  $('#campTable').innerHTML = `<thead><tr><th>Nom</th><th>Plateforme</th><th>Dépense</th><th>Livrées</th><th>Profit</th><th>ROAS</th><th>Verdict</th><th></th></tr></thead><tbody>` +
+  $('#campTable').innerHTML = `<thead><tr><th>Nom</th><th>Plateforme</th><th>Dépense</th><th>Livrées</th><th>CA livré</th><th>Profit</th><th>ROAS</th><th>Verdict</th><th></th></tr></thead><tbody>` +
     (state.campaigns.map(c => {
       const s = campaignStats(c.id);
-      const vi = { GAGNANTE:'🟢', PERDANTE:'🔴', A_SURVEILLER:'🟠' }[s.verdict];
-      const cls = { GAGNANTE:'ok', PERDANTE:'danger', A_SURVEILLER:'warn' }[s.verdict];
       return `<tr>
         <td data-l="Nom"><b>${esc(c.name)}</b></td>
         <td data-l="Plateforme">${esc(c.platform)}</td>
         <td data-l="Dépense">${fmt(s.spends)}</td>
-        <td data-l="Livrées">${s.deliv.length}</td>
+        <td data-l="Livrées">${s.deliv.length} / ${s.orders.length}</td>
+        <td data-l="CA livré">${fmt(s.rev)}</td>
         <td data-l="Profit" style="color:${s.profit >= 0 ? 'var(--green)' : 'var(--red)'};font-weight:700">${fmt(s.profit)}</td>
         <td data-l="ROAS">${s.roas ?? '—'}</td>
-        <td data-l="Verdict"><span class="badge ${cls}">${vi} ${s.verdict}</span></td>
-        <td><button class="btn gray" onclick="openCampDetail('${c.id}')">👁️</button></td>
+        <td data-l="Verdict">${verdictBadge(s.verdict)}</td>
+        <td><button class="btn gray sm" onclick="openCampDetail('${c.id}')">👁️ Détails</button></td>
       </tr>`;
-    }).join('') || '<tr><td colspan="8" style="text-align:center;color:var(--text-3);padding:18px">Aucune campagne</td></tr>') + '</tbody>';
+    }).join('') || '<tr><td colspan="9" style="text-align:center;color:var(--text-3);padding:18px">Aucune campagne</td></tr>') + '</tbody>';
 }
 
-window.openCampDetail = (id) => { selectedCampaign = id; renderCampDetail(); $('#campDetail').style.display = 'block'; $('#campDetail').scrollIntoView({behavior:'smooth'}); };
-window.closeCampDetail = () => { selectedCampaign = null; $('#campDetail').style.display = 'none'; };
+window.openCampDetail = (id) => {
+  selectedCampaign = id;
+  $('#campDetail').style.display = 'block';
+  renderCampDetail();
+  $('#campDetail').scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+window.closeCampDetail = () => {
+  selectedCampaign = null;
+  $('#campDetail').style.display = 'none';
+  if (profitChart) { profitChart.destroy(); profitChart = null; }
+};
 
 function renderCampDetail() {
   const c = state.campaigns.find(x => x.id === selectedCampaign);
   if (!c) return;
   const s = campaignStats(c.id);
-  $('#campDetailTitle').textContent = '📢 ' + c.name;
-  $('#campKpis').innerHTML = `
-    <div class="card"><small>Dépense</small><span>${fmt(s.spends)}</span></div>
-    <div class="card blue"><small>Revenu livré</small><span>${fmt(s.rev)}</span></div>
-    <div class="card ${s.profit >= 0 ? 'green' : 'red'}"><small>Profit net</small><span>${fmt(s.profit)}</span></div>
-    <div class="card purple"><small>CPA</small><span>${s.cpa ? fmt(s.cpa) : '—'}</span></div>
-    <div class="card"><small>ROAS</small><span>${s.roas ?? '—'}</span></div>
-    <div class="card"><small>CPA rentab.</small><span>${s.marginUnit ? fmt(s.marginUnit) : '—'}</span></div>
-    <div class="card"><small>Commandes</small><span>${s.orders.length}</span></div>
-    <div class="card"><small>Livrées</small><span>${s.deliv.length}</span></div>
+
+  const verdictIcon = { GAGNANTE:'🟢', PERDANTE:'🔴', A_SURVEILLER:'🟠' }[s.verdict];
+  const verdictColor = { GAGNANTE:'green', PERDANTE:'red', A_SURVEILLER:'orange' }[s.verdict];
+
+  // Funnel
+  const funnelData = [
+    { label: 'Reçues', val: s.orders.length, max: s.orders.length },
+    { label: 'Confirmées', val: s.confirmed.length, max: s.orders.length },
+    { label: 'Expédiées', val: s.shipped.length, max: s.orders.length },
+    { label: 'Livrées', val: s.deliv.length, max: s.orders.length },
+    { label: 'Retournées', val: s.ret.length, max: s.orders.length },
+  ];
+  const funnelHTML = funnelData.map(f => {
+    const pct = f.max ? Math.round((f.val / f.max) * 100) : 0;
+    return `<div class="funnel-row">
+      <div class="funnel-lbl">${f.label}</div>
+      <div class="funnel-bar"><div class="funnel-fill" style="width:${Math.max(pct, 8)}%">${pct}%</div></div>
+      <div class="funnel-val">${f.val}</div>
+    </div>`;
+  }).join('');
+
+  // Diagnostic CPA
+  let cpaDiag = '';
+  if (s.cpa && s.marginUnit) {
+    if (s.cpa > s.marginUnit) {
+      cpaDiag = `<div class="alert danger" style="margin-top:10px"><span>⚠️</span><div><b>CPA non rentable</b> : le CPA actuel (${fmt(s.cpa)}) dépasse la marge unitaire (${fmt(s.marginUnit)}). Chaque vente te coûte de l'argent.</div></div>`;
+    } else {
+      cpaDiag = `<div class="alert success" style="margin-top:10px"><span>✅</span><div><b>CPA rentable</b> : ${fmt(s.cpa)} &lt; marge unitaire ${fmt(s.marginUnit)}. La campagne génère de la valeur.</div></div>`;
+    }
+  }
+
+  $('#campDetail').innerHTML = `
+    <div class="page-head">
+      <div>
+        <div class="page-title" style="font-size:20px">📢 ${esc(c.name)}</div>
+        <div class="page-sub">${esc(c.platform)} · ${c.status || 'ACTIVE'} · démarrée le ${dtFr(c.startDate)}</div>
+      </div>
+      <button class="btn gray" onclick="closeCampDetail()">✕ Fermer</button>
+    </div>
+
+    <h3 class="sh">🎯 KPIs principaux</h3>
+    <div class="stats">
+      <div class="card orange"><small>💸 Dépense</small><span>${fmt(s.spends)}</span></div>
+      <div class="card blue"><small>💰 Revenu livré</small><span>${fmt(s.rev)}</span></div>
+      <div class="card ${s.profit >= 0 ? 'green' : 'red'}"><small>📈 Profit net</small><span>${fmt(s.profit)}</span></div>
+      <div class="card ${verdictColor}"><small>🎯 Verdict</small><span>${verdictIcon} ${s.verdict.replace('_',' ')}</span></div>
+    </div>
+
+    <div class="grid2">
+      <div>
+        <h3 class="sh">🔄 Entonnoir des commandes</h3>
+        <div class="card">
+          ${funnelHTML}
+          <div style="margin-top:12px;font-size:12px;color:var(--text-3)">
+            Taux de confirmation : <b>${Math.round(s.confirmRate*100)}%</b> ·
+            Taux de livraison : <b>${Math.round(s.deliveryRate*100)}%</b> ·
+            Taux de retour : <b>${Math.round(s.returnRate*100)}%</b>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="sh">💹 Métriques économiques</h3>
+        <div class="card" style="font-size:13px;line-height:2">
+          <div style="display:flex;justify-content:space-between"><span>CPA (coût / livrée)</span><b>${s.cpa ? fmt(s.cpa) : '—'}</b></div>
+          <div style="display:flex;justify-content:space-between"><span>CPA de rentabilité</span><b>${s.marginUnit ? fmt(s.marginUnit) : '—'}</b></div>
+          <div style="display:flex;justify-content:space-between"><span>ROAS</span><b>${s.roas ?? '—'}x</b></div>
+          <div style="display:flex;justify-content:space-between"><span>Revenu livré</span><b>${fmt(s.rev)}</b></div>
+          <div style="display:flex;justify-content:space-between"><span>− Coût articles</span><span>${fmt(-s.cost)}</span></div>
+          <div style="display:flex;justify-content:space-between"><span>− Frais livraison</span><span>${fmt(-s.ship)}</span></div>
+          <div style="display:flex;justify-content:space-between"><span>− Dépense pub</span><span>${fmt(-s.spends)}</span></div>
+          <hr style="border:0;border-top:1px solid var(--border);margin:6px 0">
+          <div style="display:flex;justify-content:space-between"><b>Profit net</b><b style="color:${s.profit >= 0 ? 'var(--green)' : 'var(--red)'}">${fmt(s.profit)}</b></div>
+          <div style="display:flex;justify-content:space-between;color:var(--text-3);font-size:12px;margin-top:6px"><span>Profit estimé (en cours)</span><b>${fmt(s.estimatedProfitPending)}</b></div>
+        </div>
+        ${cpaDiag}
+      </div>
+    </div>
+
+    <h3 class="sh">📊 Dépense vs profit par jour</h3>
+    <div class="chart-wrap">
+      <h4>30 derniers jours</h4>
+      <canvas id="campChart"></canvas>
+    </div>
+
+    <div class="simu">
+      <h4>🧮 Simulateur : et si je change le budget ?</h4>
+      <div class="simu-row">
+        <label>Nouveau budget :</label>
+        <input type="number" id="simuBudget" value="${s.spends}" min="0">
+        <button class="btn sm" onclick="runSimu('${c.id}')">Calculer</button>
+      </div>
+      <div id="simuResult" class="simu-result">
+        Saisis un nouveau budget et clique sur Calculer.
+      </div>
+    </div>
+
+    <h3 class="sh">🛒 Commandes rattachées</h3>
+    <div class="table-wrap"><table id="campOrdersTable"></table></div>
   `;
-  $('#campOrders').innerHTML = `<thead><tr><th>Réf</th><th>Client</th><th>Statut</th><th>Total</th><th>Coût</th></tr></thead><tbody>` +
-    (s.orders.map(o => `<tr><td data-l="Réf">${esc(o.reference)}</td><td data-l="Client">${esc(o.customerName)}</td><td data-l="Statut">${statusBadge(o.status)}</td><td data-l="Total">${fmt(o.totalPrice)}</td><td data-l="Coût">${fmt(itemsCost(o))}</td></tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--text-3);padding:18px">Aucune commande rattachée</td></tr>') + '</tbody>';
+
+  // Table des commandes
+  $('#campOrdersTable').innerHTML = `<thead><tr><th>Réf</th><th>Client</th><th>Statut</th><th>Total</th><th>Coût</th><th>Livré le</th></tr></thead><tbody>` +
+    (s.orders.map(o => `<tr>
+      <td data-l="Réf">${esc(o.reference)}</td>
+      <td data-l="Client">${esc(o.customerName)}</td>
+      <td data-l="Statut">${statusBadge(o.status)}</td>
+      <td data-l="Total">${fmt(o.totalPrice)}</td>
+      <td data-l="Coût">${fmt(orderCost(o))}</td>
+      <td data-l="Livré le">${dtFr(o.deliveredAt)}</td>
+    </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--text-3);padding:18px">Aucune commande rattachée à cette campagne</td></tr>') + '</tbody>';
+
+  // Chart
+  renderCampChart(c.id, s);
 }
 
+function renderCampChart(campaignId, stats) {
+  const canvas = document.getElementById('campChart');
+  if (!canvas) return;
+  if (profitChart) { profitChart.destroy(); profitChart = null; }
+
+  // Prépare les données par jour (30 derniers jours)
+  const now = Date.now();
+  const days = [];
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date(now - i * 86400000);
+    days.push(d.toISOString().slice(0, 10));
+  }
+  const spendByDay = {};
+  const profitByDay = {};
+  state.transactions.filter(t => isActive(t) && t.campaignId === campaignId && t.type === 'sortie')
+    .forEach(t => {
+      const k = t.date.slice(0, 10);
+      spendByDay[k] = (spendByDay[k] || 0) + t.amount;
+    });
+  state.orders.filter(o => o.campaignId === campaignId && o.status === 'LIVREE' && o.deliveredAt)
+    .forEach(o => {
+      const k = o.deliveredAt.slice(0, 10);
+      const p = o.totalPrice - orderCost(o) - (o.deliveryFee || 0);
+      profitByDay[k] = (profitByDay[k] || 0) + p;
+    });
+
+  const spendData = days.map(d => spendByDay[d] || 0);
+  const profitData = days.map(d => profitByDay[d] || 0);
+  const cumul = [];
+  let acc = 0;
+  for (let i = 0; i < days.length; i++) {
+    acc += (profitData[i] - spendData[i]);
+    cumul.push(acc);
+  }
+
+  profitChart = new Chart(canvas, {
+    type: 'bar',
+    data: {
+      labels: days.map(d => d.slice(5)),
+      datasets: [
+        { label: 'Dépense pub', data: spendData, backgroundColor: 'rgba(239,68,68,0.7)' },
+        { label: 'Profit livré', data: profitData, backgroundColor: 'rgba(16,185,129,0.7)' },
+        { label: 'Cumul', data: cumul, type: 'line', borderColor: '#4f6ef7', backgroundColor: 'rgba(79,110,247,0.1)', tension: 0.3, fill: false },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } },
+      scales: { y: { beginAtZero: true, ticks: { callback: v => Math.round(v/1000) + 'k' } } },
+    },
+  });
+}
+
+window.runSimu = function(campaignId) {
+  const s = campaignStats(campaignId);
+  const newBudget = Number(document.getElementById('simuBudget').value || 0);
+  if (!s.spends || !s.deliv.length) {
+    document.getElementById('simuResult').innerHTML = 'Pas assez de données pour simuler.';
+    return;
+  }
+  const cpa = s.spends / s.deliv.length;
+  const roas = s.rev / s.spends;
+  const newDeliv = Math.round(newBudget / cpa);
+  const newRev = Math.round(newBudget * roas);
+  const unitProfit = s.deliv.length ? (s.rev - s.cost - s.ship) / s.deliv.length : 0;
+  const newProfit = Math.round(newRev - newDeliv * (s.cost / s.deliv.length) - newDeliv * (s.ship / s.deliv.length) - newBudget);
+  const diff = newProfit - s.profit;
+  const color = newProfit >= 0 ? 'var(--green)' : 'var(--red)';
+  document.getElementById('simuResult').innerHTML = `
+    <div>Budget : <strong>${fmt(s.spends)}</strong> → <strong>${fmt(newBudget)}</strong></div>
+    <div>Livrées estimées : <strong>${newDeliv}</strong> (CPA constant ${fmt(Math.round(cpa))})</div>
+    <div>Revenu estimé : <strong>${fmt(newRev)}</strong></div>
+    <div>Profit estimé : <strong style="color:${color}">${fmt(newProfit)}</strong> (${diff >= 0 ? '+' : ''}${fmt(diff)})</div>
+    <div style="margin-top:8px;font-size:12px;color:var(--text-3)">
+      ${newProfit < 0 ? '⚠️ La campagne reste non rentable même avec ce budget.' : '✅ Ce budget serait rentable si les taux se maintiennent.'}
+    </div>
+  `;
+};
+
+/* ---------- STATISTIQUES ---------- */
 function renderStats() {
   const g = globalResult();
+  const ad = globalAdStats();
+
   $('#pnlBreakdown').innerHTML = `
     <div style="font-size:13px;line-height:2">
       <div style="display:flex;justify-content:space-between"><span>Revenu livré</span><b>${fmt(g.revenue)}</b></div>
@@ -1185,10 +1454,58 @@ function renderStats() {
       <div style="display:flex;justify-content:space-between;font-size:15px"><b>Solde caisse</b><b>${fmt(inC - outC)}</b></div>
     </div>`;
 
-  // Ranking
-  const ranking = state.campaigns.map(c => ({ c, s: campaignStats(c.id) })).sort((a, b) => b.s.profit - a.s.profit);
-  $('#campRanking').innerHTML = `<thead><tr><th>#</th><th>Campagne</th><th>Profit</th><th>Verdict</th></tr></thead><tbody>` +
-    (ranking.map((x, i) => `<tr><td data-l="#">${i + 1}</td><td data-l="Campagne">${esc(x.c.name)}</td><td data-l="Profit" style="color:${x.s.profit >= 0 ? 'var(--green)' : 'var(--red)'}">${fmt(x.s.profit)}</td><td data-l="Verdict"><span class="badge ${{GAGNANTE:'ok',PERDANTE:'danger',A_SURVEILLER:'warn'}[x.s.verdict]}">${x.s.verdict}</span></td></tr>`).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--text-3);padding:18px">Aucune donnée</td></tr>') + '</tbody>';
+  $('#statsAdBlock').innerHTML = `
+    <div class="stats">
+      <div class="card orange"><small>Dépense totale</small><span>${fmt(ad.total)}</span></div>
+      <div class="card blue"><small>Revenu pub</small><span>${fmt(ad.totalRev)}</span></div>
+      <div class="card ${ad.totalProfit >= 0 ? 'green' : 'red'}"><small>Profit net pub</small><span>${fmt(ad.totalProfit)}</span></div>
+      <div class="card purple"><small>ROAS</small><span>${ad.roas}x</span></div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
+      <span class="badge ok">🟢 ${ad.gagnantes} gagnante(s)</span>
+      <span class="badge warn">🟠 ${ad.surveiller} à surveiller</span>
+      <span class="badge danger">🔴 ${ad.perdantes} perdante(s)</span>
+    </div>
+  `;
+
+  // Comparaison des campagnes
+  const ranking = ad.campaigns.slice().sort((a, b) => b.s.profit - a.s.profit);
+  $('#campRanking').innerHTML = `<thead><tr><th>#</th><th>Campagne</th><th>Dépense</th><th>Livrées</th><th>CA livré</th><th>Profit</th><th>CPA</th><th>ROAS</th><th>Verdict</th></tr></thead><tbody>` +
+    (ranking.map((x, i) => `<tr>
+      <td data-l="#">${i + 1}</td>
+      <td data-l="Campagne"><b>${esc(x.c.name)}</b></td>
+      <td data-l="Dépense" class="num">${fmt(x.s.spends)}</td>
+      <td data-l="Livrées" class="num">${x.s.deliv.length}</td>
+      <td data-l="CA livré" class="num">${fmt(x.s.rev)}</td>
+      <td data-l="Profit" class="num" style="color:${x.s.profit >= 0 ? 'var(--green)' : 'var(--red)'}">${fmt(x.s.profit)}</td>
+      <td data-l="CPA" class="num">${x.s.cpa ? fmt(x.s.cpa) : '—'}</td>
+      <td data-l="ROAS" class="num">${x.s.roas ?? '—'}</td>
+      <td data-l="Verdict">${verdictBadge(x.s.verdict)}</td>
+    </tr>`).join('') || '<tr><td colspan="9" style="text-align:center;color:var(--text-3);padding:18px">Aucune campagne</td></tr>') + '</tbody>';
+
+  // Répartition par plateforme
+  const byPlat = {};
+  ad.campaigns.forEach(({ c, s }) => {
+    const p = c.platform;
+    if (!byPlat[p]) byPlat[p] = { spend: 0, rev: 0, profit: 0 };
+    byPlat[p].spend += s.spends;
+    byPlat[p].rev += s.rev;
+    byPlat[p].profit += s.profit;
+  });
+  const totalSpend = Object.values(byPlat).reduce((s, x) => s + x.spend, 0) || 1;
+  const platColors = { META:'#4f6ef7', TIKTOK:'#000', AUTRE:'#8b5cf6' };
+  $('#platformBreakdown').innerHTML = Object.entries(byPlat)
+    .sort((a, b) => b[1].spend - a[1].spend)
+    .map(([k, v]) => {
+      const pct = Math.round((v.spend / totalSpend) * 100);
+      const col = platColors[k] || 'var(--accent)';
+      return `<div class="platform-bar">
+        <div class="name">${esc(k)}</div>
+        <div class="bar"><div class="bar-fill" style="width:${pct}%;background:${col}"></div></div>
+        <div class="amount">${fmt(v.spend)} · ${pct}%</div>
+        <div style="width:120px;text-align:right;color:${v.profit >= 0 ? 'var(--green)' : 'var(--red)'};font-weight:600">${fmt(v.profit)}</div>
+      </div>`;
+    }).join('') || '<p style="color:var(--text-3);text-align:center">Aucune donnée</p>';
 
   // Wilaya
   const byW = {};
@@ -1234,10 +1551,10 @@ function renderParams() {
 
 function renderAudit() {
   $('#auditTable').innerHTML = `<thead><tr><th>Date</th><th>Utilisateur</th><th>Action</th><th>Détails</th></tr></thead><tbody>` +
-    (state.audit.slice(0, 100).map(a => `<tr><td data-l="Date">${algoliaDT(a.date)}</td><td data-l="Utilisateur">${esc(a.user)}</td><td data-l="Action">${esc(a.action)}</td><td data-l="Détails" style="font-size:12px;color:var(--text-2)">${esc(a.details || '')}</td></tr>`).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--text-3);padding:18px">Aucune action</td></tr>') + '</tbody>';
+    (state.audit.slice(0, 100).map(a => `<tr><td data-l="Date">${dtFrTime(a.date)}</td><td data-l="Utilisateur">${esc(a.user)}</td><td data-l="Action">${esc(a.action)}</td><td data-l="Détails" style="font-size:12px;color:var(--text-2)">${esc(a.details || '')}</td></tr>`).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--text-3);padding:18px">Aucune action</td></tr>') + '</tbody>';
 }
 
-/* ===================== BILAN ===================== */
+/* ---------- BILAN ---------- */
 window.renderBilan = function() {
   const m = $('#bilanMonth').value || new Date().toISOString().slice(0, 7);
   const [y, mo] = m.split('-').map(Number);
@@ -1247,9 +1564,9 @@ window.renderBilan = function() {
 
   const delivered = state.orders.filter(o => o.status === 'LIVREE' && o.deliveredAt && inMonth(o.deliveredAt));
   const rev = delivered.reduce((s, o) => s + o.totalPrice, 0);
-  const cost = delivered.reduce((s, o) => s + itemsCost(o), 0);
+  const cost = delivered.reduce((s, o) => s + orderCost(o), 0);
   const ship = delivered.reduce((s, o) => s + (o.deliveryFee || 0), 0);
-  const ads = state.transactions.filter(t => isActive(t) && inMonth(t.date) && t.categoryId === state.categories.find(c => c.name === 'Publicité')?.id).reduce((s, t) => s + t.amount, 0);
+  const ads = state.transactions.filter(t => isActive(t) && inMonth(t.date) && t.categoryId === getAdCategoryId()).reduce((s, t) => s + t.amount, 0);
   const net = rev - cost - ship - ads;
 
   $('#bilanPnL').innerHTML = `
@@ -1263,11 +1580,11 @@ window.renderBilan = function() {
     </div>`;
 
   const totalShare = state.partners.reduce((s, p) => s + (p.profitShare || 0), 0) || 1;
+  const withdrawId = state.categories.find(c => c.name === 'Retrait associé')?.id;
   $('#bilanDist').innerHTML = `<thead><tr><th>Associé</th><th>Part</th><th>Dû</th><th>Retraits</th><th>Solde</th></tr></thead><tbody>` +
     state.partners.map(p => {
       const share = p.profitShare || 0;
       const theoretical = Math.round((net * share) / totalShare);
-      const withdrawId = state.categories.find(c => c.name === 'Retrait associé')?.id;
       const withdrawals = state.transactions.filter(t => isActive(t) && inMonth(t.date) && t.partnerId === p.id && t.categoryId === withdrawId).reduce((s, t) => s + t.amount, 0);
       return `<tr><td data-l="Associé">${esc(p.name)}</td><td data-l="Part">${share}%</td><td data-l="Dû">${fmt(theoretical)}</td><td data-l="Retraits">${fmt(withdrawals)}</td><td data-l="Solde" style="color:${theoretical - withdrawals >= 0 ? 'var(--green)' : 'var(--red)'}"><b>${fmt(theoretical - withdrawals)}</b></td></tr>`;
     }).join('') + '</tbody>';
@@ -1275,30 +1592,34 @@ window.renderBilan = function() {
 
 window.exportBilanCSV = function() {
   const m = $('#bilanMonth').value || new Date().toISOString().slice(0, 7);
-  const rows = [['Bilan', m], ...[''].map(() => [])];
   const table = document.querySelector('#bilanDist');
-  if (table) {
-    const csv = [...table.querySelectorAll('tr')].map(tr => [...tr.children].map(td => `"${td.textContent.trim()}"`).join(';')).join('\n');
-    const blob = new Blob([`Bilan ${m}\n\n${csv}`], { type: 'text/csv;charset=utf-8' });
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `bilan-${m}.csv`; a.click();
-  }
+  if (!table) return;
+  const csv = [...table.querySelectorAll('tr')].map(tr => [...tr.children].map(td => `"${td.textContent.trim()}"`).join(';')).join('\n');
+  const blob = new Blob([`Bilan ${m}\n\n${csv}`], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `bilan-${m}.csv`; a.click();
 };
 
 /* ===================== FORMULAIRES ===================== */
 function formData(form) { return Object.fromEntries(new FormData(form)); }
-function resetForm(f) { f.reset(); }
 function num(v) { return Number(v || 0); }
 
-// Toggle partnerWrap / payeurWrap selon type
 $('#txType').addEventListener('change', e => {
   const isSortie = e.target.value === 'sortie';
   $('#payeurWrap').style.display = isSortie ? '' : 'none';
   $('#partnerWrap').style.display = (isSortie && $('#txPaidFrom').value === 'associe') ? '' : 'none';
+  // Afficher campagne uniquement si catégorie "Publicité"
   refreshSelects();
+  checkCampWrap();
 });
 $('#txPaidFrom').addEventListener('change', e => {
   $('#partnerWrap').style.display = e.target.value === 'associe' ? '' : 'none';
 });
+$('#txCat').addEventListener('change', checkCampWrap);
+function checkCampWrap() {
+  const catId = $('#txCat')?.value;
+  const isPub = state.categories.find(c => c.id === catId)?.name === 'Publicité';
+  $('#campWrap').style.display = isPub ? '' : 'none';
+}
 
 // Transactions
 $('#txForm').addEventListener('submit', e => {
@@ -1313,8 +1634,8 @@ $('#txForm').addEventListener('submit', e => {
     description: f.description,
     paidFrom: isEntree ? 'caisse' : f.paidFrom,
     partnerId: (!isEntree && f.paidFrom === 'associe') ? f.partnerId : null,
+    campaignId: f.campaignId || null,
   };
-  // Contrôle réserve minimale
   if (txData.type === 'sortie' && txData.paidFrom === 'caisse') {
     const after = cashBalance() - txData.amount;
     if (after < state.settings.minCashReserve) {
@@ -1322,7 +1643,6 @@ $('#txForm').addEventListener('submit', e => {
     }
   }
   const t = addTx(txData);
-  // Crée automatiquement une avance si payé par associé
   if (txData.type === 'sortie' && txData.paidFrom === 'associe' && txData.partnerId) {
     state.advances.push({
       id: uid(), date: txData.date, partnerId: txData.partnerId,
@@ -1331,7 +1651,8 @@ $('#txForm').addEventListener('submit', e => {
     });
   }
   log('CREATE_TX', `${txData.type} ${fmt(txData.amount)} — ${txData.description}`);
-  resetForm(e.target);
+  e.target.reset();
+  document.querySelectorAll('input[type=date]').forEach(i => i.value = todayISO());
   save(); render();
 });
 
@@ -1348,15 +1669,13 @@ $('#repayForm').addEventListener('submit', e => {
   if (!forced && cashBalance() - amount < state.settings.minCashReserve) {
     if (!confirm(`La caisse passerait sous la réserve (${fmt(state.settings.minCashReserve)}). Forcer ?`)) return;
   }
-  // Imputation FIFO
   const advances = state.advances.filter(a => a.partnerId === partnerId && (a.amount - (a.repaid || 0)) > 0);
   const { allocations, remaining } = allocateFIFO(advances, amount);
-  if (remaining > 0) return alert('Impossible d\'imputer le remboursement (incohérence)');
+  if (remaining > 0) return alert('Erreur d\'imputation FIFO');
   allocations.forEach(al => {
     const adv = state.advances.find(a => a.id === al.advanceId);
     if (adv) adv.repaid = (adv.repaid || 0) + al.amount;
   });
-  // Enregistre remboursement + sortie caisse
   const catId = state.categories.find(c => c.name === 'Remboursement associé')?.id || state.categories.find(c => c.type === 'sortie')?.id;
   const tx = addTx({
     date: new Date().toISOString(), type: 'sortie', amount,
@@ -1366,8 +1685,8 @@ $('#repayForm').addEventListener('submit', e => {
     id: uid(), date: new Date().toISOString(), partnerId, amount,
     transactionId: tx.id, forced, allocations,
   });
-  log('REPAY', `Remboursement ${fmt(amount)} à associé`);
-  resetForm(e.target);
+  log('REPAY', `Remboursement ${fmt(amount)}`);
+  e.target.reset();
   save(); render();
 });
 
@@ -1377,7 +1696,7 @@ $('#partnerForm').addEventListener('submit', e => {
   const f = formData(e.target);
   state.partners.push({ id: uid(), name: f.name, profitShare: num(f.profitShare) });
   log('CREATE_PARTNER', f.name);
-  resetForm(e.target); save(); render();
+  e.target.reset(); save(); render();
 });
 
 // Commande
@@ -1392,13 +1711,13 @@ $('#orderForm').addEventListener('submit', e => {
     createdAt: new Date().toISOString(),
     items: f.productName ? [{
       variantId: null, productName: f.productName,
-      quantity: 1, unitPrice: num(f.totalPrice), unitCost: 0,
+      quantity: 1, unitPrice: num(f.totalPrice), unitCost: num(f.itemsCost),
     }] : [],
   };
   if (state.orders.some(x => x.reference === o.reference)) return alert('Référence déjà existante');
   state.orders.push(o);
   log('CREATE_ORDER', o.reference);
-  resetForm(e.target); save(); render();
+  e.target.reset(); save(); render();
 });
 
 // Transporteur
@@ -1407,7 +1726,7 @@ $('#courierForm').addEventListener('submit', e => {
   const f = formData(e.target);
   state.couriers.push({ id: uid(), name: f.name });
   log('CREATE_COURIER', f.name);
-  resetForm(e.target); save(); render();
+  e.target.reset(); save(); render();
 });
 
 // Virement transporteur
@@ -1422,12 +1741,10 @@ $('#remitForm').addEventListener('submit', e => {
   const catIn = state.categories.find(c => c.name === 'Virement transporteur')?.id;
   const catShip = state.categories.find(c => c.name === 'Frais de livraison')?.id;
   const catRet = state.categories.find(c => c.name === 'Frais de retour')?.id;
-  // Entrée caisse (net)
   const t = addTx({
     date: new Date(f.date).toISOString(), type: 'entree', amount: net,
     categoryId: catIn, description: 'Virement transporteur (net)', paidFrom: 'caisse',
   });
-  // Frais en sorties
   if (num(f.deliveryFees) > 0) addTx({ date: new Date(f.date).toISOString(), type: 'sortie', amount: num(f.deliveryFees), categoryId: catShip, description: 'Frais livraison déduits', paidFrom: 'caisse' });
   if (num(f.returnFees) > 0) addTx({ date: new Date(f.date).toISOString(), type: 'sortie', amount: num(f.returnFees), categoryId: catRet, description: 'Frais retour déduits', paidFrom: 'caisse' });
   orders.forEach(o => { o.remitted = true; o.remittedAt = new Date().toISOString(); });
@@ -1436,8 +1753,8 @@ $('#remitForm').addEventListener('submit', e => {
     gross, deliveryFees: num(f.deliveryFees), returnFees: num(f.returnFees),
     net, orderIds: orders.map(o => o.id), transactionId: t.id,
   });
-  log('REMITTANCE', `${fmt(net)} de ${state.couriers.find(c => c.id === f.courierId)?.name}`);
-  resetForm(e.target); save(); render();
+  log('REMITTANCE', `${fmt(net)}`);
+  e.target.reset(); save(); render();
 });
 
 // Produit
@@ -1446,7 +1763,7 @@ $('#prodForm').addEventListener('submit', e => {
   const f = formData(e.target);
   state.products.push({ id: uid(), name: f.name });
   log('CREATE_PRODUCT', f.name);
-  resetForm(e.target); save(); render();
+  e.target.reset(); save(); render();
 });
 // Variante
 $('#varForm').addEventListener('submit', e => {
@@ -1457,7 +1774,7 @@ $('#varForm').addEventListener('submit', e => {
     salePrice: num(f.salePrice), stock: 0, alertThreshold: num(f.alertThreshold),
   });
   log('CREATE_VARIANT', f.sku);
-  resetForm(e.target); save(); render();
+  e.target.reset(); save(); render();
 });
 // Achat stock
 $('#purchaseForm').addEventListener('submit', e => {
@@ -1487,22 +1804,29 @@ $('#purchaseForm').addEventListener('submit', e => {
   const v = state.variants.find(x => x.id === f.variantId);
   if (v) v.stock += num(f.quantity);
   log('PURCHASE', `${f.supplier}: ${fmt(total)}`);
-  resetForm(e.target); save(); render();
+  e.target.reset();
+  document.querySelectorAll('input[type=date]').forEach(i => i.value = todayISO());
+  save(); render();
 });
 
 // Campagne
 $('#campForm').addEventListener('submit', e => {
   e.preventDefault();
   const f = formData(e.target);
-  state.campaigns.push({ id: uid(), name: f.name, platform: f.platform, startDate: f.startDate, plannedBudget: num(f.plannedBudget), status: 'ACTIVE' });
+  state.campaigns.push({
+    id: uid(), name: f.name, platform: f.platform,
+    startDate: f.startDate, endDate: f.endDate || null,
+    plannedBudget: num(f.plannedBudget), creative: f.creative || null,
+    status: 'ACTIVE', createdAt: new Date().toISOString(),
+  });
   log('CREATE_CAMPAIGN', f.name);
-  resetForm(e.target); save(); render();
+  e.target.reset(); save(); render();
 });
 // Dépense campagne
 $('#spendForm').addEventListener('submit', e => {
   e.preventDefault();
   const f = formData(e.target);
-  const catId = state.categories.find(c => c.name === 'Publicité')?.id;
+  const catId = getAdCategoryId();
   const tx = addTx({
     date: new Date(f.date).toISOString(), type: 'sortie', amount: num(f.amount),
     categoryId: catId, description: 'Dépense pub',
@@ -1518,7 +1842,9 @@ $('#spendForm').addEventListener('submit', e => {
   }
   state.campaignSpends.push({ id: uid(), campaignId: f.campaignId, date: new Date(f.date).toISOString(), amount: num(f.amount), transactionId: tx.id });
   log('CAMPAIGN_SPEND', fmt(f.amount));
-  resetForm(e.target); save(); render();
+  e.target.reset();
+  document.querySelectorAll('input[type=date]').forEach(i => i.value = todayISO());
+  save(); render();
 });
 
 // Catégorie
@@ -1528,7 +1854,7 @@ $('#catForm').addEventListener('submit', e => {
   if (state.categories.some(c => c.name === f.name && c.type === f.type)) return alert('Déjà existante');
   state.categories.push({ id: uid(), name: f.name, type: f.type });
   log('CREATE_CAT', f.name);
-  resetForm(e.target); save(); render();
+  e.target.reset(); save(); render();
 });
 
 // Paramètres
@@ -1543,25 +1869,15 @@ $('#paramsForm').addEventListener('submit', e => {
   save(); render();
 });
 
-// Suppression générique (avec log d'audit)
-window.delItem = (type, i) => {
-  if (!confirm('Supprimer cet élément ?')) return;
-  const item = state[type][i];
-  log('DELETE', `${type}: ${JSON.stringify(item).slice(0, 80)}`);
-  state[type].splice(i, 1);
-  save(); render();
-};
-window.clearAudit = () => { if (confirm('Vider l\'audit ?')) { state.audit = []; save(); render(); } };
-
 // Recherches
 ['#searchTx','#searchOrder'].forEach(s => { const el = $(s); if (el) el.addEventListener('input', render); });
 ['#filterTxType','#filterTxPaid','#filterOrderStatus'].forEach(s => { const el = $(s); if (el) el.addEventListener('change', render); });
 
-// Init date par défaut
+// Init dates
 document.querySelectorAll('input[type=date]').forEach(inp => { if (!inp.value) inp.value = todayISO(); });
 $('#bilanMonth').value = new Date().toISOString().slice(0, 7);
+renderBilan();
 
-// Affiche pickerless auth
 showPickerlessAuth();
 </script>
 </body>
