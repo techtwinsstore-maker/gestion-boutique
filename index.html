@@ -116,6 +116,8 @@ input[type=color]{padding:2px;height:38px}
 .calc-tab{cursor:pointer;border:0;background:transparent;padding:9px 14px;border-radius:8px;font-weight:600;font-size:13.5px;color:var(--muted);flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:background .15s,color .15s}
 .calc-tab:hover{background:var(--surface2);color:var(--ink)}
 .calc-tab.active{background:var(--amber);color:#fff}
+.calc-panel{display:none}
+.calc-panel.active{display:block}
 .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 @media (max-width:820px){.calc-grid{grid-template-columns:1fr}}
 .calc-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;min-width:0;direction:rtl;text-align:right}
@@ -167,9 +169,6 @@ input[type=color]{padding:2px;height:38px}
 (function(){
 'use strict';
 
-// ==========================================
-// CONFIGURATION FIREBASE ET INITIALISATION
-// ==========================================
 const firebaseConfig = {
   apiKey: "AIzaSyBRWNREaG4CMAEbaT7Q771NaADi4uadvxc",
   authDomain: "techtwins-861d7.firebaseapp.com",
@@ -182,12 +181,10 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const docRef = db.collection('techTwins').doc('appState');
-// ==========================================
 
 var $=function(s,r){return (r||document).querySelector(s)};
 var S;
 
-// Chargement initial + garde-fous
 function loadInitialState(){
   var raw=JSON.parse(document.getElementById('app-data').textContent);
   raw.meta=raw.meta||{rev:0};
@@ -201,7 +198,7 @@ function loadInitialState(){
 S=loadInitialState();
 
 function sanitize(){
-  ['currency'].forEach(function(k){if(typeof S[k]!=='string')S[k]='DA'});
+  if(typeof S.currency!=='string')S.currency='DA';
   ['sections','categories','transactions','cashDays','clients','clientOps','admins','adminOps','receptions','supplierPayments','orders','testPhones'].forEach(function(k){if(!Array.isArray(S[k]))S[k]=[]});
   if(!S.sections.length)S.sections=[{id:'sec_global',name:'Boutique (global)',type:'global',color:'#4ade80'}];
 }
@@ -214,7 +211,6 @@ var OPT={charge:'Dépense payée par l’associé',emprunt:'Argent pris dans la 
 var PAY={espece:'Espèces',ccp:'CCP',baridimob:'BaridiMob',virement:'Virement'};
 var artifact=null,dl=null,saveSt='local',timer=null;
 
-/* ---------- Calculateur : état ---------- */
 var CALC={
   p:{cost:2000,sell:5000,other:1000,adCost:200,target:30},
   d:{cost:2000,sell:6000,confirmRate:70,deliverRate:50,confirmCost:120,deliverCost:250,returnCost:0,customer:300,adComm:3,orders:100},
@@ -223,7 +219,6 @@ var CALC={
 try{var CS=JSON.parse(localStorage.getItem('tt_calc')||'null');if(CS){if(CS.p)CALC.p=CS.p;if(CS.d)CALC.d=CS.d;if(CS.c)CALC.c=CS.c;}}catch(e){}
 function saveCalc(){try{localStorage.setItem('tt_calc',JSON.stringify(CALC));}catch(e){}}
 
-/* ---------- helpers ---------- */
 var nf=new Intl.NumberFormat('fr-FR');
 function fmt(n){return nf.format(Math.round(n)).replace(/[ ]/g,' ')}
 function money(n){return fmt(n)+' '+S.currency}
@@ -243,7 +238,6 @@ function admName(id){var a=by(S.admins,id);return a?a.name:'—'}
 function chip(sec){return '<span class="chip"><i style="background:'+esc(sec.color)+'"></i>'+esc(sec.name)+'</span>'}
 function cap(s){return s?s.charAt(0).toUpperCase()+s.slice(1):s}
 
-/* ---------- persistence ---------- */
 function setStatus(s){saveSt=s;var e=$('#st');if(e)e.innerHTML=statusHtml();var e2=$('#st2');if(e2)e2.innerHTML=statusHtml()}
 function statusHtml(){
   var m={saved:['','Enregistré'],saving:['warn','Enregistrement…'],local:['warn','Enregistré sur cet appareil seulement'],ro:['bad','Lecture seule'],err:['bad','Échec de l’enregistrement']}[saveSt]||['',''];
@@ -261,7 +255,6 @@ function save(){
   }catch(e){console.error(e);setStatus('err');}
 }
 
-/* ---------- calculations ---------- */
 function opSection(op){
   if(op.sectionId)return op.sectionId;
   if(op.linkedReceptionId){var r=by(S.receptions,op.linkedReceptionId);if(r)return r.sectionId}
@@ -290,7 +283,6 @@ function calc(){
 }
 function niceMax(v){if(v<=0)return 1;var p=Math.pow(10,Math.floor(Math.log10(v))),n=v/p;return (n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10)*p}
 
-/* ---------- views ---------- */
 function shell(){
   return '<div class="shell"><aside class="side"><div class="brand"><b><span class="twin"><i></i><i></i></span>Tech Twins</b><span>Boutique DZbuild · Algérie</span></div>'
    +'<nav class="nav" aria-label="Sections">'+TABS.map(function(t){return '<button data-a="tab" data-t="'+t[0]+'"'+(ui.tab===t[0]?' aria-current="page"':'')+'>'+t[1]+'</button>'}).join('')+'</nav>'
@@ -421,9 +413,19 @@ function vSections(){
   return head('Sections','Produits, campagnes et le niveau global de la boutique.','<button class="btn pri" data-a="newSec">Nouvelle section</button>')+'<div class="cards">'+cards+'</div>';
 }
 
-/* ============================================================
-   CALCULATEUR
-   ============================================================ */
+function vReglages(){
+  var cats=S.categories.map(function(c){
+    return '<tr><td>'+esc(c.name)+'</td><td><span class="tag">'+(c.type==='revenu'?'Revenu':'Dépense')+'</span></td><td class="r"><button class="btn sm ghost" data-a="editCat" data-id="'+c.id+'">Modifier</button></td></tr>';
+  }).join('');
+  return head('Réglages','Catégories, devise et sauvegarde des données.','')
+   +(saveSt==='ro'?'<div class="banner">Cette vue est en lecture seule. Les modifications ne sont pas enregistrées.</div>':'')
+   +'<section class="panel"><h2>Catégories</h2><div class="scroll"><table><tbody>'+cats+'</tbody></table></div><div style="margin-top:12px"><button class="btn" data-a="newCat">Nouvelle catégorie</button></div></section>'
+   +'<section class="panel"><h2>Devise</h2><div class="row"><input id="cur" style="max-width:120px" value="'+esc(S.currency)+'" aria-label="Devise"><button class="btn" data-a="setCur">Appliquer</button></div></section>'
+   +'<section class="panel"><h2>Sauvegarde</h2><p class="sub" style="margin:0 0 12px">Exportez vos données au format JSON, compatible avec le fichier d’origine, ou importez un fichier pour remplacer tout le contenu.</p><div class="row">'
+   +'<button class="btn pri" data-a="export">Exporter en JSON</button><label class="btn" for="imp">Importer un JSON</label><input id="imp" type="file" accept=".json,application/json" hidden></div><div id="impmsg" class="err" style="margin-top:8px"></div></section>';
+}
+
+/* ---------- CALCULATEUR ---------- */
 function cfs(id,label,key,unit){
   return '<label class="fld">'+label+'<input type="number" id="'+id+'" data-ck="'+key+'" value="'+esc(CALC[key])+'" inputmode="decimal"><span class="mut" style="font-size:11.5px;text-align:left">'+unit+'</span></label>';
 }
@@ -494,9 +496,9 @@ function vCalculateur(){
 
   return head('Calculateur','Analysez la rentabilité de vos produits et campagnes.','')
     +tabBar
-    +'<div class="calc-panel">'+m1+'</div>'
-    +'<div class="calc-panel">'+m2+'</div>'
-    +'<div class="calc-panel">'+m3+'</div>';
+    +'<div class="calc-panel'+(ct==='product'?' active':'')+'">'+m1+'</div>'
+    +'<div class="calc-panel'+(ct==='detailed'?' active':'')+'">'+m2+'</div>'
+    +'<div class="calc-panel'+(ct==='campaign'?' active':'')+'">'+m3+'</div>';
 }
 function runCalcP(){
   var total=CALC.p.cost+CALC.p.other+CALC.p.adCost;
@@ -759,7 +761,6 @@ document.addEventListener('change',function(e){
   }
 });
 
-/* ---------- Firebase realtime ---------- */
 try{
   docRef.onSnapshot(function(doc) {
     try{
