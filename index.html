@@ -1,10 +1,7 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
-<!-- AJOUT DES BIBLIOTHÈQUES FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<!-- FIN AJOUT -->
 <style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body><title>Tech Twins Gestion</title><style id="app-style">
-/* Layout: sidebar ledger on desktop, bottom tab bar on phone. Teal = money in, amber = money out. */
 :root{
   --bg:#EDF0F1; --surface:#FFFFFF; --surface2:#E3E8EA; --ink:#12202A; --muted:#566772; --line:#D2D9DD;
   --accent:#0A7771; --accent-ink:#FFFFFF; --amber:#B9680F; --neg:#B53A31; --pos:#0A7771; --shade:rgba(18,32,42,.45);
@@ -110,17 +107,61 @@ svg.chart .b1{fill:var(--accent)} svg.chart .b2{fill:var(--amber)}
 input[type=color]{padding:2px;height:38px}
 .empty{color:var(--muted);padding:18px 0;text-align:center}
 .banner{background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:14px}
+
+/* ============================================
+   CALCULATEUR
+   ============================================ */
+.calc-tabs{display:flex;gap:6px;margin-bottom:16px;background:var(--surface);padding:6px;border-radius:10px;border:1px solid var(--line);flex-wrap:wrap}
+.calc-tab{cursor:pointer;border:0;background:transparent;padding:9px 14px;border-radius:8px;font-weight:600;font-size:13.5px;color:var(--muted);flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:background .15s,color .15s}
+.calc-tab:hover{background:var(--surface2);color:var(--ink)}
+.calc-tab.active{background:var(--amber);color:#fff}
+.calc-panel{display:none}
+.calc-panel.active{display:block}
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:820px){.calc-grid{grid-template-columns:1fr}}
+.calc-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;min-width:0;direction:rtl;text-align:right}
+.calc-card h2{display:flex;align-items:center;gap:8px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--line);font-size:16px;font-family:var(--f-display)}
+.calc-card h2 .dot-o{width:10px;height:10px;background:var(--amber);border-radius:50%;flex:none}
+.calc-card .fld{margin-bottom:10px}
+.calc-card .fld input{text-align:center;font-family:var(--f-mono);font-weight:600;background:var(--surface2)}
+.calc-card .fld input:focus{background:var(--surface);border-color:var(--amber)}
+.calc-card label.info-dot{cursor:help;color:var(--amber);font-weight:900}
+.calc-row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:400px){.calc-row-2{grid-template-columns:1fr}}
+.calc-res{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:10px;margin-bottom:8px;background:var(--surface2);gap:10px}
+.calc-res.hl{background:rgba(185,104,15,.12);border:1px solid rgba(185,104,15,.35)}
+.calc-res .l{font-size:12.5px;color:var(--muted);font-weight:600;text-align:right}
+.calc-res .v{font-family:var(--f-mono);font-size:17px;font-weight:700;color:var(--amber);overflow-wrap:anywhere;text-align:left;direction:ltr}
+.calc-res .v.pos{color:var(--pos)}
+.calc-res .v.neg{color:var(--neg)}
+.calc-decision{margin-top:16px;padding:20px;border-radius:12px;text-align:center;background:var(--ink);border:2px solid var(--amber);color:var(--bg)}
+.calc-decision .dl{font-size:12.5px;font-weight:700;color:var(--amber);margin-bottom:8px;letter-spacing:.05em}
+.calc-decision .dv{font-family:var(--f-mono);font-size:30px;font-weight:800;line-height:1.1;overflow-wrap:anywhere;direction:ltr}
+.calc-decision .ds{font-size:12.5px;opacity:.75;margin-top:6px}
+.calc-bar{background:var(--surface2);border-radius:8px;padding:10px 14px;margin-top:12px}
+.calc-bar .l{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);font-weight:600;margin-bottom:6px}
+.calc-bar .track{height:9px;background:var(--line);border-radius:99px;overflow:hidden}
+.calc-bar .fill{height:100%;border-radius:99px;background:var(--amber);transition:width .3s,background .3s}
+.calc-hint{margin-top:14px;padding:10px 14px;border-radius:8px;background:rgba(185,104,15,.08);border:1px solid rgba(185,104,15,.25);color:var(--amber);font-size:12.5px;line-height:1.6}
+.calc-btn{width:100%;margin-top:10px;cursor:pointer;border:0;padding:12px;border-radius:10px;background:var(--amber);color:#fff;font-weight:700;font-size:14.5px}
+.calc-btn:hover{filter:brightness(1.08)}
+.calc-btn.sec{background:var(--surface2);color:var(--muted);border:1px solid var(--line);font-weight:600}
+.calc-btn.sec:hover{background:var(--line);color:var(--ink)}
+
 @media (max-width:820px){
   .shell{grid-template-columns:minmax(0,1fr)}
-  .side{position:fixed;inset:auto 0 0 0;top:auto;height:auto;flex-direction:row;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));border-right:0;border-top:1px solid var(--line);z-index:20;gap:0}
+  .side{position:fixed;inset:auto 0 0 0;top:auto;height:auto;flex-direction:row;padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));border-right:0;border-top:1px solid var(--line);z-index:20;gap:0}
   .side .brand,.side .status{display:none}
-  .nav{flex-direction:row;width:100%}
-  .nav button{flex:1 1 0;min-width:0;text-align:center;padding:9px 2px;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .nav{flex-direction:row;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:2px}
+  .nav button{flex:0 0 auto;min-width:64px;text-align:center;padding:8px 4px;font-size:10.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   main{padding:20px 16px 96px}
   .hero{grid-template-columns:minmax(0,1fr)}
   .grid2{grid-template-columns:minmax(0,1fr)}
   h1{font-size:26px}
   .topbar{display:flex!important}
+  .calc-card{padding:14px}
+  .calc-res .v{font-size:14px}
+  .calc-decision .dv{font-size:24px}
 }
 .topbar{display:none;align-items:center;justify-content:space-between;gap:8px;font-family:var(--f-display);font-size:18px;font-weight:700}
 @media (prefers-reduced-motion:no-preference){.btn{transition:background .15s,border-color .15s}}
@@ -150,16 +191,25 @@ var S=JSON.parse(document.getElementById('app-data').textContent);
 S.meta=S.meta||{rev:0};
 
 try{var L=JSON.parse(localStorage.getItem('tt_state')||'null');if(L&&L.meta&&L.meta.rev>S.meta.rev&&L.transactions)S=L;}catch(e){}
-var ui={tab:'apercu',f:{sec:'',type:'',month:'',q:''},rsec:''};
+var ui={tab:'apercu',f:{sec:'',type:'',month:'',q:''},rsec:'',calcTab:'product'};
 try{ui.tab=localStorage.getItem('tt_tab')||'apercu';}catch(e){}
-var TABS=[['apercu','Aperçu'],['journal','Journal'],['achats','Achats'],['associes','Associés'],['sections','Sections'],['reglages','Réglages']];
+var TABS=[['apercu','Aperçu'],['journal','Journal'],['achats','Achats'],['associes','Associés'],['sections','Sections'],['calculateur','Calculateur'],['reglages','Réglages']];
 var OPT={charge:'Dépense payée par l’associé',emprunt:'Argent pris dans la caisse',versement:'Argent versé dans la caisse',remboursement:'Remboursé par la caisse'};
 var PAY={espece:'Espèces',ccp:'CCP',baridimob:'BaridiMob',virement:'Virement'};
 var artifact=null,dl=null,saveSt='local',timer=null;
 
+/* ---------- état du calculateur ---------- */
+var CALC={
+  p:{cost:2000,sell:5000,other:1000,adCost:200,target:30},
+  d:{cost:2000,sell:6000,confirmRate:70,deliverRate:50,confirmCost:120,deliverCost:250,returnCost:0,customer:300,adComm:3,orders:100},
+  c:{budget:10000,orders:20,confirmRate:70,deliverRate:60,profitNoAds:1200}
+};
+try{var CS=JSON.parse(localStorage.getItem('tt_calc')||'null');if(CS){if(CS.p)CALC.p=CS.p;if(CS.d)CALC.d=CS.d;if(CS.c)CALC.c=CS.c;}}catch(e){}
+function saveCalc(){try{localStorage.setItem('tt_calc',JSON.stringify(CALC));}catch(e){}}
+
 /* ---------- helpers ---------- */
 var nf=new Intl.NumberFormat('fr-FR');
-function fmt(n){return nf.format(Math.round(n)).replace(/[  ]/g,' ')}
+function fmt(n){return nf.format(Math.round(n)).replace(/[ ]/g,' ')}
 function money(n){return fmt(n)+' '+S.currency}
 function sgn(n){return (n>0?'+':n<0?'−':'')+fmt(Math.abs(n))}
 function cls(n){return n>0?'pos':n<0?'neg':'mut'}
@@ -176,11 +226,12 @@ function catOf(id){return by(S.categories,id)||{name:'—'}}
 function admName(id){var a=by(S.admins,id);return a?a.name:'—'}
 function chip(sec){return '<span class="chip"><i style="background:'+esc(sec.color)+'"></i>'+esc(sec.name)+'</span>'}
 function cap(s){return s?s.charAt(0).toUpperCase()+s.slice(1):s}
+function nfa(n){return nf.format(Math.round(n||0)).replace(/[ ]/g,' ')}
 
 /* ---------- persistence ---------- */
-function setStatus(s){saveSt=s;var e=$('#st');if(e)e.innerHTML=statusHtml()}
+function setStatus(s){saveSt=s;var e=$('#st');if(e)e.innerHTML=statusHtml();var e2=$('#st2');if(e2)e2.innerHTML=statusHtml()}
 function statusHtml(){
-  var m={saved:['','Enregistré'],saving:['warn','Enregistrement…'],local:['warn','Enregistré sur cet appareil seulement'],ro:['bad','Lecture seule'],err:['bad','Échec de l’enregistrement']}[saveSt]||['','']; 
+  var m={saved:['','Enregistré'],saving:['warn','Enregistrement…'],local:['warn','Enregistré sur cet appareil seulement'],ro:['bad','Lecture seule'],err:['bad','Échec de l’enregistrement']}[saveSt]||['',''];
   return '<span class="dot '+m[0]+'"></span><span>'+m[1]+'</span>';
 }
 function buildDoc(){
@@ -197,15 +248,10 @@ function save(){
   S.meta.rev=(S.meta.rev||0)+1;
   try{localStorage.setItem('tt_state',JSON.stringify(S));}catch(e){}
   setStatus('saving');
-  
-  // Sauvegarde sur Firebase
-  docRef.set(S).then(function() {
-    setStatus('saved');
-  }).catch(function(error) {
+  docRef.set(S).then(function() {setStatus('saved');}).catch(function(error) {
     console.error("Erreur de sauvegarde Firebase: ", error);
     setStatus('err');
   });
-
   clearTimeout(timer);timer=setTimeout(publish,700);
 }
 function publish(){
@@ -243,7 +289,7 @@ function calc(){
     else c.cash-=o.amount;
   });
   S.admins.forEach(function(a){var b=c.bal[a.id];b.net=b.charge+b.versement-b.emprunt-b.remboursement});
-  c.cost=c.txExp+c.charges;c.profit=c.rev-c.cost;
+  c.cost=c.txExp+c.charges;c.profit=c.rev-c.cost+c.capital;
   return c;
 }
 function niceMax(v){if(v<=0)return 1;var p=Math.pow(10,Math.floor(Math.log10(v))),n=v/p;return (n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10)*p}
@@ -256,9 +302,10 @@ function shell(){
 }
 function render(){
   $('#root').innerHTML=shell();
-  var v={apercu:vApercu,journal:vJournal,achats:vAchats,associes:vAssocies,sections:vSections,reglages:vReglages}[ui.tab]||vApercu;
+  var v={apercu:vApercu,journal:vJournal,achats:vAchats,associes:vAssocies,sections:vSections,calculateur:vCalculateur,reglages:vReglages}[ui.tab]||vApercu;
   $('#main').innerHTML='<div class="topbar"><span><span class="twin"><i></i><i></i></span>Tech Twins</span><span class="status" id="st2">'+statusHtml()+'</span></div>'+v();
   if(ui.tab==='journal')txList();
+  if(ui.tab==='calculateur')initCalc();
 }
 function head(title,sub,actions){
   return '<div class="head"><div><h1>'+title+'</h1>'+(sub?'<p class="sub">'+sub+'</p>':'')+'</div><div class="row">'+(actions||'')+'</div></div>';
@@ -285,9 +332,9 @@ function vApercu(){
   var last=S.transactions.slice().sort(function(a,b){return b.date<a.date?-1:b.date>a.date?1:0}).slice(0,6).map(function(t){
     return '<tr><td class="mut">'+dfmt(t.date)+'</td><td class="wrap">'+esc(t.desc||catOf(t.categoryId).name)+'</td><td class="r num '+(t.type==='revenu'?'pos':'neg')+'">'+(t.type==='revenu'?'+':'−')+fmt(t.amount)+'</td></tr>'}).join('');
   return head('Aperçu','Situation de la boutique au '+dfmt(today())+'.','<button class="btn pri" data-a="newTx">Nouvelle transaction</button>')
-   +'<section class="hero"><div class="profit"><span class="lab">Résultat net</span><span class="big">'+sgn(c.profit)+' '+esc(S.currency)+'</span><span class="note">Revenus '+fmt(c.rev)+' moins coûts '+fmt(c.cost)+'. Le capital apporté ('+fmt(c.capital)+') n’est pas compté comme un revenu.</span></div>'
+   +'<section class="hero"><div class="profit"><span class="lab">Résultat net</span><span class="big">'+sgn(c.profit)+' '+esc(S.currency)+'</span><span class="note">Revenus '+fmt(c.rev)+' + capital '+fmt(c.capital)+' moins coûts '+fmt(c.cost)+'.</span></div>'
    +'<div class="kpis"><div class="kpi"><div class="lab">Caisse</div><div class="val '+(c.cash<0?'neg':'')+'">'+money(c.cash)+'</div><div class="hint">Encaissements − dépenses ± associés</div></div>'
-   +'<div class="kpi"><div class="lab">Chiffre d’affaires</div><div class="val">'+money(c.rev)+'</div><div class="hint">Hors capital</div></div>'
+   +'<div class="kpi"><div class="lab">Chiffre d’affaires</div><div class="val">'+money(c.rev)+'</div><div class="hint">Hors capital ('+fmt(c.capital)+')</div></div>'
    +'<div class="kpi"><div class="lab">Coûts totaux</div><div class="val">'+money(c.cost)+'</div><div class="hint">Caisse '+fmt(c.txExp)+' · associés '+fmt(c.charges)+'</div></div>'
    +'<div class="kpi"><div class="lab">À rembourser</div><div class="val '+(owed?'neg':'')+'">'+money(owed)+'</div><div class="hint">Dû aux associés</div></div></div></section>'
    +'<section class="panel"><h2>Revenus et coûts par mois</h2><div class="legend"><span class="chip"><i style="background:var(--accent)"></i>Revenus</span><span class="chip"><i style="background:var(--amber)"></i>Coûts</span></div>'+(ms.length?svg:'<p class="empty">Aucune donnée.</p>')+'</section>'
@@ -365,15 +412,178 @@ function vSections(){
   return head('Sections','Produits, campagnes et le niveau global de la boutique.','<button class="btn pri" data-a="newSec">Nouvelle section</button>')+'<div class="cards">'+cards+'</div>';
 }
 
-function vReglages(){
-  var cats=S.categories.map(function(c){var used=S.transactions.some(function(t){return t.categoryId===c.id})||S.receptions.some(function(r){return r.categoryId===c.id});
-    return '<tr><td>'+esc(c.name)+'</td><td><span class="tag">'+(c.type==='revenu'?'Revenu':'Dépense')+'</span></td><td class="r"><button class="btn sm ghost" data-a="editCat" data-id="'+c.id+'">Modifier</button></td></tr>'}).join('');
-  return head('Réglages','Catégories, devise et sauvegarde des données.','')
-   +(saveSt==='ro'?'<div class="banner">Cette vue est en lecture seule. Les modifications ne sont pas enregistrées.</div>':'')
-   +'<section class="panel"><h2>Catégories</h2><div class="scroll"><table><tbody>'+cats+'</tbody></table></div><div style="margin-top:12px"><button class="btn" data-a="newCat">Nouvelle catégorie</button></div></section>'
-   +'<section class="panel"><h2>Devise</h2><div class="row"><input id="cur" style="max-width:120px" value="'+esc(S.currency)+'" aria-label="Devise"><button class="btn" data-a="setCur">Appliquer</button></div></section>'
-   +'<section class="panel"><h2>Sauvegarde</h2><p class="sub" style="margin:0 0 12px">Exportez vos données au format JSON, compatible avec le fichier d’origine, ou importez un fichier pour remplacer tout le contenu.</p><div class="row">'
-   +(dl?'<button class="btn pri" data-a="export">Exporter en JSON</button>':'')+'<label class="btn" for="imp">Importer un JSON</label><input id="imp" type="file" accept=".json,application/json" hidden></div><div id="impmsg" class="err" style="margin-top:8px"></div></section>';
+/* ============================================================
+   CALCULATEUR — 3 modules
+   ============================================================ */
+function calcNum(id){
+  var e=document.getElementById(id);
+  if(!e)return 0;
+  var v=parseFloat(String(e.value).replace(',','.'));
+  return isFinite(v)?v:0;
+}
+function cfs(id,label,key,unit){
+  return '<label class="fld">'+label+'<input type="number" id="'+id+'" data-ck="'+key+'" value="'+esc(CALC[key])+'" inputmode="decimal"><span class="mut" style="font-size:11.5px;text-align:left">'+unit+'</span></label>';
+}
+function cfs2(id1,l1,k1,u1,id2,l2,k2,u2){
+  return '<div class="calc-row-2">'+cfs(id1,l1,k1,u1)+cfs(id2,l2,k2,u2)+'</div>';
+}
+
+function vCalculateur(){
+  var ct=ui.calcTab||'product';
+  var tabs=[['product','📦 قرار المنتج'],['detailed','🔍 التحليل التفصيلي'],['campaign','📢 ربحية الحملة']];
+  var tabBar='<div class="calc-tabs">'+tabs.map(function(t){
+    return '<button class="calc-tab'+(ct===t[0]?' active':'')+'" data-a="calcTab" data-t="'+t[0]+'">'+t[1]+'</button>';
+  }).join('')+'</div>';
+
+  /* ---- Module 1 : Product decision ---- */
+  var m1='<div class="calc-grid">'
+    +'<div class="calc-card"><h2><span class="dot-o"></span> المعطيات</h2>'
+    +cfs2('pCost','سعر شراء المنتج','p.cost','دج','pSell','سعر البيع المتوقع','p.sell','دج')
+    +cfs('pOther','إجمالي التكلفة الأخرى للوحدة','p.other','دج')
+    +cfs('pAdCost','تكلفة الإعلان لكل طلبية مسلمة','p.adCost','دج')
+    +cfs('pTarget','الهوامش المستهدفة','p.target','%')
+    +'<button class="calc-btn sec" data-a="calcReset" data-k="p">↺ إعادة التصفير</button></div>'
+    +'<div class="calc-card"><h2><span class="dot-o"></span> القرار السريع</h2>'
+    +'<div class="calc-res hl"><span class="l">هامش الربح الحالي</span><span class="v" id="pMargin">0%</span></div>'
+    +'<div class="calc-res"><span class="l">الربح الصافي للوحدة</span><span class="v" id="pNetProfit">0 دج</span></div>'
+    +'<div class="calc-decision"><div class="dl">قرار المنتج بالدينار</div><div class="dv" id="pDecision">0</div><div class="ds" id="pDecisionText">أدخل المعطيات</div></div>'
+    +'<div class="calc-bar"><div class="l"><span>قوة النتيجة</span><span id="pStrength">0%</span></div><div class="track"><div class="fill" id="pStrengthFill" style="width:0%"></div></div></div>'
+    +'<div class="calc-hint">💡 أدخل سعر البيع والشراء والتكاليف لتعرف إن كان المنتج يحقق الهامش المستهدف.</div></div>'
+    +'</div>';
+
+  /* ---- Module 2 : Detailed analysis ---- */
+  var m2='<div class="calc-grid">'
+    +'<div class="calc-card"><h2><span class="dot-o"></span> المعطيات التفصيلية</h2>'
+    +cfs2('dCost','سعر شراء المنتج','d.cost','دج','dSell','سعر البيع المتوقع','d.sell','دج')
+    +cfs2('dConfirmRate','نسبة التأكيد','d.confirmRate','%','dDeliverRate','نسبة التسليم','d.deliverRate','%')
+    +cfs2('dConfirmCost','تكلفة التأكيد','d.confirmCost','دج','dDeliverCost','تكلفة التوصيل','d.deliverCost','دج')
+    +cfs('dReturnCost','تكلفة الإرجاع','d.returnCost','دج')
+    +cfs('dCustomer','مساهمة الزبون في التوصيل','d.customer','دج')
+    +cfs2('dAdComm','عمولة الإعلان','d.adComm','%','dOrders','عدد الطلبات الكلي','d.orders','طلبية')
+    +'<button class="calc-btn sec" data-a="calcReset" data-k="d">↺ إعادة التصفير</button></div>'
+    +'<div class="calc-card"><h2><span class="dot-o"></span> النتيجة التفصيلية</h2>'
+    +'<div class="calc-res"><span class="l">الطلبيات المؤكدة</span><span class="v" id="dConfirmed">0</span></div>'
+    +'<div class="calc-res"><span class="l">الطلبيات المسلّمة</span><span class="v pos" id="dDelivered">0</span></div>'
+    +'<div class="calc-res"><span class="l">الإيرادات الإجمالية</span><span class="v pos" id="dRevenue">0</span></div>'
+    +'<div class="calc-res"><span class="l">إجمالي التكاليف</span><span class="v neg" id="dTotalCost">0</span></div>'
+    +'<div class="calc-res hl"><span class="l">الربح الإجمالي</span><span class="v" id="dProfit">0</span></div>'
+    +'<div class="calc-res"><span class="l">الربح لكل طلبية</span><span class="v" id="dProfitPerOrder">0</span></div>'
+    +'<div class="calc-decision"><div class="dl">العائد على التكلفة (ROI)</div><div class="dv" id="dDecision">0%</div><div class="ds" id="dDecisionText">أدخل المعطيات</div></div>'
+    +'<div class="calc-hint">⚠️ الطلبيات الفاشلة (غير مؤكدة أو غير مسلّمة) تُحسب كتكلفة بدون إيراد.</div></div>'
+    +'</div>';
+
+  /* ---- Module 3 : Campaign profitability ---- */
+  var m3='<div class="calc-grid">'
+    +'<div class="calc-card"><h2><span class="dot-o"></span> معطيات الحملة</h2>'
+    +cfs('cBudget','ميزانية الإعلانات','c.budget','دج')
+    +cfs('cOrders','عدد الطلبات التي وصلتك','c.orders','طلبية')
+    +cfs2('cConfirmRate','نسبة التأكيد','c.confirmRate','%','cDeliverRate','نسبة التسليم','c.deliverRate','%')
+    +cfs('cProfitNoAds','ربح من البيع بدون إعلانات','c.profitNoAds','دج')
+    +'<button class="calc-btn" data-a="calcRun">✓ تحليل الحملة الآن</button>'
+    +'<button class="calc-btn sec" data-a="calcReset" data-k="c">↺ إعادة التصفير</button></div>'
+    +'<div class="calc-card"><h2><span class="dot-o"></span> القرار السريع</h2>'
+    +'<div class="calc-res hl"><span class="l">قرار الحملة (ROI)</span><span class="v" id="cDecision">0%</span></div>'
+    +'<div class="calc-res"><span class="l">عدد الطلبات المؤكدة</span><span class="v" id="cConfirmed">0</span></div>'
+    +'<div class="calc-res"><span class="l">تكلفة الطلبية المؤكدة</span><span class="v" id="cCostPerOrder">0</span></div>'
+    +'<div class="calc-res"><span class="l">العائد المتوقع على الميزانية</span><span class="v pos" id="cReturn">0</span></div>'
+    +'<div class="calc-res"><span class="l">الربح لكل طلبية (بعد الإعلان)</span><span class="v" id="cProfitPerOrder">0</span></div>'
+    +'<div class="calc-res"><span class="l">الربح الإجمالي قبل الإعلان</span><span class="v pos" id="cGrossProfit">0</span></div>'
+    +'<div class="calc-res hl"><span class="l">الربح الصافي بعد الإعلان</span><span class="v" id="cNetProfit">0</span></div>'
+    +'<div class="calc-bar"><div class="l"><span>جودة الحملة</span><span id="cQuality">0%</span></div><div class="track"><div class="fill" id="cQualityFill" style="width:0%"></div></div></div>'
+    +'<div class="calc-hint">💡 هذه الحاسبة تحسب تكلفة الإعلان على الطلبيات المسلّمة، فإن لم تكن النتيجة إيجابية فالحملة في خسارة.</div></div>'
+    +'</div>';
+
+  return head('Calculateur','Analysez la rentabilité de vos produits et campagnes.','')
+    +tabBar
+    +'<div class="calc-panel'+(ct==='product'?' active':'')+'">'+m1+'</div>'
+    +'<div class="calc-panel'+(ct==='detailed'?' active':'')+'">'+m2+'</div>'
+    +'<div class="calc-panel'+(ct==='campaign'?' active':'')+'">'+m3+'</div>';
+}
+
+/* --- Calcul 1 --- */
+function runCalcP(){
+  var cost=CALC.p.cost,sell=CALC.p.sell,other=CALC.p.other,adCost=CALC.p.adCost,target=CALC.p.target;
+  var total=cost+other+adCost;
+  var net=sell-total;
+  var margin=sell>0?(net/sell*100):0;
+  var mEl=document.getElementById('pMargin');
+  if(mEl){mEl.textContent=margin.toFixed(1)+'%';mEl.className='v '+(margin>=target?'pos':margin>=0?'':'neg')}
+  var npEl=document.getElementById('pNetProfit');
+  if(npEl){npEl.textContent=fmt(net)+' '+S.currency;npEl.className='v '+(net>0?'pos':'neg')}
+  var d=document.getElementById('pDecision'),dt=document.getElementById('pDecisionText');
+  if(d){d.textContent=sgn(net);d.style.color=net<=0?'#F27A71':margin<target?'#EBA251':'#3DC5BC'}
+  if(dt){dt.textContent=net<=0?'⚠️ المنتج في خسارة':margin<target?'⚠️ الهامش أقل من المستهدف ('+target+'%)':'✅ المنتج مربح ويتجاوز الهدف'}
+  var s=Math.min(100,Math.max(0,margin*2));
+  var sEl=document.getElementById('pStrength');if(sEl)sEl.textContent=s.toFixed(0)+'%';
+  var f=document.getElementById('pStrengthFill');
+  if(f){f.style.width=s+'%';f.style.background=s>=60?'#3DC5BC':s>=30?'#EBA251':'#F27A71'}
+}
+
+/* --- Calcul 2 --- */
+function runCalcD(){
+  var c=CALC.d;
+  var conf=c.orders*(c.confirmRate/100);
+  var deliv=conf*(c.deliverRate/100);
+  var ret=conf-deliv;
+  var rev=deliv*c.sell+deliv*c.customer;
+  var revAfterComm=rev*(1-c.adComm/100);
+  var prodCost=c.orders*c.cost;
+  var confCost=conf*c.confirmCost;
+  var delivCost=deliv*c.deliverCost;
+  var retCost=ret*c.returnCost;
+  var totalCost=prodCost+confCost+delivCost+retCost;
+  var profit=revAfterComm-totalCost;
+  var ppo=deliv>0?profit/deliv:0;
+  var set=function(id,v,cl){var e=document.getElementById(id);if(e){e.textContent=v;if(cl)e.className='v '+cl}};
+  set('dConfirmed',Math.round(conf).toString());
+  set('dDelivered',Math.round(deliv).toString(),'pos');
+  set('dRevenue',fmt(revAfterComm)+' '+S.currency,'pos');
+  set('dTotalCost',fmt(totalCost)+' '+S.currency,'neg');
+  set('dProfit',sgn(profit)+(profit?'':'')+' '+S.currency,profit>0?'pos':'neg');
+  set('dProfitPerOrder',(ppo>=0?'+':'')+fmt(ppo)+' '+S.currency,ppo>0?'pos':'neg');
+  var roi=totalCost>0?(profit/totalCost*100):0;
+  var d=document.getElementById('dDecision'),dt=document.getElementById('dDecisionText');
+  if(d){d.textContent=roi.toFixed(1)+'%';d.style.color=profit<=0?'#F27A71':roi<20?'#EBA251':'#3DC5BC'}
+  if(dt)dt.textContent=profit<=0?'⚠️ المنتج في خسارة — لا تطلقه':roi<20?'⚠️ ربح ضعيف — حسّن نسب التأكيد والتسليم':'✅ المنتج مربح — يمكن إطلاقه';
+}
+
+/* --- Calcul 3 --- */
+function runCalcC(){
+  var c=CALC.c;
+  var conf=c.orders*(c.confirmRate/100);
+  var deliv=conf*(c.deliverRate/100);
+  var costPerOrder=c.orders>0?c.budget/c.orders:0;
+  var gross=deliv*c.profitNoAds;
+  var net=gross-c.budget;
+  var ppo=deliv>0?(gross-c.budget)/deliv:0;
+  var roi=c.budget>0?(net/c.budget*100):0;
+  var set=function(id,v,cl){var e=document.getElementById(id);if(e){e.textContent=v;if(cl)e.className='v '+cl}};
+  set('cConfirmed',Math.round(conf).toString());
+  set('cCostPerOrder',fmt(costPerOrder)+' '+S.currency);
+  set('cReturn',fmt(gross)+' '+S.currency,'pos');
+  set('cProfitPerOrder',(ppo>=0?'+':'')+fmt(ppo)+' '+S.currency,ppo>0?'pos':'neg');
+  set('cGrossProfit',fmt(gross)+' '+S.currency,'pos');
+  set('cNetProfit',sgn(net)+' '+S.currency,net>0?'pos':'neg');
+  var d=document.getElementById('cDecision');
+  if(d){d.textContent=roi.toFixed(0)+'%';d.style.color=net>0?'#3DC5BC':'#F27A71'}
+  var q=Math.min(100,Math.max(0,roi));
+  var qEl=document.getElementById('cQuality');if(qEl)qEl.textContent=q.toFixed(0)+'%';
+  var f=document.getElementById('cQualityFill');
+  if(f){f.style.width=q+'%';f.style.background=q>=50?'#3DC5BC':q>=20?'#EBA251':'#F27A71'}
+}
+
+function initCalc(){
+  var inputs=document.querySelectorAll('[data-ck]');
+  inputs.forEach(function(inp){
+    inp.oninput=function(){
+      var k=inp.getAttribute('data-ck').split('.');
+      var v=parseFloat(inp.value.replace(',','.'));if(!isFinite(v))v=0;
+      CALC[k[0]][k[1]]=v;
+      saveCalc();
+      runCalcP();runCalcD();runCalcC();
+    };
+  });
+  runCalcP();runCalcD();runCalcC();
 }
 
 /* ---------- modal ---------- */
@@ -396,7 +606,6 @@ function sel(name,list,val,att){return '<select name="'+name+'" '+(att||'')+'>'+
 var secList=function(){return S.sections.map(function(s){return [s.id,s.name]})};
 var catList=function(type){return S.categories.filter(function(c){return c.type===type}).map(function(c){return [c.id,c.name]})};
 function num(v){var n=Number(String(v).replace(',','.'));return isFinite(n)?n:NaN}
-var armed=null,armFn=null;
 
 function txForm(id){
   var t=id?by(S.transactions,id):null;
@@ -515,6 +724,15 @@ var A={
   newAdmin:function(){adminForm()},editAdmin:function(b){adminForm(b.dataset.id)},
   newSec:function(){secForm()},editSec:function(b){secForm(b.dataset.id)},
   newCat:function(){catForm()},editCat:function(b){catForm(b.dataset.id)},
+  calcTab:function(b){ui.calcTab=b.dataset.t;render()},
+  calcReset:function(b){
+    var k=b.dataset.k;
+    if(k==='p')CALC.p={cost:2000,sell:5000,other:1000,adCost:200,target:30};
+    if(k==='d')CALC.d={cost:2000,sell:6000,confirmRate:70,deliverRate:50,confirmCost:120,deliverCost:250,returnCost:0,customer:300,adComm:3,orders:100};
+    if(k==='c')CALC.c={budget:10000,orders:20,confirmRate:70,deliverRate:60,profitNoAds:1200};
+    saveCalc();render();
+  },
+  calcRun:function(){runCalcC()},
   mclose:closeModal,
   setCur:function(){var v=$('#cur').value.trim();if(v){S.currency=v;save();render()}},
   export:function(){
@@ -547,25 +765,20 @@ document.addEventListener('change',function(e){
   }
 });
 
-// ==========================================
-// SYNCHRONISATION EN TEMPS RÉEL DEPUIS FIREBASE
-// ==========================================
+/* ---------- Firebase realtime ---------- */
 docRef.onSnapshot(function(doc) {
   if (doc.exists) {
     var cloudData = doc.data();
-    // Si les données du cloud sont plus récentes que celles affichées
     if (cloudData.meta && cloudData.meta.rev > (S.meta.rev || 0)) {
       S = cloudData;
       try{localStorage.setItem('tt_state', JSON.stringify(S));}catch(e){}
-      render(); // Rafraîchit l'interface automatiquement
+      render();
       console.log("Données synchronisées depuis le cloud.");
     }
   } else {
-    // Si le document n'existe pas encore dans le cloud, on l'y crée
     docRef.set(S);
   }
 });
-// ==========================================
 
 render();
 })();
